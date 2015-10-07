@@ -2,4 +2,8 @@ EPANET2 Python calling interface
 Assela Pathirana
 
 swig.exe -python EPANET2.i  (in epanettools directory to create epanet2.py and epanet2_wrap.c)
+python setup.py test
 python setup.py bdist_wininst
+python setup.py bdist_wheel
+python setup.py sdist
+
