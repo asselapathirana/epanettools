@@ -6,14 +6,16 @@
  %include "cstring.i"
  /* read http://www.swig.org/Doc1.3/Arguments.html */
  %apply int *OUTPUT { int *result };
+ %apply int *OUTPUT { int *result1 };
+ %apply int *OUTPUT { int *result2 };
  %apply long *OUTPUT { long *result };
  %apply float *OUTPUT { float *result };
  %apply double *OUTPUT { double *result };
- %cstring_bounded_output(char *result, 1024);
+ %cstring_bounded_output(char *result,   1024);
  %{
  /* Includes the header in the wrapper code */
- #include "epanet2.h"
+ #include "./epanet/epanet2.h"
  %}
  
  /* Parse the header file to generate wrappers */
- %include "epanet2.h"
+ %include "./epanet/epanet2.h"

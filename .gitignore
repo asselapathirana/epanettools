@@ -1,0 +1,11 @@
+*.pyd
+*.pyc
+build/
+__pycache__
+.cache/
+.eggs/
+*.egg-info/
+*.rpt
+dist/
+*.bak
+

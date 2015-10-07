@@ -2,14 +2,12 @@
 """
 setup.py file for EPANET2 pyton library  - Assela Pathirana
 """
-
-try:
-    from setuptools import setup, Extension
-except ImportError:
-    from distutils.core import setup, Extension
+import os, sys
+from setuptools import setup, Extension
+from setuptools.command.test import test as TestCommand
 	
 from itertools import product
-import os
+
 
 with open("README.txt","r") as f:
     README=f.read()
@@ -70,6 +68,19 @@ CLASSIFY=[
         "Development Status :: 3 - Alpha",
         "Natural Language :: English"
         ]
+		
+
+class PyTest(TestCommand):
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+
+    def run_tests(self):
+        import pytest
+        errcode = pytest.main(self.test_args)
+        sys.exit(errcode)		
+
 setup (name = NAME,
        version = VERSION,
        author      = "Assela Pathirana",
@@ -82,5 +93,11 @@ setup (name = NAME,
        url=u"http://assela.pathirana.net/EPANET-Python",
        #download_url="http://swmm5-ea.googlecode.com/files/"+SETUPNAME+".zip",
        long_description = LONGDISC, 
-       classifiers=CLASSIFY
+       classifiers=CLASSIFY,
+	   tests_require=['pytest'],
+	   cmdclass={'test': PyTest},
+	   extras_require={
+        'testing': ['pytest'],
+    }
+	   
        )

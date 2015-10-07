@@ -2949,7 +2949,7 @@ static swig_module_info swig_module = {swig_types, 5, 0, 0, 0, 0};
 
 
  /* Includes the header in the wrapper code */
- #include "epanet2.h"
+ #include "./epanet/epanet2.h"
  
 
 SWIGINTERNINLINE PyObject*
@@ -5305,38 +5305,31 @@ SWIGINTERN PyObject *_wrap_ENgeterror(PyObject *SWIGUNUSEDPARM(self), PyObject *
   int arg3 ;
   int val1 ;
   int ecode1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
+  char temp2[1024+1] ;
   int val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
   int result;
   
-  if (!PyArg_ParseTuple(args,(char *)"OOO:ENgeterror",&obj0,&obj1,&obj2)) SWIG_fail;
+  arg2 = (char *) temp2;
+  if (!PyArg_ParseTuple(args,(char *)"OO:ENgeterror",&obj0,&obj1)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ENgeterror" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = (int)(val1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ENgeterror" "', argument " "2"" of type '" "char *""'");
-  }
-  arg2 = (char *)(buf2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
+  ecode3 = SWIG_AsVal_int(obj1, &val3);
   if (!SWIG_IsOK(ecode3)) {
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ENgeterror" "', argument " "3"" of type '" "int""'");
   } 
   arg3 = (int)(val3);
   result = (int)ENgeterror(arg1,arg2,arg3);
   resultobj = SWIG_From_int((int)(result));
-  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
+  arg2[1024] = 0;  
+  resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_FromCharPtr(arg2));
   return resultobj;
 fail:
-  if (alloc2 == SWIG_NEWOBJ) free((char*)buf2);
   return NULL;
 }
 
@@ -5577,28 +5570,29 @@ SWIGINTERN PyObject *_wrap_ENgetlinknodes(PyObject *SWIGUNUSEDPARM(self), PyObje
   int *arg3 = (int *) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  int temp2 ;
+  int res2 = SWIG_TMPOBJ ;
   int temp3 ;
   int res3 = SWIG_TMPOBJ ;
   PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
   int result;
   
+  arg2 = &temp2;
   arg3 = &temp3;
-  if (!PyArg_ParseTuple(args,(char *)"OO:ENgetlinknodes",&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTuple(args,(char *)"O:ENgetlinknodes",&obj0)) SWIG_fail;
   ecode1 = SWIG_AsVal_int(obj0, &val1);
   if (!SWIG_IsOK(ecode1)) {
     SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ENgetlinknodes" "', argument " "1"" of type '" "int""'");
   } 
   arg1 = (int)(val1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_int, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ENgetlinknodes" "', argument " "2"" of type '" "int *""'"); 
-  }
-  arg2 = (int *)(argp2);
   result = (int)ENgetlinknodes(arg1,arg2,arg3);
   resultobj = SWIG_From_int((int)(result));
+  if (SWIG_IsTmpObj(res2)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg2)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res2) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_int, new_flags));
+  }
   if (SWIG_IsTmpObj(res3)) {
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg3)));
   } else {

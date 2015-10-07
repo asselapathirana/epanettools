@@ -164,7 +164,7 @@
 
 // --- declare the EPANET toolkit functions
 
- extern int  ENepanet(char *, char *, char *, void (*) (char *));
+extern int  ENepanet(char *, char *, char *, void (*) (char *));
 extern int  ENopen(char *, char *, char * );
 extern int  ENsaveinpfile(char * );
 extern int  ENclose(void);
@@ -203,7 +203,7 @@ extern int  ENgetpatternid(int, char * result );
 extern int  ENgetpatternlen(int, int * result );
 extern int  ENgetpatternvalue(int, int, float * result );
 extern int  ENgetqualtype(int *, int * result );
-extern int  ENgeterror(int, char *, int);
+extern int  ENgeterror(int, char * result, int);
 
 extern int  ENgetnodeindex(char *, int * result );
 extern int  ENgetnodeid(int, char * result );
@@ -213,7 +213,7 @@ extern int  ENgetnodevalue(int, int, float * result );
 extern int  ENgetlinkindex(char *, int * result );
 extern int  ENgetlinkid(int, char * result );
 extern int  ENgetlinktype(int, int * result );
-extern int  ENgetlinknodes(int, int *, int * result );
+extern int  ENgetlinknodes(int, int  * result1, int * result2 );
 extern int  ENgetlinkvalue(int, int, float * result );
 
 extern int  ENgetversion(int * result );

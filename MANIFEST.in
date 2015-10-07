@@ -1,1 +1,2 @@
 include epanettools/epanet/*.h
+graft epanettools/epanet

@@ -539,8 +539,8 @@ def ENgetqualtype(arg1):
     return _epanet2.ENgetqualtype(arg1)
 ENgetqualtype = _epanet2.ENgetqualtype
 
-def ENgeterror(arg1, arg2, arg3):
-    return _epanet2.ENgeterror(arg1, arg2, arg3)
+def ENgeterror(arg1, arg3):
+    return _epanet2.ENgeterror(arg1, arg3)
 ENgeterror = _epanet2.ENgeterror
 
 def ENgetnodeindex(arg1):
@@ -571,8 +571,8 @@ def ENgetlinktype(arg1):
     return _epanet2.ENgetlinktype(arg1)
 ENgetlinktype = _epanet2.ENgetlinktype
 
-def ENgetlinknodes(arg1, arg2):
-    return _epanet2.ENgetlinknodes(arg1, arg2)
+def ENgetlinknodes(arg1):
+    return _epanet2.ENgetlinknodes(arg1)
 ENgetlinknodes = _epanet2.ENgetlinknodes
 
 def ENgetlinkvalue(arg1, arg2):
