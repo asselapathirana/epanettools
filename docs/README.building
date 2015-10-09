@@ -6,6 +6,7 @@ python setup.py test
 python -m doctest README.txt -v
 
 open git bash
+#make sure there is a ~/.pypirc file
 set path for python, scripts 
 (e.g. export PATH=$PATH:/d/WinPython-64bit-3.4.3.2/python-3.4.3.amd64/:/d/WinPython-64bit-3.4.3.2/python-3.4.3.amd64/Scripts/)
 fullrelease
