@@ -1,28 +1,28 @@
-# Change Log
-All notable changes to this project will be documented in this file.
-0.5.0.5 (2015-10-09)
-
-
-Minor fixes in documentation. Release made easy. 
-
-
-0.5.0.4 (2015-10-09)
-
-
-- Nothing changed yet.
-
-
-0.5.0.3 (2015-10-09)
-
-
-No binaries will be provided anymore. 
-
-
-0.5.0.1 (2015-10-09)
-
-## [Unreleased]
-
-Verifed support for a number of extra toolkit functions. These examples are given in the README.txt
-
-Toolkit functions requiring input arrays are using numpy arrays (float32 type) as input. See README.txt for examples. 
-
+# Change Log
+All notable changes to this project will be documented in this file.
+0.5.0.6 (2015-10-09)
+
+
+Minor fixes in documentation. Release made easy. 
+
+
+0.5.0.4 (2015-10-09)
+
+
+- Nothing changed yet.
+
+
+0.5.0.3 (2015-10-09)
+
+
+No binaries will be provided anymore. 
+
+
+0.5.0.1 (2015-10-09)
+
+## [Unreleased]
+
+Verifed support for a number of extra toolkit functions. These examples are given in the README.txt
+
+Toolkit functions requiring input arrays are using numpy arrays (float32 type) as input. See README.txt for examples. 
+
