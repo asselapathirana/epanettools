@@ -599,8 +599,8 @@ def ENaddpattern(arg1):
     return _epanet2.ENaddpattern(arg1)
 ENaddpattern = _epanet2.ENaddpattern
 
-def ENsetpattern(arg1, arg2, arg3):
-    return _epanet2.ENsetpattern(arg1, arg2, arg3)
+def ENsetpattern(arg1, floatarray):
+    return _epanet2.ENsetpattern(arg1, floatarray)
 ENsetpattern = _epanet2.ENsetpattern
 
 def ENsetpatternvalue(arg1, arg2, arg3):

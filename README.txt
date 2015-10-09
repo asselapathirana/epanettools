@@ -29,9 +29,11 @@ Usage:
 
 ::
 
+    >>> import os
     >>> from epanettools import epanet2 as et
-	>>> p="epanettools/examples/simple/"
-    >>> ret=et.ENopen(p+"Net3.inp",p+"Net3.rpt","")
+    >>> from epanettools.examples import simple 
+    >>> file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp')
+    >>> ret=et.ENopen(file,"Net3.rpt","")
     
  
     
@@ -76,8 +78,41 @@ Get the list of nodes
     >>> print (nodes)       #doctest: +ELLIPSIS
     ...                     #doctest: +NORMALIZE_WHITESPACE
 	['10', '15', '20', '35', '40', '50', '60', ..., '275', 'River', 'Lake', '1', '2']
-	
-	
+
+Get nodes indexes on either side of a link with given index
+
+::
+
+    >>> et.ENgetlinknodes(55) # note the first item in the list should be ignored. 
+    [0, 5, 46]
+    
+    
+::
+    
+    >>> patId = "NewPattern";
+    >>> ret=et.ENaddpattern(patId)
+    >>> print(ret)
+    0
+    >>> import numpy as np
+    >>> patFactors=np.array([0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0], 
+    ...                      dtype=np.float32)
+    >>> ret,patIndex=et.ENgetpatternindex(patId)
+    >>> print(patIndex)
+    6
+    >>> et.ENsetpattern(patIndex, patFactors)
+    0
+    >>> et.ENgetpatternid(6)[1]
+    'NewPattern'
+    >>> et.ENgetpatternlen(6)
+    [0, 12]
+    >>> [round(et.ENgetpatternvalue(6,i)[1],3) for i in range(1,12+1)]
+    [0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0]
+    >>> et.ENsetpatternvalue(6,9,3.3)
+    0
+    >>> [round(et.ENgetpatternvalue(6,i)[1],3) for i in range(1,12+1)]
+    [0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 3.3, 0.8, 0.0, 0.0]
+    
+    
 Hydraulic Simulation
 	
 	

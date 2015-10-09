@@ -1,0 +1,10 @@
+# Change Log
+All notable changes to this project will be documented in this file.
+This project adheres to [Semantic Versioning](http://semver.org/).
+
+## [Unreleased]
+
+Verifed support for a number of extra toolkit functions. These examples are given in the README.txt
+
+Toolkit functions requiring input arrays are using numpy arrays (float32 type) as input. See README.txt for examples. 
+

@@ -6,6 +6,8 @@ import os, sys
 from setuptools import setup, Extension
 from setuptools.command.test import test as TestCommand
 	
+import numpy 
+
 from itertools import product
 
 
@@ -88,10 +90,10 @@ setup (name = NAME,
        description = """EPANET 2.0  calls from python""",       
        packages = ["epanettools"],
 	   ext_modules = [epanet2_module],
+       include_dirs=[numpy.get_include()],
        package_data={'epanettools': package_data},
        license=LICENSE,
        url=u"http://assela.pathirana.net/EPANET-Python",
-       #download_url="http://swmm5-ea.googlecode.com/files/"+SETUPNAME+".zip",
        long_description = LONGDISC, 
        classifiers=CLASSIFY,
 	   tests_require=['pytest'],

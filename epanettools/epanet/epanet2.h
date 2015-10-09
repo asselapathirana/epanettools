@@ -222,7 +222,7 @@ extern int  ENsetcontrol(int, int, int, float, int, float);
 extern int  ENsetnodevalue(int, int, float);
 extern int  ENsetlinkvalue(int, int, float);
 extern int  ENaddpattern(char *  );
-extern int  ENsetpattern(int, float *, int);
+extern int  ENsetpattern(int, float * floatarray, int nfloats);
 extern int  ENsetpatternvalue(int, int, float);
 extern int  ENsettimeparam(int, long);
 extern int  ENsetoption(int, float);
