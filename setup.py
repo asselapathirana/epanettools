@@ -12,7 +12,6 @@ from itertools import product
 
 version = '0.5.0.5'
 
-
 with open("README.txt","r") as f:
     README=f.read()
 	
