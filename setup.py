@@ -10,7 +10,7 @@ import numpy
 
 from itertools import product
 
-version='0.4.0.1'
+version = '0.5.0.1'
 
 
 with open("README.txt","r") as f:
