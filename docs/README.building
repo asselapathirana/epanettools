@@ -5,9 +5,7 @@ swig.exe -python EPANET2.i  (in epanettools directory to create epanet2.py and e
 python setup.py test
 python -m doctest README.txt -v
 
-open git bash
-#make sure there is a ~/.pypirc file, zest.releaser python package is installed 
-set path for python, scripts 
-(e.g. export PATH=$PATH:/d/WinPython-64bit-3.4.3.2/python-3.4.3.amd64/:/d/WinPython-64bit-3.4.3.2/python-3.4.3.amd64/Scripts/)
+#make sure there is a %HOME%\.pypirc file, zest.releaser python package is installed 
+#make sure '* text=auto' is set in .gitattributes file at the root of the repo. 
 fullrelease
 
