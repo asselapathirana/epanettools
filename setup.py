@@ -10,6 +10,8 @@ import numpy
 
 from itertools import product
 
+version='0.4.0.1'
+
 
 with open("README.txt","r") as f:
     README=f.read()
@@ -42,8 +44,8 @@ EXTS.extend([x.upper() for x in EXTS])
 EXAMPLES=list(product(EXAMPLES,EXTS))
 package_data=[ "examples/"+x[0]+"/*."+x[1] for x in EXAMPLES]
 NAME='EPANETTOOLS'
-VERSION='0.2.3.0'
-SETUPNAME=NAME+"-"+VERSION
+VERSION=version
+SETUPNAME=NAME+"-"+version
 LICENSE=u"GNU General Public License version 3"
 LONGDISC="""Python interface for the popular urban drainage model EPANET 2.0 engine. 
 EPANET2 is realeased by United States Environmental Protection Agency to public domain. 
@@ -84,7 +86,7 @@ class PyTest(TestCommand):
         sys.exit(errcode)		
 
 setup (name = NAME,
-       version = VERSION,
+       version = version,
        author      = "Assela Pathirana",
        author_email = "assela@pathirana.net",
        description = """EPANET 2.0  calls from python""",       
