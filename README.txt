@@ -1,4 +1,4 @@
-Epanet 2.0 Python calling interface
+Epanet 2.0 Python calling interface 
 
 Since version 0.4.0.1 the library is compatible with Python 3.0
 
@@ -9,7 +9,7 @@ A python package enabling user to call all the `epanet programmers toolkit <http
 Installation
 ------------
 :Windows: 
-	Download the MS Windows installer and run to install. Since version 0.4.0.1 "python wheels " packages are also provided. So, the following command can also be used to install on windows ::
+	Use a Python ditribution that comes with a c copiler (use WinPython or PythonXY) ::
 	
 	   pip install epanettools
 	
