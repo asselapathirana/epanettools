@@ -69,7 +69,7 @@ CLASSIFY=[
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows",
         "Topic :: Software Development :: Libraries :: Python Modules",
-        "Development Status :: 2 - Beta",
+        "Development Status :: 4 - Beta",
         "Natural Language :: English"
         ]
 		
