@@ -126,17 +126,28 @@ class EPANetSimulation():
         
     def clean(self):
         """Delete all the files created by epanet run""" 
-        et.ENcloseH()
-        et.ENcloseQ()
-        et.ENclose()
+        
+        try:
+            et.ENcloseH()
+        except:
+            pass
+        try:
+            et.ENcloseQ()
+        except: 
+            pass
+        try:
+            et.ENclose()
+        except:
+            pass
         os.remove(self.rptfile)
         os.remove(self.hydfile)
         os.remove(self.binfile)
             
-    def __del__(self):
-        "Destructor method"
-        self.clean()
-        os.remove(self.inputfile)
+    #def __del__(self):
+    #    "Destructor method"
+    #    pass
+        #self.clean()
+        #os.remove(self.inputfile)
 
         
     def _reset(self):
