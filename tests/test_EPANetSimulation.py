@@ -44,29 +44,71 @@ class Test1(unittest.TestCase):
         self.assertFalse(self.es.inputfile==file)
         
     def test_get_correct_network_information(self):
-        from  epanettools.epanettools import EPANetSimulation
-        from epanettools.examples import simple
+
         
-        n=self.es.getNodes()
+        n=self.es.nodes
         self.assertEqual(n[1].id,'10')
         self.assertEqual(n[3].id,'20')
         self.assertEqual(n[25].id,'129')
         self.assertEqual(n[94].id,'Lake')
-        m=self.es.getLinks()
+        
+        self.assertEqual(n[94].index,94)
+        
+        m=self.es.links
         self.assertEqual(m[1].id,'20')
         self.assertEqual(m[3].id,'50')
-        self.assertEqual(m[119].id,'335')    
+        self.assertEqual(m[119].id,'335')  
+        self.assertEqual([m[1].start.id,m[1].end.id],['3','20'])
+        self.assertEqual([m[118].start.id,m[118].end.id],['Lake','10'])
         
-    def can_access_low_level_EN_type_functions(self):
+        
+        self.assertEqual(m[119].index,119)
+        
+        # link or node can be searched with ID too. 
+        self.assertEqual(n['Lake'].id,'Lake')
+        self.assertEqual(n['Lake'].index,94)
+        self.assertEqual(m['335'].id,'335')
+        self.assertEqual(m['335'].index,119)
+        
+        # get the links connected to a node. 
+        self.assertEqual(sorted([i.id for i in n['169'].links]),['183', '185', '187', '211'] )
+        
+    def test_can_access_low_level_EN_type_functions(self):
         self.assertEqual(self.es.ENgetnodeid(3),[0,'20'])
+        
+        
+    def test_each_node_and_link_has_the_epanetsimulation_object_linked_to_it_as_variable_es(self):
+        self.assertIsInstance(self.es.links[1].es,EPANetSimulation)
+        self.assertIsInstance(self.es.nodes[1].es,EPANetSimulation)
+    
+    def test_runs_a_simulation_and_get_results(self):
+        self.es.run()
+        self.assertAlmostEqual(self.es.nodes['103'].pressure[5],59.3006591796875)
+        self.assertAlmostEqual(self.es.nodes['125'].pressure[5],66.05056762695312)
+        self.assertEqual(self.es.time[5],15213)
+        self.assertEqual(len(self.es.time),len(self.es.nodes[1].pressure))
+        
+        self.assertAlmostEqual(self.es.nodes['103'].demand[5],101.23200225830078)
+        self.assertAlmostEqual(self.es.nodes['103'].head[5],179.8582000732422)
+        
+        
+       
+        
+        self.es.runq()
+        self.assertAlmostEqual(self.es.nodes['117'].quality[4],85.31733703613281)
+        self.assertAlmostEqual(self.es.nodes['117'].quality[5],100.0)
+        
+        
     
 def main():
     #test_false()
     tc=Test1()
     tc.setUp()
-    tc.test_non_existing_file_raise_error()
-    tc.can_access_low_level_EN_type_functions()
-    tc.test_get_correct_network_information()
+    #tc.test_non_existing_file_raise_error()
+    #tc.test_can_access_low_level_EN_type_functions()
+    #tc.test_get_correct_network_information()
+    #tc.test_each_node_and_link_has_the_epanetsimulation_object_linked_to_it_as_variable_es()
+    tc.test_runs_a_simulation_and_get_results()
 
 if __name__ == "__main__":
         main()

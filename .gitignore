@@ -10,3 +10,4 @@ dist/
 *.bak
 
 env/
+tests/s???
