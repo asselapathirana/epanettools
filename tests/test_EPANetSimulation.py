@@ -44,8 +44,6 @@ class Test1(unittest.TestCase):
         self.assertFalse(self.es.inputfile==file)
         
     def test_get_correct_network_information(self):
-
-        
         n=self.es.nodes
         self.assertEqual(n[1].id,'10')
         self.assertEqual(n[3].id,'20')
@@ -91,24 +89,45 @@ class Test1(unittest.TestCase):
         self.assertAlmostEqual(self.es.nodes['103'].demand[5],101.23200225830078)
         self.assertAlmostEqual(self.es.nodes['103'].head[5],179.8582000732422)
         
-        
-       
-        
         self.es.runq()
         self.assertAlmostEqual(self.es.nodes['117'].quality[4],85.31733703613281)
         self.assertAlmostEqual(self.es.nodes['117'].quality[5],100.0)
         
-        
-    
+    @skip
+    def test_hydraulic_file_is_saved_only_when_save_is_true(self):
+        self.es.run(save=False)
+        self.assertFalse(os.path.exists(self.es.hydraulicfile))
+        self.es.run(save=True)
+        self.assertTrue(os.path.exists(self.es.hydraulicfile))        
+
+    @skip
+    def test_clean_will_remove_results(self):
+        self.assertTrue(os.path.exists(self.es.inputfile))        
+        self.es.run()
+        self.assertTrue(os.path.exists(self.es.rptfile))
+        self.assertTrue(os.path.exists(self.es.hydraulicfile))         
+        self.es.runq()
+        self.assertTrue(os.path.exists(self.es.rptfile))
+        self.assertTrue(os.path.exists(self.es.binfile))
+        self.assertTrue(os.path.exists(self.es.hydraulicfile))         
+        self.es.clean()
+        self.assertTrue(os.path.exists(self.es.inputfile))
+        self.assertFalse(os.path.exists(self.es.rptfile))
+        self.assertFalse(os.path.exists(self.es.binfile))
+        self.assertFalse(os.path.exists(self.es.hydraulicfile))
+
 def main():
     #test_false()
     tc=Test1()
     tc.setUp()
-    #tc.test_non_existing_file_raise_error()
-    #tc.test_can_access_low_level_EN_type_functions()
-    #tc.test_get_correct_network_information()
-    #tc.test_each_node_and_link_has_the_epanetsimulation_object_linked_to_it_as_variable_es()
+    tc.test_non_existing_file_raise_error()
+    tc.test_can_access_low_level_EN_type_functions()
+    tc.test_get_correct_network_information()
+    tc.test_each_node_and_link_has_the_epanetsimulation_object_linked_to_it_as_variable_es()
     tc.test_runs_a_simulation_and_get_results()
+    tc.test_hydraulic_file_is_saved_only_when_save_is_true()
+    tc.test_clean_will_remove_results()
+    tc.test_destruction_will_remove_temporary_inputfile()
 
 if __name__ == "__main__":
         main()

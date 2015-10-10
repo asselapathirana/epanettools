@@ -48,14 +48,15 @@ class EPANetSimulation():
         self.enOpenStatus=False
         self.OriginalInputFileName=inputFileName
         self.inputfile=self.create_temporary_copy(inputFileName)
-        self.rptfile=self.inputfile[:-3]+".rpt"
-        self.binfile=self.inputfile[:-3]+".bin"
+        self.rptfile=self.inputfile[:-3]+"rpt"
+        self.binfile=self.inputfile[:-3]+"bin"
+        self.hydraulicfile=self.inputfile[:-3]+"hyd"
         self._open()
         self._getLinksAndNodes()
         self._close()
         
 
-    def run(self):
+    def run(self, save=True):
         self._open()
         self.time=[]
         for i,node in self.nodes.items():
@@ -63,7 +64,11 @@ class EPANetSimulation():
             node.head=[]
             node.pressure=[]
         et.ENopenH()
-        et.ENinitH(0)
+        if (save):
+            init=1
+        else:
+            init=0
+        et.ENinitH(init)
         while True :
             ret,t=et.ENrunH()
             self.time.append(t)
@@ -77,15 +82,16 @@ class EPANetSimulation():
             ret,tstep=et.ENnextH()
             if (tstep<=0):
                 break
-        ret=et.ENcloseH()        
+        if(save):
+            self.Error(et.ENsavehydfile(self.hydraulicfile))
+        self.Error(et.ENcloseH())     
 
  
     def runq(self):
         
         for i,node in self.nodes.items():
             node.quality=[]        
-            
-        self.Error(et.ENsolveH())
+        self.Error(et.ENusehydfile(self.hydraulicfile))
         self.Error(et.ENopenQ()) 
         self.Error(et.ENinitQ(1))
         while(True):
@@ -97,8 +103,6 @@ class EPANetSimulation():
             self.Error(ret)
             if(tstep<=0):
                 break
-
-            
         et.ENcloseQ();         
         
     
@@ -119,6 +123,20 @@ class EPANetSimulation():
 
     def _explicitly_open(self):
         self.Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
+        
+    def clean(self):
+        """Delete all the files created by epanet run""" 
+        et.ENcloseH()
+        et.ENcloseQ()
+        et.ENclose()
+        os.remove(self.rptfile)
+        os.remove(self.hydfile)
+        os.remove(self.binfile)
+            
+    def __del__(self):
+        "Destructor method"
+        self.clean()
+        os.remove(self.inputfile)
 
         
     def _reset(self):

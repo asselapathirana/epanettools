@@ -11,3 +11,5 @@ dist/
 
 env/
 tests/s???
+*.wpu
+
