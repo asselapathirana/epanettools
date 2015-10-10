@@ -47,15 +47,15 @@ class Test1(unittest.TestCase):
         from  epanettools.epanettools import EPANetSimulation
         from epanettools.examples import simple
         
-
-        self.assertEqual(self.es.getNodes()[0],'10')
-        self.assertEqual(self.es.getNodes()[2],'20')
-        self.assertEqual(self.es.getNodes()[-1],'3')
-        self.assertEqual(self.es.getNodes()[-4],'Lake')
-
-        self.assertEqual(self.es.getLinks()[0],'20')
-        self.assertEqual(self.es.getLinks()[2],'50')
-        self.assertEqual(self.es.getLinks()[-1],'335')    
+        n=self.es.getNodes()
+        self.assertEqual(n[1].id,'10')
+        self.assertEqual(n[3].id,'20')
+        self.assertEqual(n[25].id,'129')
+        self.assertEqual(n[94].id,'Lake')
+        m=self.es.getLinks()
+        self.assertEqual(m[1].id,'20')
+        self.assertEqual(m[3].id,'50')
+        self.assertEqual(m[119].id,'335')    
         
     def can_access_low_level_EN_type_functions(self):
         self.assertEqual(self.es.ENgetnodeid(3),[0,'20'])

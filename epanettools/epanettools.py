@@ -1,6 +1,18 @@
 from . import epanet2 as et
 import tempfile, shutil, os
 
+class Node():
+    id=''
+    elevation=float('nan')
+    
+class Link():
+    id=''
+    start=None
+    end=None
+    diameter=float('nan')
+    length=float('nan')
+    
+
 
 class EPANetSimulation():
     
@@ -39,17 +51,23 @@ class EPANetSimulation():
         
     def getLinks(self):
         self._open()
-        self.links=[]
+        links={}
         for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
-            self.links.append(et.ENgetlinkid(i)[1])
-        return self.links
+            link=Link()
+            link.id=et.ENgetlinkid(i)[1]
+            links[i]=link
+        return links
     
     def getNodes(self):
         self._open()
-        self.nodes=[]
+        nodes={}
         for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
-            self.nodes.append(et.ENgetnodeid(i)[1])
-        return self.nodes 
+                node=Node()
+                node.id=et.ENgetnodeid(i)[1]
+                node.elevation=et.ENgetnodevalue(i,et.EN_ELEVATION )
+                nodes[i]=node
+        return nodes
+    
     
     def __getattribute__(self, name):
         try:
