@@ -12,4 +12,4 @@ dist/
 env/
 tests/s???
 *.wpu
-
+/py*.egg/

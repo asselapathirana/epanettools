@@ -13,7 +13,8 @@ class Test1(unittest.TestCase):
         file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp')
         self.es=EPANetSimulation(file)           
     
-    def subTest(self):
+    def tearDown(self):
+        self.es.clean()
         print("TEAR DOWN!")
     
     @skip  
@@ -93,14 +94,14 @@ class Test1(unittest.TestCase):
         self.assertAlmostEqual(self.es.nodes['117'].quality[4],85.31733703613281)
         self.assertAlmostEqual(self.es.nodes['117'].quality[5],100.0)
         
-    @skip
+    
     def test_hydraulic_file_is_saved_only_when_save_is_true(self):
         self.es.run(save=False)
         self.assertFalse(os.path.exists(self.es.hydraulicfile))
         self.es.run(save=True)
         self.assertTrue(os.path.exists(self.es.hydraulicfile))        
 
-    @skip
+    
     def test_clean_will_remove_results(self):
         self.assertTrue(os.path.exists(self.es.inputfile))        
         self.es.run()
@@ -128,6 +129,6 @@ def main():
     tc.test_hydraulic_file_is_saved_only_when_save_is_true()
     tc.test_clean_will_remove_results()
     tc.test_destruction_will_remove_temporary_inputfile()
-
+    tc.tearDown()
 if __name__ == "__main__":
         main()

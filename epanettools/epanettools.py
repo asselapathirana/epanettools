@@ -1,5 +1,7 @@
 from . import epanet2 as et
-import tempfile, shutil, os
+import tempfile, shutil, os, sys
+
+"""" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead."""
 
 from . import tools
 
@@ -45,7 +47,7 @@ class EPANetSimulation():
     
     
     def __init__(self,inputFileName):
-        self.enOpenStatus=False
+        self._enOpenStatus=False
         self.OriginalInputFileName=inputFileName
         self.inputfile=self.create_temporary_copy(inputFileName)
         self.rptfile=self.inputfile[:-3]+"rpt"
@@ -53,7 +55,7 @@ class EPANetSimulation():
         self.hydraulicfile=self.inputfile[:-3]+"hyd"
         self._open()
         self._getLinksAndNodes()
-        self._close()
+
         
 
     def run(self, save=True):
@@ -84,7 +86,8 @@ class EPANetSimulation():
                 break
         if(save):
             self.Error(et.ENsavehydfile(self.hydraulicfile))
-        self.Error(et.ENcloseH())     
+        self.Error(et.ENcloseH())
+
 
  
     def runq(self):
@@ -117,46 +120,43 @@ class EPANetSimulation():
         return f
     
     def _open(self): 
-        if(not self.enOpenStatus):
-            self._explicitly_open()
-        self.enOpenStatus=True
+        if(not self._enOpenStatus):
+            self.Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
+            print("Opening",file=sys.stderr)
+        self._enOpenStatus=True
+        
+    def _close(self):
+        if(self._enOpenStatus):
+            self.Error(et.ENclose())
+            print("Closing",file=sys.stderr)
+            self._enOpenStatus=False    
 
-    def _explicitly_open(self):
-        self.Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
         
     def clean(self):
         """Delete all the files created by epanet run""" 
-        
+        self._close()
         try:
-            et.ENcloseH()
+            os.remove(self.rptfile)
         except:
             pass
         try:
-            et.ENcloseQ()
-        except: 
-            pass
-        try:
-            et.ENclose()
+            os.remove(self.hydraulicfile)
         except:
             pass
-        os.remove(self.rptfile)
-        os.remove(self.hydfile)
-        os.remove(self.binfile)
+        try:
+            os.remove(self.binfile)
+        except:
+            pass        
+
+        #print("Hydraulic file name ******************* %s", et.cvar.HydFname)
             
-    #def __del__(self):
-    #    "Destructor method"
-    #    pass
-        #self.clean()
-        #os.remove(self.inputfile)
 
         
     def _reset(self):
         self._close()
-        self.Error(et._explicitly_open())
+        self._open()
 
-    def _close(self):
-        self.Error(et.ENclose())
-        self.enOpenStatus=False
+
         
         
     def _getLinksAndNodes(self):

@@ -33,8 +33,12 @@ sources=[ "epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
 sources.append("epanettools"+os.sep+"epanet2_wrap.c")
  
 epanet2_module = Extension('_epanet2',
-                           sources=sources
+                           sources=sources,
+                           extra_compile_args=['-fopenmp','-Wno-deprecated','-O3'],
+                           extra_link_args=['-fopenmp','-Wno-deprecated','-O3'], 
+                           #extra_compile_args=['-O0', '-g', '-Wall']
                            )
+
 
 
 EXAMPLES=["simple"]
