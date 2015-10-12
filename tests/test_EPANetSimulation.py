@@ -117,18 +117,24 @@ class Test1(unittest.TestCase):
         self.assertFalse(os.path.exists(self.es.binfile))
         self.assertFalse(os.path.exists(self.es.hydraulicfile))
 
-def main():
-    #test_false()
-    tc=Test1()
+
+tc=Test1()
+
+def clt(fn):
     tc.setUp()
-    tc.test_non_existing_file_raise_error()
-    tc.test_can_access_low_level_EN_type_functions()
-    tc.test_get_correct_network_information()
-    tc.test_each_node_and_link_has_the_epanetsimulation_object_linked_to_it_as_variable_es()
-    tc.test_runs_a_simulation_and_get_results()
-    tc.test_hydraulic_file_is_saved_only_when_save_is_true()
-    tc.test_clean_will_remove_results()
-    tc.test_destruction_will_remove_temporary_inputfile()
+    fn()
     tc.tearDown()
+    
+
+def main():
+    for a in dir(tc):
+        if (a.startswith('test_')):
+            b=getattr(tc,a)
+            if(hasattr(b, '__call__')):
+               print ("calling %s **********************************" % a )
+               clt(b)
+           
+
+
 if __name__ == "__main__":
         main()

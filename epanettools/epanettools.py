@@ -57,6 +57,7 @@ class EPANetSimulation():
         self.hydraulicfile=self.inputfile[:-3]+"hyd"
         self._open()
         self._getLinksAndNodes()
+        self._close()
 
 
     def run(self, save=True):
@@ -88,6 +89,7 @@ class EPANetSimulation():
         if(save):
             self.Error(et.ENsavehydfile(self.hydraulicfile))
         self._HClose()
+        self._close()
 
 
  
@@ -95,6 +97,7 @@ class EPANetSimulation():
         
         for i,node in self.nodes.items():
             node.quality=[]        
+        self._open()
         self.Error(et.ENusehydfile(self.hydraulicfile))
         self.Error(et.ENopenQ()) 
         self.Error(et.ENinitQ(1))
@@ -108,7 +111,7 @@ class EPANetSimulation():
             if(tstep<=0):
                 break
         et.ENcloseQ();         
-        
+        self._close()
     
     def Error(self,e):
         if(e):
