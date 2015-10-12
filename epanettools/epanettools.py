@@ -162,8 +162,6 @@ class EPANetSimulation():
             os.remove(self.binfile)
         except:
             pass        
-
-        #print("Hydraulic file name ******************* %s", et.cvar.HydFname)
             
 
         
