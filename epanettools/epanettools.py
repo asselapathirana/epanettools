@@ -109,6 +109,10 @@ class EPANetSimulation(Object):
         self._close()
 
 
+    def sync(self):
+        """ Syncs the changes variable values with underlying toolkit system."""
+        pass
+
     def run(self, save=True):
         self.reset_results()
         self._open()
