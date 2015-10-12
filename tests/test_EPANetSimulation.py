@@ -2,7 +2,7 @@ import os
 import unittest
 import epanettools
 from epanettools.examples import simple
-from  epanettools.epanettools import EPANetSimulation
+from  epanettools.epanettools import EPANetSimulation, Node, Link
 
 from unittest import skip, expectedFailure
 
@@ -60,6 +60,15 @@ class Test1(unittest.TestCase):
         self.assertEqual([m[1].start.id,m[1].end.id],['3','20'])
         self.assertEqual([m[118].start.id,m[118].end.id],['Lake','10'])
         
+        # types of nodes
+        self.assertEqual(n[94].node_type,Node.node_types['RESERVOIR'])
+        self.assertEqual(n[1].node_type,Node.node_types['JUNCTION'])
+        self.assertEqual(n['2'].node_type,Node.node_types['TANK'])
+        
+        #types of links
+        self.assertEqual(m['335'].link_type,Link.link_types['PUMP'])
+        self.assertEqual(m['101'].link_type,Link.link_types['PIPE'])
+        self.assertEqual(m[1].link_type,Link.link_types['PIPE'])
         
         self.assertEqual(m[119].index,119)
         
@@ -81,18 +90,29 @@ class Test1(unittest.TestCase):
         self.assertIsInstance(self.es.nodes[1].es,EPANetSimulation)
     
     def test_runs_a_simulation_and_get_results(self):
+        def mod1():
+            p=Node.result_type['EN_PRESSURE']
+            self.assertAlmostEqual(self.es.nodes['103'].results[p][5],59.301,places=3)
+            self.assertAlmostEqual(self.es.nodes['125'].results[p][5],66.051,places=3)
+            self.assertEqual(self.es.time[5],15213)
+            self.assertEqual(len(self.es.time),len(self.es.nodes[1].results[p]))
+            
+            d=Node.result_type['EN_DEMAND']
+            h=Node.result_type['EN_HEAD']
+            self.assertAlmostEqual(self.es.nodes['103'].results[d][5],101.232, places=3)
+            self.assertAlmostEqual(self.es.nodes['103'].results[h][5],179.858, places=3)
+        
+        
         self.es.run()
-        self.assertAlmostEqual(self.es.nodes['103'].pressure[5],59.3006591796875)
-        self.assertAlmostEqual(self.es.nodes['125'].pressure[5],66.05056762695312)
-        self.assertEqual(self.es.time[5],15213)
-        self.assertEqual(len(self.es.time),len(self.es.nodes[1].pressure))
-        
-        self.assertAlmostEqual(self.es.nodes['103'].demand[5],101.23200225830078)
-        self.assertAlmostEqual(self.es.nodes['103'].head[5],179.8582000732422)
-        
+        mod1()
         self.es.runq()
-        self.assertAlmostEqual(self.es.nodes['117'].quality[4],85.31733703613281)
-        self.assertAlmostEqual(self.es.nodes['117'].quality[5],100.0)
+        q=Node.result_type['EN_QUALITY']
+        self.assertAlmostEqual(self.es.nodes['117'].results[q][4],85.317,places=3)
+        self.assertAlmostEqual(self.es.nodes['117'].results[q][5],100.0)
+        mod1()
+        
+
+
         
     
     def test_hydraulic_file_is_saved_only_when_save_is_true(self):
@@ -119,20 +139,18 @@ class Test1(unittest.TestCase):
 
 
 tc=Test1()
-
 def clt(fn):
     tc.setUp()
     fn()
     tc.tearDown()
-    
 
 def main():
     for a in dir(tc):
         if (a.startswith('test_')):
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
-               print ("calling %s **********************************" % a )
-               clt(b)
+                print ("calling %s **********************************" % a )
+                clt(b)
            
 
 
