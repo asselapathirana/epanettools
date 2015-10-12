@@ -2951,6 +2951,7 @@ static swig_module_info swig_module = {swig_types, 5, 0, 0, 0, 0};
  #define SWIG_FILE_WITH_INIT
  /* Includes the header in the wrapper code */
  #include "./epanet/epanet2.h"
+ extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
  
 
 #ifndef SWIG_FILE_WITH_INIT
@@ -3750,6 +3751,41 @@ SWIG_AsVal_float (PyObject * obj, float *val)
   }
 
 
+
+
+SWIGINTERN int
+SWIG_AsCharArray(PyObject * obj, char *val, size_t size)
+{ 
+  char* cptr = 0; size_t csize = 0; int alloc = SWIG_OLDOBJ;
+  int res = SWIG_AsCharPtrAndSize(obj, &cptr, &csize, &alloc);
+  if (SWIG_IsOK(res)) {
+    /* special case of single char conversion when we don't need space for NUL */
+    if (size == 1 && csize == 2 && cptr && !cptr[1]) --csize;
+    if (csize <= size) {
+      if (val) {
+	if (csize) memcpy(val, cptr, csize*sizeof(char));
+	if (csize < size) memset(val + csize, 0, (size - csize)*sizeof(char));
+      }
+      if (alloc == SWIG_NEWOBJ) {
+	free((char*)cptr);
+	res = SWIG_DelNewMask(res);
+      }      
+      return res;
+    }
+    if (alloc == SWIG_NEWOBJ) free((char*)cptr);
+  }
+  return SWIG_TypeError;
+}
+
+
+size_t
+SWIG_strnlen(const char* s, size_t maxlen)
+{
+  const char *p;
+  for (p = s; maxlen-- && *p; p++)
+    ;
+  return p - s;
+}
 
 #ifdef __cplusplus
 extern "C" {
@@ -5404,6 +5440,31 @@ fail:
 }
 
 
+SWIGINTERN int Swig_var_TmpDir_set(PyObject *_val) {
+  {
+    int res = SWIG_AsCharArray(_val, TmpDir, 200);
+    if (!SWIG_IsOK(res)) {
+      SWIG_exception_fail(SWIG_ArgError(res), "in variable '""TmpDir""' of type '""char [200]""'");
+    }
+  }
+  return 0;
+fail:
+  return 1;
+}
+
+
+SWIGINTERN PyObject *Swig_var_TmpDir_get(void) {
+  PyObject *pyobj = 0;
+  
+  size_t size = SWIG_strnlen(TmpDir, 200);
+  
+  
+  
+  pyobj = SWIG_FromCharPtrAndSize(TmpDir, size);
+  return pyobj;
+}
+
+
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
 	 { (char *)"ENepanet", _wrap_ENepanet, METH_VARARGS, NULL},
@@ -6284,6 +6345,8 @@ SWIG_init(void) {
   SWIG_Python_SetConstant(d, "EN_NOSAVE",SWIG_From_int((int)(0)));
   SWIG_Python_SetConstant(d, "EN_SAVE",SWIG_From_int((int)(1)));
   SWIG_Python_SetConstant(d, "EN_INITFLOW",SWIG_From_int((int)(10)));
+  PyDict_SetItemString(md,(char*)"cvar", SWIG_globals());
+  SWIG_addvarlink(SWIG_globals(),(char*)"TmpDir",Swig_var_TmpDir_get, Swig_var_TmpDir_set);
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="t" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/t" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/t" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="../epanettools/epanet/enumstxt.h" />
+		<Unit filename="../epanettools/epanet/epanet.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/epanet2.h" />
+		<Unit filename="../epanettools/epanet/funcs.h" />
+		<Unit filename="../epanettools/epanet/hash.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/hash.h" />
+		<Unit filename="../epanettools/epanet/hydraul.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/inpfile.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/input1.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/input2.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/input3.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/mempool.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/mempool.h" />
+		<Unit filename="../epanettools/epanet/output.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/quality.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/report.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/rules.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/smatrix.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="../epanettools/epanet/text.h" />
+		<Unit filename="../epanettools/epanet/toolkit.h" />
+		<Unit filename="../epanettools/epanet/types.h" />
+		<Unit filename="../epanettools/epanet/vars.h" />
+		<Extensions>
+			<code_completion />
+			<envvars />
+			<debugger />
+			<lib_finder disable_auto="1" />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

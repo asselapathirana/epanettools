@@ -395,4 +395,5 @@ def ENsetqualtype(*args):
 ENsetqualtype = _epanet2.ENsetqualtype
 # This file is compatible with both classic and new-style classes.
 
+cvar = _epanet2.cvar
 

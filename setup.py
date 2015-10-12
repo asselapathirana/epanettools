@@ -32,10 +32,11 @@ sources=[ "epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
                                      ]]
 sources.append("epanettools"+os.sep+"epanet2_wrap.c")
  
+cargs=['-Wno-unused-but-set-variable','-Wno-format','-Wno-char-subscripts', '-fopenmp','-Wno-deprecated','-O3']
 epanet2_module = Extension('_epanet2',
                            sources=sources,
-                           extra_compile_args=['-fopenmp','-Wno-deprecated','-O3'],
-                           extra_link_args=['-fopenmp','-Wno-deprecated','-O3'], 
+                           extra_compile_args=cargs,
+                           extra_link_args=cargs,
                            #extra_compile_args=['-O0', '-g', '-Wall']
                            )
 

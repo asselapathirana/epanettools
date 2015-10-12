@@ -12,6 +12,6 @@ proj.directory-list = [{'dirloc': loc('..'),
                         'watch_for_changes': True}]
 proj.file-type = 'shared'
 proj.launch-config = {loc('../setup.py'): ('project',
-        (u'test ',
+        (u'test tests',
          ''))}
 proj.main-file = loc('../tests/test_EPANetSimulation.py')

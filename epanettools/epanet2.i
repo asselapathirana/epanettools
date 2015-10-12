@@ -2,6 +2,7 @@
  #define SWIG_FILE_WITH_INIT
  /* Includes the header in the wrapper code */
  #include "./epanet/epanet2.h"
+ extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
  %}
 
 
@@ -28,8 +29,11 @@
  %apply float *OUTPUT { float *result };
  %apply double *OUTPUT { double *result };
  %cstring_bounded_output(char *result,   1024);
- 
+
 
  
  /* Parse the header file to generate wrappers */
  %include "./epanet/epanet2.h"
+ 
+ extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
+;

@@ -1,7 +1,8 @@
 from . import epanet2 as et
 import tempfile, shutil, os, sys
 
-"""" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead."""
+"""" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
+     Never use ENOpenH ENcloseH without keeping tab. -- always use _HClose and _HOpen methods instead."""
 
 from . import tools
 
@@ -48,6 +49,7 @@ class EPANetSimulation():
     
     def __init__(self,inputFileName):
         self._enOpenStatus=False
+        self._enHOpenStatus=False
         self.OriginalInputFileName=inputFileName
         self.inputfile=self.create_temporary_copy(inputFileName)
         self.rptfile=self.inputfile[:-3]+"rpt"
@@ -56,7 +58,6 @@ class EPANetSimulation():
         self._open()
         self._getLinksAndNodes()
 
-        
 
     def run(self, save=True):
         self._open()
@@ -65,7 +66,7 @@ class EPANetSimulation():
             node.demand=[]
             node.head=[]
             node.pressure=[]
-        et.ENopenH()
+        self._HOpen()
         if (save):
             init=1
         else:
@@ -86,7 +87,7 @@ class EPANetSimulation():
                 break
         if(save):
             self.Error(et.ENsavehydfile(self.hydraulicfile))
-        self.Error(et.ENcloseH())
+        self._HClose()
 
 
  
@@ -122,6 +123,7 @@ class EPANetSimulation():
     def _open(self): 
         if(not self._enOpenStatus):
             self.Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
+            et.cvar.TmpDir=tempfile._get_default_tempdir()
             print("Opening",file=sys.stderr)
         self._enOpenStatus=True
         
@@ -131,6 +133,16 @@ class EPANetSimulation():
             print("Closing",file=sys.stderr)
             self._enOpenStatus=False    
 
+
+    def _HOpen(self):
+        if(not self._enHOpenStatus):
+            self.Error(et.ENopenH())
+        self._enHOpenStatus=True
+        
+    def _HClose(self):
+        if(self._enOpenStatus):
+            self.Error(et.ENcloseH())
+        self._enHOpenStatus=False
         
     def clean(self):
         """Delete all the files created by epanet run""" 
