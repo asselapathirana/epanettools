@@ -13,3 +13,4 @@ env/
 tests/s???
 *.wpu
 /py*.egg/
+junk/*.layout
