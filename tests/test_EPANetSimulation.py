@@ -91,25 +91,37 @@ class Test1(unittest.TestCase):
     
     def test_runs_a_simulation_and_get_results(self):
         def mod1():
-            p=Node.result_type['EN_PRESSURE']
+            p=Node.value_type['EN_PRESSURE']
             self.assertAlmostEqual(self.es.nodes['103'].results[p][5],59.301,places=3)
             self.assertAlmostEqual(self.es.nodes['125'].results[p][5],66.051,places=3)
             self.assertEqual(self.es.time[5],15213)
             self.assertEqual(len(self.es.time),len(self.es.nodes[1].results[p]))
             
-            d=Node.result_type['EN_DEMAND']
-            h=Node.result_type['EN_HEAD']
+            d=Node.value_type['EN_DEMAND']
+            h=Node.value_type['EN_HEAD']
             self.assertAlmostEqual(self.es.nodes['103'].results[d][5],101.232, places=3)
             self.assertAlmostEqual(self.es.nodes['103'].results[h][5],179.858, places=3)
         
-        
+        def mod2():
+            p=Link.value_type['EN_DIAMETER']
+            self.assertAlmostEquals(self.es.links[1].results[p][22],99.0,places=1) #index is not important. Diameter is fixed. !
+            self.assertAlmostEquals(self.es.links['105'].results[p][1],12.0,places=1)
+            v=Link.value_type['EN_VELOCITY']
+            self.assertAlmostEquals(self.es.links[2].results[v][22],0.025,places=2)
+            self.assertAlmostEquals(self.es.links['111'].results[v][1],3.23,places=2)
+            
         self.es.run()
         mod1()
+        mod2()
         self.es.runq()
-        q=Node.result_type['EN_QUALITY']
+        q=Node.value_type['EN_QUALITY']
         self.assertAlmostEqual(self.es.nodes['117'].results[q][4],85.317,places=3)
         self.assertAlmostEqual(self.es.nodes['117'].results[q][5],100.0)
+        
+        e=Link.value_type['EN_ENERGY']
+        self.assertAlmostEquals(self.es.links['111'].results[e][23],.00685,places=2)
         mod1()
+        mod2()
         
 
 

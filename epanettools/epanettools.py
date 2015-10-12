@@ -6,9 +6,9 @@ import tempfile, shutil, os, sys
 
 from . import tools
 
-class Node():
+class Node(Object):
     node_types={'JUNCTION':0,'RESERVOIR':1,"TANK":2}
-    result_type={
+    value_type={
     "EN_ELEVATION":       0,
     "EN_BASEDEMAND":       1,
     "EN_PATTERN":         2,
@@ -46,13 +46,29 @@ class Node():
     
 class Link():
     link_types={"CVPIPE":0, "PIPE":1, "PUMP":2, "PRV":3, "PSV":4, "PBV":5, "FCV":6, "TCV":7, "GPV":8}
+    value_type={
+            "EN_DIAMETER":    0,
+            "EN_LENGTH":      1,
+            "EN_ROUGHNESS":   2,
+            "EN_MINORLOSS":   3,
+            "EN_INITSTATUS":  4,
+            "EN_INITSETTING": 5,
+            "EN_KBULK":       6,
+            "EN_KWALL":       7,
+            "EN_FLOW":        8,
+            "EN_VELOCITY":    9,
+            "EN_HEADLOSS":    10,
+            "EN_STATUS":      11,
+            "EN_SETTING":     12,
+            "EN_ENERGY":      13,    }
+    
     def __init__(self,es):
         self.es=es
         self.id=''
         self.start=None
         self.end=None
-        self.diameter=float('nan')
-        self.length=float('nan')
+        self.link_type=-1 #default value is illegal.
+        self.results={}        
     
 class index_id_type(tools.TransformedDict):
     
@@ -76,7 +92,7 @@ class Links(index_id_type):
     pass
 
 
-class EPANetSimulation():
+class EPANetSimulation(Object):
     
     
     def __init__(self,inputFileName):
@@ -114,6 +130,9 @@ class EPANetSimulation():
             for  i,node in self.nodes.items():
                 self.get_node_result_set(node)
                 
+            for  i,link in self.links.items():
+                    self.get_link_result_set(link)           
+                
             ret,tstep=et.ENnextH()
             if (tstep<=0):
                 break
@@ -124,17 +143,28 @@ class EPANetSimulation():
 
 
     def get_node_result_set(self,node):
-        for key,rt in Node.result_type.items():
+        for key,rt in Node.value_type.items():
             r,v=et.ENgetnodevalue(node.index,rt)
             if (r>100):
                 v=float('NaN')
             node.results[rt].append(v)
             
+            
+    def get_link_result_set(self,link):
+        for key,rt in Link.value_type.items():
+            r,v=et.ENgetlinkvalue(link.index,rt)
+            if (r>100):
+                v=float('NaN')
+            link.results[rt].append(v)    
+            
      
     def reset_results(self):
         for i,n in self.nodes.items():
-            for key,rt in Node.result_type.items():
+            for key,rt in Node.value_type.items():
                 n.results[rt]=[]
+        for i,n in self.links.items():
+            for key,rt in Link.value_type.items():
+                n.results[rt]=[]        
         
      
      
@@ -151,8 +181,9 @@ class EPANetSimulation():
             ret,t=et.ENrunQ()
             self.Error(ret)
             for i,node in self.nodes.items():
-                node.quality.append(et.ENgetnodevalue(node.index, et.EN_QUALITY )[1])
                 self.get_node_result_set(node)
+            for  i,link in self.links.items():
+                    self.get_link_result_set(link)             
             ret,tstep=et.ENnextQ()
             self.Error(ret)
             if(tstep<=0):
