@@ -6,7 +6,7 @@ import tempfile, shutil, os, sys
 
 from . import tools
 
-class Node(Object):
+class Node(object):
     node_types={'JUNCTION':0,'RESERVOIR':1,"TANK":2}
     value_type={
     "EN_ELEVATION":       0,
@@ -92,7 +92,7 @@ class Links(index_id_type):
     pass
 
 
-class EPANetSimulation(Object):
+class EPANetSimulation(object):
     
     
     def __init__(self,inputFileName):
