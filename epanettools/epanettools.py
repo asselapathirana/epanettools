@@ -101,6 +101,8 @@ class EPANetSimulation(object):
     def __init__(self,inputFileName):
         self._enOpenStatus=False
         self._enHOpenStatus=False
+        #
+        
         self.OriginalInputFileName=inputFileName
         self.inputfile=self.create_temporary_copy(inputFileName)
         self.rptfile=self.inputfile[:-3]+"rpt"
@@ -111,17 +113,27 @@ class EPANetSimulation(object):
         self.reset_results()
         self._getInputData()
         self._close()
-        self.check_changed(init=True)
+        
+        #keep this as last method to call. 
+        #self.check_changed(init=True)
 
-    def check_changed(self,init=False):
+        """  def check_changed(self,init=False):
+        import hashlib
+        if(not init):
+            pass
         s=dumps([self.nodes,self.links])
+        m=hashlib.md5()
+        m.update(s)
+        print(len(self.nodes[1].results),len(self.links[1].results))#, m.hexdigest(),len(s)) 
         if(init):
-            self.signature=s
             self._changed=False
+            self.signature=s
         else:
             p=self.signature
-            return s==p
-        
+            self._changed=self.signature==p
+            self.signature=s
+            return(self._changed)
+        """
         
             
         
