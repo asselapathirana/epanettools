@@ -29,6 +29,67 @@ class Test1(unittest.TestCase):
             
     def test_non_existing_file_raise_error(self):
         self.assertRaises(FileNotFoundError, EPANetSimulation,"Silly file")
+        
+        
+        
+    def test_input_type_node_or_node_data_has_only_one_value(self):
+        def mod1():
+            for j,node in self.es.nodes.items():
+                for t,i in Node.value_type.items():
+                    if(i>=Node.computed_values_start):
+                        continue
+                    self.assertEqual(len(node.results[i]),1)
+        mod1()        
+        self.es.run()
+        mod1()
+        self.es.runq()
+        mod1()
+            
+    def test_output_type_node_or_node_data_has_multiple_value(self):
+        def mod1(before_run=True):
+            for j,node in self.es.nodes.items():
+                for t,i in Node.value_type.items():
+                    if(i<Node.computed_values_start):
+                        continue
+                    if(before_run):
+                        self.assertEqual(len(node.results[i]),0)
+                    else: 
+                        self.assertEqual(len(node.results[i]),len(self.es.time))
+        mod1()        
+        self.es.run()
+        mod1(False)
+        self.es.runq()
+        mod1(False)    
+        
+    def test_input_type_node_or_link_data_has_only_one_value(self):
+        def mod1():
+            for j,link in self.es.links.items():
+                for t,i in Link.value_type.items():
+                    if(i>=Link.computed_values_start):
+                        continue
+                    self.assertEqual(len(link.results[i]),1)
+        mod1()        
+        self.es.run()
+        mod1()
+        self.es.runq()
+        mod1()
+        
+    def test_output_type_node_or_link_data_has_multiple_value(self):
+        def mod1(before_run=True):
+            for j,link in self.es.links.items():
+                for t,i in Link.value_type.items():
+                    if(i<Link.computed_values_start):
+                        continue
+                    if(before_run):
+                        self.assertEqual(len(link.results[i]),0)
+                    else: 
+                        self.assertEqual(len(link.results[i]),len(self.es.time))
+        mod1()        
+        self.es.run()
+        mod1(False)
+        self.es.runq()
+        mod1(False)
+    
     
     def test_properly_open_a_network_file(self):
         import filecmp
@@ -81,6 +142,9 @@ class Test1(unittest.TestCase):
         # get the links connected to a node. 
         self.assertEqual(sorted([i.id for i in n['169'].links]),['183', '185', '187', '211'] )
         
+        
+
+        
     def test_can_access_low_level_EN_type_functions(self):
         self.assertEqual(self.es.ENgetnodeid(3),[0,'20'])
         
@@ -104,8 +168,8 @@ class Test1(unittest.TestCase):
         
         def mod2():
             p=Link.value_type['EN_DIAMETER']
-            self.assertAlmostEquals(self.es.links[1].results[p][22],99.0,places=1) #index is not important. Diameter is fixed. !
-            self.assertAlmostEquals(self.es.links['105'].results[p][1],12.0,places=1)
+            self.assertAlmostEquals(self.es.links[1].results[p][0],99.0,places=1) #index is not important. Diameter is fixed. !
+            self.assertAlmostEquals(self.es.links['105'].results[p][0],12.0,places=1)
             v=Link.value_type['EN_VELOCITY']
             self.assertAlmostEquals(self.es.links[2].results[v][22],0.025,places=2)
             self.assertAlmostEquals(self.es.links['111'].results[v][1],3.23,places=2)
@@ -148,6 +212,14 @@ class Test1(unittest.TestCase):
         self.assertFalse(os.path.exists(self.es.rptfile))
         self.assertFalse(os.path.exists(self.es.binfile))
         self.assertFalse(os.path.exists(self.es.hydraulicfile))
+        
+        
+    def test_change_monitoring(self):
+        # just when started
+        self.assertFalse(self.es.check_changed())
+        self.es.run()
+        self.assertFalse(self.es.check_changed())
+        #self.
 
 
 tc=Test1()

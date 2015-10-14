@@ -1,5 +1,6 @@
 from . import epanet2 as et
 import tempfile, shutil, os, sys
+from pickle import dumps
 
 """" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
      Never use ENOpenH ENcloseH without keeping tab. -- always use _HClose and _HOpen methods instead."""
@@ -8,9 +9,10 @@ from . import tools
 
 class Node(object):
     node_types={'JUNCTION':0,'RESERVOIR':1,"TANK":2}
+    computed_values_start=9
     value_type={
     "EN_ELEVATION":       0,
-    "EN_BASEDEMAND":       1,
+    "EN_BASEDEMAND":      1,
     "EN_PATTERN":         2,
     "EN_EMITTER":         3,
     "EN_INITQUAL":        4,
@@ -46,6 +48,7 @@ class Node(object):
     
 class Link():
     link_types={"CVPIPE":0, "PIPE":1, "PUMP":2, "PRV":3, "PSV":4, "PBV":5, "FCV":6, "TCV":7, "GPV":8}
+    computed_values_start=8
     value_type={
             "EN_DIAMETER":    0,
             "EN_LENGTH":      1,
@@ -106,21 +109,38 @@ class EPANetSimulation(object):
         self._open()
         self._getLinksAndNodes()
         self.reset_results()
+        self._getInputData()
         self._close()
+        self.check_changed(init=True)
 
-
+    def check_changed(self,init=False):
+        s=dumps([self.nodes,self.links])
+        if(init):
+            self.signature=s
+            self._changed=False
+        else:
+            p=self.signature
+            return s==p
+        
+        
+            
+        
+    
+    def _sync(self):
+        return True
+        
+        
     def sync(self):
         """ Syncs the changes variable values with underlying toolkit system."""
-        pass
+        if (not self.check_changed()):
+            return
+        self._changed = not self._sync()
 
     def run(self, save=True):
         self.reset_results()
         self._open()
-        self.time=[]
-        for i,node in self.nodes.items():
-            node.demand=[]
-            node.head=[]
-            node.pressure=[]
+        #get the input_data results
+        self._getInputData()
         self._HOpen()
         if (save):
             init=1
@@ -132,10 +152,10 @@ class EPANetSimulation(object):
             self.time.append(t)
             # Retrieve hydraulic results for time t
             for  i,node in self.nodes.items():
-                self.get_node_result_set(node)
+                self.get_node_result_set(node,input_data=False)
                 
             for  i,link in self.links.items():
-                    self.get_link_result_set(link)           
+                    self.get_link_result_set(link,input_data=False)
                 
             ret,tstep=et.ENnextH()
             if (tstep<=0):
@@ -145,24 +165,31 @@ class EPANetSimulation(object):
         self._HClose()
         self._close()
 
+      
 
-    def get_node_result_set(self,node):
+
+    def get_node_result_set(self,node,input_data=False):
         for key,rt in Node.value_type.items():
-            r,v=et.ENgetnodevalue(node.index,rt)
-            if (r>100):
-                v=float('NaN')
-            node.results[rt].append(v)
+            if ((not input_data) and (rt>=node.computed_values_start)) or \
+               ((input_data) and (rt< node.computed_values_start)):
+                r,v=et.ENgetnodevalue(node.index,rt)
+                if (r>100):
+                    v=float('NaN')
+                node.results[rt].append(v)
             
             
-    def get_link_result_set(self,link):
+    def get_link_result_set(self,link,input_data=False):
         for key,rt in Link.value_type.items():
-            r,v=et.ENgetlinkvalue(link.index,rt)
-            if (r>100):
-                v=float('NaN')
-            link.results[rt].append(v)    
+            if ((not input_data) and (rt>=Link.computed_values_start)) or \
+               ((input_data) and (rt< Link.computed_values_start)):
+                r,v=et.ENgetlinkvalue(link.index,rt)
+                if (r>100):
+                    v=float('NaN')
+                link.results[rt].append(v)    
             
      
     def reset_results(self):
+        self.time=[]
         for i,n in self.nodes.items():
             for key,rt in Node.value_type.items():
                 n.results[rt]=[]
@@ -175,19 +202,20 @@ class EPANetSimulation(object):
      
     def runq(self):
         self.reset_results()
-        for i,node in self.nodes.items():
-            node.quality=[]        
         self._open()
+        #get the input_data results
+        self._getInputData()        
         self.Error(et.ENusehydfile(self.hydraulicfile))
         self.Error(et.ENopenQ()) 
         self.Error(et.ENinitQ(1))
         while(True):
             ret,t=et.ENrunQ()
+            self.time.append(t)
             self.Error(ret)
             for i,node in self.nodes.items():
-                self.get_node_result_set(node)
+                self.get_node_result_set(node,input_data=False)
             for  i,link in self.links.items():
-                    self.get_link_result_set(link)             
+                    self.get_link_result_set(link,input_data=False)             
             ret,tstep=et.ENnextQ()
             self.Error(ret)
             if(tstep<=0):
@@ -252,7 +280,12 @@ class EPANetSimulation(object):
         self._open()
 
 
-        
+    def _getInputData(self):
+        for  i,node in self.nodes.items():
+            self.get_node_result_set(node,input_data=True)          
+        for  i,link in self.links.items():
+                self.get_link_result_set(link,input_data=True)  
+                
         
     def _getLinksAndNodes(self):
         self.links=Links()
@@ -261,10 +294,10 @@ class EPANetSimulation(object):
         for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
             node=Node(self)
             node.id=et.ENgetnodeid(i)[1]
-            node.results['ELEVATION']=et.ENgetnodevalue(i,et.EN_ELEVATION )[1]
             r,t=et.ENgetnodetype(i)
             self.Error(r)
             node.node_type=t
+
             self.nodes[i]=node
         for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
             link=Link(self)
@@ -274,7 +307,8 @@ class EPANetSimulation(object):
             link.end=self.nodes[b]
             r,t=et.ENgetlinktype(i)
             self.Error(r)
-            link.link_type=t            
+            link.link_type=t   
+        
             self.nodes[a].links.append(link)
             self.nodes[b].links.append(link)
             self.links[i]=link

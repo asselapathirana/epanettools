@@ -1,6 +1,5 @@
 import collections
 
-
 class TransformedDict(collections.MutableMapping):
     """A dictionary that applies an arbitrary key-altering
        function before accessing the keys.
@@ -29,3 +28,5 @@ class TransformedDict(collections.MutableMapping):
 
     def __keytransform__(self, key):
         return key
+    
+    
