@@ -1,8 +1,10 @@
 import os
+import math
 import unittest
 import epanettools
 from epanettools.examples import simple
-from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, Links
+from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, \
+      Links, Patterns, Pattern, Controls, Control
 
 from unittest import skip, expectedFailure
 
@@ -27,6 +29,38 @@ class Test1(unittest.TestCase):
         self.assertIsInstance(self.es.network.nodes,Nodes)
         self.assertIsInstance(self.es.network.nodes[1],Node)
         self.assertIsInstance(self.es.network.links[1],Link)
+        
+    def test_network_has_patterns(self):
+        self.assertIsInstance(self.es.network.patterns,Patterns)
+        self.assertIsInstance(self.es.network.patterns[1],Pattern)
+        self.assertEqual(len(self.es.network.patterns),5)
+        self.assertEqual(self.es.network.patterns['4'][7],1777) # can call with index or...
+        self.assertEqual(self.es.network.patterns[4][7],1777)   # id. And for specific value, call the item.
+
+    def test_network_has_controls(self):
+        self.assertIsInstance(self.es.network.controls,Controls)
+        self.assertIsInstance(self.es.network.controls[1],Control)
+        self.assertEqual(len(self.es.network.controls),6)
+        c=[self.es.network.controls[x] for x in range(1,5)]
+        self.assertEqual(c[0].link.id,'10')
+        self.assertEqual(c[0].node,None)
+        self.assertEqual(c[0].level,3600.)
+        self.assertAlmostEqual(c[0].setting,Link.OPENED)
+        self.assertEqual(c[0].ctype,Control.control_types['TIMER_CONTROL'])
+        
+        self.assertAlmostEqual(c[1].setting,Link.CLOSED)
+        
+        self.assertAlmostEqual(c[2].setting,Link.OPENED) #Link 335 OPEN IF Node 1 BELOW 17.1
+        self.assertEqual(c[2].link.id,'335')
+        self.assertEqual(c[2].node.id,'1')
+        self.assertAlmostEqual(c[2].level,17.1,places=1)
+        self.assertEqual(c[2].ctype,Control.control_types['LOW_LEVEL_CONTROL'])
+        
+        self.assertAlmostEqual(c[3].setting,Link.CLOSED) #Link 335 OPEN IF Node 1 BELOW 17.1
+        self.assertEqual(c[3].link.id,'335')
+        self.assertEqual(c[3].node.id,'1')
+        self.assertAlmostEqual(c[3].level,19.1,places=1)
+        self.assertEqual(c[3].ctype,Control.control_types['HIGH_LEVEL_CONTROL'])        
         
     def test_can_import_EPANetSimulation(self):
         try:

@@ -192,8 +192,8 @@ extern int  ENreport(void);
 extern int  ENresetreport(void);
 extern int  ENsetreport(char *  );
 
-extern int  ENgetcontrol(int, int *, int *, float *,
-                      int *, float * result );
+extern int  ENgetcontrol(int, int * ci1, int * ci2, float * c1,
+                      int * ci3, float * c2 );
 extern int  ENgetcount(int, int * result);
 extern int  ENgetoption(int, float * result );
 extern int  ENgettimeparam(int, long * result );

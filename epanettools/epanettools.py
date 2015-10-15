@@ -40,13 +40,24 @@ class Node(object):
 
     def __init__(self,es):
         self.es=es
-        self.id=''
-        self.values={}
         self.links=[]
-        self.node_type=-1 #default value is illegal.
         self.results={}
-    
-class Link():
+        
+        
+    def get_node_result_set(self,input_data=False):
+        for key,rt in Node.value_type.items():
+            if ((not input_data) and (rt>=Node.computed_values_start)) or \
+               ((input_data) and (rt< Node.computed_values_start)):
+                r,v=et.ENgetnodevalue(self.index,rt)
+                if (r>100):
+                    v=float('NaN')
+                self.results[rt].append(v)
+            
+            
+
+class Link(object):
+    CLOSED=0
+    OPENED=1
     link_types={"CVPIPE":0, "PIPE":1, "PUMP":2, "PRV":3, "PSV":4, "PBV":5, "FCV":6, "TCV":7, "GPV":8}
     computed_values_start=8
     value_type={
@@ -67,18 +78,42 @@ class Link():
     
     def __init__(self,es):
         self.es=es
-        self.id=''
-        self.start=None
-        self.end=None
-        self.link_type=-1 #default value is illegal.
-        self.results={}        
+        self.results={}
+        
+        
+
+    
+    def get_link_result_set(self,input_data=False):
+        for key,rt in Link.value_type.items():
+            if ((not input_data) and (rt>=Link.computed_values_start)) or \
+               ((input_data) and (rt< Link.computed_values_start)):
+                r,v=et.ENgetlinkvalue(self.index,rt)
+                if (r>100):
+                    v=float('NaN')
+                self.results[rt].append(v)       
+
+class Pattern(tools.TransformedDict):
+    
+    def __init__(self,es):
+        super(Pattern,self).__init__()
+        self.es=es
+    
+class Control(object):
+    
+    control_types={'LOW_LEVEL_CONTROL':0, 'HIGH_LEVEL_CONTROL':1, 'TIMER_CONTROL':2, 'TIME_OF_DAY_CONTROL':3}
+
+ 
+    def __init__(self,es):
+        self.es=es
+    
+    
     
 class index_id_type(tools.TransformedDict):
     
     def __setitem__(self, key, value):
         v=self.__keytransform__(key)
         self.store[v] = value
-        self.store[v].index=v
+        self.store[v].index=v # the index of the entity is also saved as attribute in the item. 
         
     def __keytransform__(self, key):
         if isinstance(key, str):
@@ -94,8 +129,16 @@ class Nodes(index_id_type):
 class Links(index_id_type):
     pass
 
+class Patterns(index_id_type):
+    pass
+
+class Controls(index_id_type):
+    pass
+
 class Network(object):
     pass
+
+
 
 class EPANetSimulation(object):
     
@@ -111,14 +154,10 @@ class EPANetSimulation(object):
         self.binfile=self.inputfile[:-3]+"bin"
         self.hydraulicfile=self.inputfile[:-3]+"hyd"
         self._open()
-        self._getLinksAndNodes()
+        self._getNetworkData()
         self.reset_results()
         self._getInputData()
         self._close()
-        
-
-        
-            
         
     
     def _sync(self):
@@ -145,10 +184,10 @@ class EPANetSimulation(object):
             self.time.append(t)
             # Retrieve hydraulic results for time t
             for  i,node in self.network.nodes.items():
-                self.get_node_result_set(node,input_data=False)
+                node.get_node_result_set(input_data=False)
                 
             for  i,link in self.network.links.items():
-                    self.get_link_result_set(link,input_data=False)
+                link.get_link_result_set(input_data=False)
                 
             ret,tstep=et.ENnextH()
             if (tstep<=0):
@@ -161,24 +200,7 @@ class EPANetSimulation(object):
       
 
 
-    def get_node_result_set(self,node,input_data=False):
-        for key,rt in Node.value_type.items():
-            if ((not input_data) and (rt>=node.computed_values_start)) or \
-               ((input_data) and (rt< node.computed_values_start)):
-                r,v=et.ENgetnodevalue(node.index,rt)
-                if (r>100):
-                    v=float('NaN')
-                node.results[rt].append(v)
-            
-            
-    def get_link_result_set(self,link,input_data=False):
-        for key,rt in Link.value_type.items():
-            if ((not input_data) and (rt>=Link.computed_values_start)) or \
-               ((input_data) and (rt< Link.computed_values_start)):
-                r,v=et.ENgetlinkvalue(link.index,rt)
-                if (r>100):
-                    v=float('NaN')
-                link.results[rt].append(v)    
+ 
             
      
     def reset_results(self):
@@ -206,9 +228,9 @@ class EPANetSimulation(object):
             self.time.append(t)
             self.Error(ret)
             for i,node in self.network.nodes.items():
-                self.get_node_result_set(node,input_data=False)
+                node.get_node_result_set(input_data=False)
             for  i,link in self.network.links.items():
-                    self.get_link_result_set(link,input_data=False)             
+                link.get_link_result_set(input_data=False)             
             ret,tstep=et.ENnextQ()
             self.Error(ret)
             if(tstep<=0):
@@ -275,28 +297,34 @@ class EPANetSimulation(object):
 
     def _getInputData(self):
         for  i,node in self.network.nodes.items():
-            self.get_node_result_set(node,input_data=True)          
+            node.get_node_result_set(input_data=True)          
         for  i,link in self.network.links.items():
-                self.get_link_result_set(link,input_data=True)  
+                link.get_link_result_set(input_data=True)  
                 
         
-    def _getLinksAndNodes(self):
+    def _getNetworkData(self):
         self.network=Network()
         self.network.links=Links()
         self.network.nodes=Nodes()
+        self.network.patterns=Patterns()
+        self.network.controls=Controls()
      
         self._open()
         for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
             node=Node(self)
-            node.id=et.ENgetnodeid(i)[1]
+            k=et.ENgetnodeid(i)
+            self.Error(k[0])
+            node.id=k[1]
             r,t=et.ENgetnodetype(i)
             self.Error(r)
             node.node_type=t
-
             self.network.nodes[i]=node
+
         for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
             link=Link(self)
-            link.id=et.ENgetlinkid(i)[1]
+            k=et.ENgetlinkid(i)
+            self.Error(k[0])
+            link.id=k[1]
             ret,a,b=et.ENgetlinknodes(i)
             link.start=self.network.nodes[a]
             link.end=self.network.nodes[b]
@@ -307,8 +335,32 @@ class EPANetSimulation(object):
             self.network.nodes[a].links.append(link)
             self.network.nodes[b].links.append(link)
             self.network.links[i]=link
+            
+        for i in range(1,et.ENgetcount(et.EN_PATCOUNT)[1]+1):
+            pattern=Pattern(self)
+            k=et.ENgetpatternid(i)
+            self.Error(k[0])
+            pattern.id=k[1]
+            for j in range(1,et.ENgetpatternlen(i)[1]+1):
+                pattern.store[j]=et.ENgetpatternvalue(i,j)[1]
+                
+            self.network.patterns[i]=pattern
     
+        for i in range(1,et.ENgetcount(et.EN_CONTROLCOUNT)[1]+1):
+                    c=Control(self)
+                    k=et.ENgetcontrol(i)
+                    self.Error(k[0])
+                    c.ctype=k[1]
+                    if(c.ctype>1): # no node is involved. for types 2 and 3!  
+                        c.node=None
+                    else:
+                        c.node=self.network.nodes[k[4]]
+                    c.level=k[5]
+                    c.link=self.network.links[k[2]]
+                    c.setting=k[3]
+                    self.network.controls[i]=c
 
+   
     
     def __getattribute__(self, name):
         try:

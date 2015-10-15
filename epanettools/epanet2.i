@@ -27,6 +27,11 @@
  %apply int *OUTPUT { int *result2 };
  %apply long *OUTPUT { long *result };
  %apply float *OUTPUT { float *result };
+ %apply float *OUTPUT {float *c1}
+ %apply float *OUTPUT {float *c2}
+ %apply int *OUTPUT {int *ci1}
+ %apply int *OUTPUT {int *ci2}
+ %apply int *OUTPUT {int *ci3}
  %apply double *OUTPUT { double *result };
  %cstring_bounded_output(char *result,   1024);
 
