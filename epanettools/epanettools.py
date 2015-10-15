@@ -94,6 +94,8 @@ class Nodes(index_id_type):
 class Links(index_id_type):
     pass
 
+class Network(object):
+    pass
 
 class EPANetSimulation(object):
     
@@ -114,26 +116,7 @@ class EPANetSimulation(object):
         self._getInputData()
         self._close()
         
-        #keep this as last method to call. 
-        #self.check_changed(init=True)
 
-        """  def check_changed(self,init=False):
-        import hashlib
-        if(not init):
-            pass
-        s=dumps([self.nodes,self.links])
-        m=hashlib.md5()
-        m.update(s)
-        print(len(self.nodes[1].results),len(self.links[1].results))#, m.hexdigest(),len(s)) 
-        if(init):
-            self._changed=False
-            self.signature=s
-        else:
-            p=self.signature
-            self._changed=self.signature==p
-            self.signature=s
-            return(self._changed)
-        """
         
             
         
@@ -144,9 +127,7 @@ class EPANetSimulation(object):
         
     def sync(self):
         """ Syncs the changes variable values with underlying toolkit system."""
-        if (not self.check_changed()):
-            return
-        self._changed = not self._sync()
+        self._sync()
 
     def run(self, save=True):
         self.reset_results()
@@ -163,10 +144,10 @@ class EPANetSimulation(object):
             ret,t=et.ENrunH()
             self.time.append(t)
             # Retrieve hydraulic results for time t
-            for  i,node in self.nodes.items():
+            for  i,node in self.network.nodes.items():
                 self.get_node_result_set(node,input_data=False)
                 
-            for  i,link in self.links.items():
+            for  i,link in self.network.links.items():
                     self.get_link_result_set(link,input_data=False)
                 
             ret,tstep=et.ENnextH()
@@ -202,10 +183,10 @@ class EPANetSimulation(object):
      
     def reset_results(self):
         self.time=[]
-        for i,n in self.nodes.items():
+        for i,n in self.network.nodes.items():
             for key,rt in Node.value_type.items():
                 n.results[rt]=[]
-        for i,n in self.links.items():
+        for i,n in self.network.links.items():
             for key,rt in Link.value_type.items():
                 n.results[rt]=[]        
         
@@ -224,9 +205,9 @@ class EPANetSimulation(object):
             ret,t=et.ENrunQ()
             self.time.append(t)
             self.Error(ret)
-            for i,node in self.nodes.items():
+            for i,node in self.network.nodes.items():
                 self.get_node_result_set(node,input_data=False)
-            for  i,link in self.links.items():
+            for  i,link in self.network.links.items():
                     self.get_link_result_set(link,input_data=False)             
             ret,tstep=et.ENnextQ()
             self.Error(ret)
@@ -293,15 +274,17 @@ class EPANetSimulation(object):
 
 
     def _getInputData(self):
-        for  i,node in self.nodes.items():
+        for  i,node in self.network.nodes.items():
             self.get_node_result_set(node,input_data=True)          
-        for  i,link in self.links.items():
+        for  i,link in self.network.links.items():
                 self.get_link_result_set(link,input_data=True)  
                 
         
     def _getLinksAndNodes(self):
-        self.links=Links()
-        self.nodes=Nodes()        
+        self.network=Network()
+        self.network.links=Links()
+        self.network.nodes=Nodes()
+     
         self._open()
         for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
             node=Node(self)
@@ -310,20 +293,20 @@ class EPANetSimulation(object):
             self.Error(r)
             node.node_type=t
 
-            self.nodes[i]=node
+            self.network.nodes[i]=node
         for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
             link=Link(self)
             link.id=et.ENgetlinkid(i)[1]
             ret,a,b=et.ENgetlinknodes(i)
-            link.start=self.nodes[a]
-            link.end=self.nodes[b]
+            link.start=self.network.nodes[a]
+            link.end=self.network.nodes[b]
             r,t=et.ENgetlinktype(i)
             self.Error(r)
             link.link_type=t   
         
-            self.nodes[a].links.append(link)
-            self.nodes[b].links.append(link)
-            self.links[i]=link
+            self.network.nodes[a].links.append(link)
+            self.network.nodes[b].links.append(link)
+            self.network.links[i]=link
     
 
     
