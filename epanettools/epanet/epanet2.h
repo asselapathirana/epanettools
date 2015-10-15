@@ -202,7 +202,7 @@ extern int  ENgetpatternindex(char *, int * result );
 extern int  ENgetpatternid(int, char * result );
 extern int  ENgetpatternlen(int, int * result );
 extern int  ENgetpatternvalue(int, int, float * result );
-extern int  ENgetqualtype(int *, int * result );
+extern int  ENgetqualtype(int * result1, int * result );
 extern int  ENgeterror(int, char * result, int);
 
 extern int  ENgetnodeindex(char *, int * result );

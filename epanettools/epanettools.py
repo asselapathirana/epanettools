@@ -136,9 +136,17 @@ class Controls(index_id_type):
     pass
 
 class Network(object):
-    pass
-
-
+    WaterQualityAnalysisTypes = {
+    "EN_NONE":         0,
+    "EN_CHEM":         1,
+    "EN_AGE":          2,
+    "EN_TRACE":        3,
+    }
+    EN_TRIALS =     0
+    EN_ACCURACY =   1
+    EN_TOLERANCE =  2
+    EN_EMITEXPON =  3
+    EN_DEMANDMULT = 4
 
 class EPANetSimulation(object):
     
@@ -308,6 +316,7 @@ class EPANetSimulation(object):
         self.network.nodes=Nodes()
         self.network.patterns=Patterns()
         self.network.controls=Controls()
+
      
         self._open()
         for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
@@ -359,8 +368,35 @@ class EPANetSimulation(object):
                     c.link=self.network.links[k[2]]
                     c.setting=k[3]
                     self.network.controls[i]=c
-
+                    
+        k=et.ENgetqualtype()
+        self.Error(k[0])
+        self.network.WaterQualityAnalysisType=k[1]
+        if(k[2]==0):
+            t=None
+        else:
+            t=self.network.nodes[k[2]]
+        self.network.WaterQualityTraceNode=t        
    
+        k=et.ENgetoption(Network.EN_ACCURACY)
+        self.Error(k[0])
+        self.network.en_accuracy=k[1]
+        
+        k=et.ENgetoption(Network.EN_DEMANDMULT)
+        self.Error(k[0])
+        self.network.en_demandmult=k[1]
+        
+        k=et.ENgetoption(Network.EN_EMITEXPON)
+        self.Error(k[0])
+        self.network.en_emitexpon=k[1]
+        
+        k=et.ENgetoption(Network.EN_TOLERANCE)
+        self.Error(k[0])
+        self.network.en_tolerance=k[1]  
+        
+        k=et.ENgetoption(Network.EN_TRIALS)
+        self.Error(k[0])
+        self.network.en_trials=k[1]        
     
     def __getattribute__(self, name):
         try:

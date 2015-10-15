@@ -5784,22 +5784,23 @@ SWIGINTERN PyObject *_wrap_ENgetqualtype(PyObject *SWIGUNUSEDPARM(self), PyObjec
   PyObject *resultobj = 0;
   int *arg1 = (int *) 0 ;
   int *arg2 = (int *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
+  int temp1 ;
+  int res1 = SWIG_TMPOBJ ;
   int temp2 ;
   int res2 = SWIG_TMPOBJ ;
-  PyObject * obj0 = 0 ;
   int result;
   
+  arg1 = &temp1;
   arg2 = &temp2;
-  if (!PyArg_ParseTuple(args,(char *)"O:ENgetqualtype",&obj0)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_int, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ENgetqualtype" "', argument " "1"" of type '" "int *""'"); 
-  }
-  arg1 = (int *)(argp1);
+  if (!PyArg_ParseTuple(args,(char *)":ENgetqualtype")) SWIG_fail;
   result = (int)ENgetqualtype(arg1,arg2);
   resultobj = SWIG_From_int((int)(result));
+  if (SWIG_IsTmpObj(res1)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg1)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res1) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg1), SWIGTYPE_p_int, new_flags));
+  }
   if (SWIG_IsTmpObj(res2)) {
     resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_int((*arg2)));
   } else {

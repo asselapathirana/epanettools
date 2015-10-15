@@ -535,8 +535,8 @@ def ENgetpatternvalue(arg1, arg2):
     return _epanet2.ENgetpatternvalue(arg1, arg2)
 ENgetpatternvalue = _epanet2.ENgetpatternvalue
 
-def ENgetqualtype(arg1):
-    return _epanet2.ENgetqualtype(arg1)
+def ENgetqualtype():
+    return _epanet2.ENgetqualtype()
 ENgetqualtype = _epanet2.ENgetqualtype
 
 def ENgeterror(arg1, arg3):

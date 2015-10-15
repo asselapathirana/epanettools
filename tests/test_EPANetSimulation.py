@@ -60,7 +60,20 @@ class Test1(unittest.TestCase):
         self.assertEqual(c[3].link.id,'335')
         self.assertEqual(c[3].node.id,'1')
         self.assertAlmostEqual(c[3].level,19.1,places=1)
-        self.assertEqual(c[3].ctype,Control.control_types['HIGH_LEVEL_CONTROL'])        
+        self.assertEqual(c[3].ctype,Control.control_types['HIGH_LEVEL_CONTROL']) 
+        
+    def test_water_quality_analysis_type_is_set(self):
+        self.assertEqual(self.es.network.WaterQualityAnalysisType,Network.WaterQualityAnalysisTypes["EN_TRACE"])
+        self.assertEqual(self.es.network.WaterQualityTraceNode.id,'Lake')
+        
+    def test_proper_options_are_set(self):
+        n=self.es.network
+        self.assertAlmostEqual(n.en_accuracy,0.001,places=3)
+        self.assertAlmostEqual(n.en_demandmult,1.0,places=3)
+        self.assertAlmostEqual(n.en_emitexpon,0.5,places=2)
+        self.assertAlmostEqual(n.en_tolerance,.01,places=5)
+        self.assertAlmostEqual(n.en_trials,40.0,places=3)
+       
         
     def test_can_import_EPANetSimulation(self):
         try:
