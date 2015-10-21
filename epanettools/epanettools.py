@@ -7,9 +7,30 @@ from pickle import dumps
 
 from . import tools
 
+
+def Error(e):
+    if(e):
+        s="Epanet Error: %d : %s" %(e,et.ENgeterror(e,500)[1])
+        raise Exception(s) 
+    
+def check_and_return(result_list,silent=False):
+    r=list(result_list)
+    if(not silent):
+        Error(r[0])
+        
+    if(r[0]>0):
+        return float('nan')
+    else:
+        if(len(r)==2):
+            return r[1]
+        else:
+            return r[1:]
+    
+
 class Node(object):
     node_types={'JUNCTION':0,'RESERVOIR':1,"TANK":2}
-    computed_values_start=9
+    input_values=  [0,1,2,3,4,5,6,7,8,14,15,16,17,18,19,20,21,22,23] # these are also the values that can be retrieved before running. 
+    settable_values=[i for i in input_values if i not in [14,16,19]] # ENsetnodevalues works only with these. 
     value_type={
     "EN_ELEVATION":       0,
     "EN_BASEDEMAND":      1,
@@ -38,20 +59,33 @@ class Node(object):
 
         
 
-    def __init__(self,es):
+    def __init__(self,es,index=False):
         self.es=es
         self.links=[]
         self.results={}
+        #get the inverse of value_type
+        self.vti={b:a for a,b in self.value_type.items()} 
+        if(index):
+            self.readValues(index)
         
+        
+    def readValues(self,index):
+        self.index=index 
+        self.id=check_and_return(et.ENgetnodeid(index))
+        self.node_type=check_and_return(et.ENgetnodetype(index)) 
         
     def get_node_result_set(self,input_data=False):
+        
         for key,rt in Node.value_type.items():
-            if ((not input_data) and (rt>=Node.computed_values_start)) or \
-               ((input_data) and (rt< Node.computed_values_start)):
-                r,v=et.ENgetnodevalue(self.index,rt)
-                if (r>100):
-                    v=float('NaN')
-                self.results[rt].append(v)
+            if ((not input_data) and (not rt in Node.input_values)) or \
+               ((input_data) and (rt in Node.input_values)):
+                self.results[rt].append(check_and_return(et.ENgetnodevalue(self.index,rt),silent=True))
+                                                         
+    def sync(self):
+        for key,rt in Node.value_type.items():
+            if (rt in Node.settable_values):
+                et.ENsetnodevalue(self.index,rt,self.results[0][0])               
+                
             
             
 
@@ -59,7 +93,8 @@ class Link(object):
     CLOSED=0
     OPENED=1
     link_types={"CVPIPE":0, "PIPE":1, "PUMP":2, "PRV":3, "PSV":4, "PBV":5, "FCV":6, "TCV":7, "GPV":8}
-    computed_values_start=8
+    settable_values=[0,1,2,3,4,5,6,7,11,12] # these are also the values that can be retrieved before running.
+    input_values  =settable_values #use these for ENlsetlinkvalue()
     value_type={
             "EN_DIAMETER":    0,
             "EN_LENGTH":      1,
@@ -76,35 +111,84 @@ class Link(object):
             "EN_SETTING":     12,
             "EN_ENERGY":      13,    }
     
-    def __init__(self,es):
+    def __init__(self,es,index=False):
         self.es=es
         self.results={}
+        if(index):
+            self.readValues(index)
+            
+            
+    def readValues(self,index):
+        self.index=index 
+        self.id=check_and_return(et.ENgetlinkid(index))
+        self.link_type=check_and_return(et.ENgetlinktype(index)) 
+        a,b=check_and_return(et.ENgetlinknodes(index))
         
+        try:
+            self.start=self.es.network.nodes[a]
+            self.end=self.es.network.nodes[b]
+            self.link_type=check_and_return(et.ENgetlinktype(index))
         
-
+            self.es.network.nodes[a].links.append(self)
+            self.es.network.nodes[b].links.append(self)
+        except Exception as e:
+            print("No Nodes present! Check if nodes have been read.",file=sys.stderr)
+            raise(e)
+        
     
     def get_link_result_set(self,input_data=False):
         for key,rt in Link.value_type.items():
-            if ((not input_data) and (rt>=Link.computed_values_start)) or \
-               ((input_data) and (rt< Link.computed_values_start)):
-                r,v=et.ENgetlinkvalue(self.index,rt)
-                if (r>100):
-                    v=float('NaN')
-                self.results[rt].append(v)       
+            if ((not input_data) and (not rt in Link.input_values)) or \
+               ((input_data) and (rt in  Link.input_values)):
+                self.results[rt].append(check_and_return(et.ENgetlinkvalue(self.index,rt), silent=True))
+
+    def sync(self):
+        for key,rt in Link.value_type.items():
+            if (rt in Link.settable_values):
+                et.ENsetlinkvalue(self.index,rt,self.results[0][0])    
 
 class Pattern(tools.TransformedDict):
     
-    def __init__(self,es):
+    def __init__(self,es, index=False):
         super(Pattern,self).__init__()
         self.es=es
+        if(index):
+            self.readValues(index)
+    
+    def readValues(self,index):
+        self.index=index
+        self.id=check_and_return(et.ENgetpatternid(index))
+        for j in range(1,check_and_return(et.ENgetpatternlen(index))+1):
+            self[j]=et.ENgetpatternvalue(index,j)[1]        
+        
+    def sync(self):
+        """"Pattrn syncing not implemented"""
+        pass
+    
     
 class Control(object):
     
     control_types={'LOW_LEVEL_CONTROL':0, 'HIGH_LEVEL_CONTROL':1, 'TIMER_CONTROL':2, 'TIME_OF_DAY_CONTROL':3}
 
- 
-    def __init__(self,es):
+    def __init__(self,es, index=False):
         self.es=es
+        if(index):
+            self.readValues(index)
+    
+    def readValues(self,index):
+        k=check_and_return(et.ENgetcontrol(index))
+        self.ctype=k[0]
+        if(self.ctype>1): # no node is involved. for types 2 and 3!  
+            self.node=None
+        else:
+            self.node=self.es.network.nodes[k[3]]
+        self.level=k[4]
+        self.link=self.es.network.links[k[1]]
+        self.setting=k[2]        
+        
+    def sync(self):
+        """Not implemented yet."""
+        pass
     
     
     
@@ -122,6 +206,10 @@ class index_id_type(tools.TransformedDict):
                     return i
             raise KeyError("Key %s not found" % key)
         return key
+    
+    def sync(self):
+        for i,item in self.items():
+            item.sync()        
     
 class Nodes(index_id_type):
     pass
@@ -147,6 +235,48 @@ class Network(object):
     EN_TOLERANCE =  2
     EN_EMITEXPON =  3
     EN_DEMANDMULT = 4
+    
+    def __init__(self):
+        self.links=Links()
+        self.nodes=Nodes()
+        self.patterns=Patterns()
+        self.controls=Controls() 
+        
+    def reset_results(self):
+        self.time=[]
+        self.tsteps=[]
+        for i,n in self.nodes.items():
+            for key,rt in Node.value_type.items():
+                n.results[rt]=[]
+        for i,n in self.links.items():
+            for key,rt in Link.value_type.items():
+                n.results[rt]=[]      
+    
+    def _sync(self):
+        """"Syncs the anything other than nodes, links, patterns, conrols"""
+        pass
+    
+    def sync(self):
+        self.nodes.sync()
+        self.links.sync()
+        self.patterns.sync()
+        self.controls.sync()
+        self._sync()
+        
+        
+    def getValues(self):
+        self.WaterQualityAnalysisType,k=check_and_return(et.ENgetqualtype())
+        if(k==0):
+            self.WaterQualityTraceNode=None
+        else:
+            self.WaterQualityTraceNode=self.nodes[k]
+   
+        self.en_accuracy=check_and_return(et.ENgetoption(Network.EN_ACCURACY))
+        self.en_demandmult=check_and_return(et.ENgetoption(Network.EN_DEMANDMULT))
+        self.en_emitexpon=check_and_return(et.ENgetoption(Network.EN_EMITEXPON))
+        self.en_tolerance=check_and_return(et.ENgetoption(Network.EN_TOLERANCE))  
+        self.en_trials=check_and_return(et.ENgetoption(Network.EN_TRIALS))        
+    
 
 class EPANetSimulation(object):
     
@@ -166,15 +296,28 @@ class EPANetSimulation(object):
         self.reset_results()
         self._getInputData()
         self._close()
-        
-    
-    def _sync(self):
-        return True
+      
+
+
+    def _legacy_get(self,entitytype, index, param=-1):
+        """Legacy interface 'get' ONLY FOR TESTING. 
+        param : result type for LINK and NODE. timeperiod for PATTERN. For option it is not used
+        """ 
+        self._open()
+        if (entitytype=="LINK"):
+            return check_and_return(et.ENgetlinkvalue(index,param))
+        if (entitytype=="NODE"):
+            return check_and_return(et.ENgetnodevalue(index,param))
+        if (entitytype=="PATTERN"):
+            return check_and_return(et.ENgetpatternvalue(index,param))
+        if (entitytype=="LINK"):
+            return check_and_return(et.ENgetoption(index,param))
+        raise (Exception,"UNKNOWN type")
         
         
     def sync(self):
         """ Syncs the changes variable values with underlying toolkit system."""
-        self._sync()
+        self.network.sync()
 
     def run(self, save=True):
         self.reset_results()
@@ -189,7 +332,7 @@ class EPANetSimulation(object):
         et.ENinitH(init)
         while True :
             ret,t=et.ENrunH()
-            self.time.append(t)
+            self.network.time.append(t)
             # Retrieve hydraulic results for time t
             for  i,node in self.network.nodes.items():
                 node.get_node_result_set(input_data=False)
@@ -198,28 +341,16 @@ class EPANetSimulation(object):
                 link.get_link_result_set(input_data=False)
                 
             ret,tstep=et.ENnextH()
+            self.network.tsteps.append(tstep)
+            
             if (tstep<=0):
                 break
         if(save):
-            self.Error(et.ENsavehydfile(self.hydraulicfile))
+            Error(et.ENsavehydfile(self.hydraulicfile))
         self._HClose()
         self._close()
 
-      
-
-
- 
             
-     
-    def reset_results(self):
-        self.time=[]
-        for i,n in self.network.nodes.items():
-            for key,rt in Node.value_type.items():
-                n.results[rt]=[]
-        for i,n in self.network.links.items():
-            for key,rt in Link.value_type.items():
-                n.results[rt]=[]        
-        
      
      
      
@@ -228,28 +359,24 @@ class EPANetSimulation(object):
         self._open()
         #get the input_data results
         self._getInputData()        
-        self.Error(et.ENusehydfile(self.hydraulicfile))
-        self.Error(et.ENopenQ()) 
-        self.Error(et.ENinitQ(1))
+        Error(et.ENusehydfile(self.hydraulicfile))
+        Error(et.ENopenQ()) 
+        Error(et.ENinitQ(1))
         while(True):
             ret,t=et.ENrunQ()
-            self.time.append(t)
-            self.Error(ret)
+            self.network.time.append(t)
+            Error(ret)
             for i,node in self.network.nodes.items():
                 node.get_node_result_set(input_data=False)
             for  i,link in self.network.links.items():
                 link.get_link_result_set(input_data=False)             
-            ret,tstep=et.ENnextQ()
-            self.Error(ret)
-            if(tstep<=0):
+            self.network.tsteps.append(check_and_return(et.ENnextQ()))
+            if(self.network.tsteps[-1]==0):
                 break
         et.ENcloseQ();         
         self._close()
     
-    def Error(self,e):
-        if(e):
-            s="Epanet Error: %d : %s" %(e,et.ENgeterror(e,500)[1])
-            raise Exception(s)        
+       
             
     def create_temporary_copy(self,path):    
         f=os.path.join(tempfile._get_default_tempdir(),next(tempfile._get_candidate_names())+".inp")
@@ -258,26 +385,26 @@ class EPANetSimulation(object):
     
     def _open(self): 
         if(not self._enOpenStatus):
-            self.Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
+            Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
             et.cvar.TmpDir=tempfile._get_default_tempdir()
             #print("Opening",file=sys.stderr)
         self._enOpenStatus=True
         
     def _close(self):
         if(self._enOpenStatus):
-            self.Error(et.ENclose())
+            Error(et.ENclose())
             #print("Closing",file=sys.stderr)
             self._enOpenStatus=False    
 
 
     def _HOpen(self):
         if(not self._enHOpenStatus):
-            self.Error(et.ENopenH())
+            Error(et.ENopenH())
         self._enHOpenStatus=True
         
     def _HClose(self):
         if(self._enOpenStatus):
-            self.Error(et.ENcloseH())
+            Error(et.ENcloseH())
         self._enHOpenStatus=False
         
     def clean(self):
@@ -312,91 +439,23 @@ class EPANetSimulation(object):
         
     def _getNetworkData(self):
         self.network=Network()
-        self.network.links=Links()
-        self.network.nodes=Nodes()
-        self.network.patterns=Patterns()
-        self.network.controls=Controls()
-
-     
         self._open()
         for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
-            node=Node(self)
-            k=et.ENgetnodeid(i)
-            self.Error(k[0])
-            node.id=k[1]
-            r,t=et.ENgetnodetype(i)
-            self.Error(r)
-            node.node_type=t
-            self.network.nodes[i]=node
-
+            self.network.nodes[i]=Node(self,index=i) 
+            
         for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
-            link=Link(self)
-            k=et.ENgetlinkid(i)
-            self.Error(k[0])
-            link.id=k[1]
-            ret,a,b=et.ENgetlinknodes(i)
-            link.start=self.network.nodes[a]
-            link.end=self.network.nodes[b]
-            r,t=et.ENgetlinktype(i)
-            self.Error(r)
-            link.link_type=t   
-        
-            self.network.nodes[a].links.append(link)
-            self.network.nodes[b].links.append(link)
-            self.network.links[i]=link
+            self.network.links[i]=Link(self,index=i)
             
         for i in range(1,et.ENgetcount(et.EN_PATCOUNT)[1]+1):
-            pattern=Pattern(self)
-            k=et.ENgetpatternid(i)
-            self.Error(k[0])
-            pattern.id=k[1]
-            for j in range(1,et.ENgetpatternlen(i)[1]+1):
-                pattern.store[j]=et.ENgetpatternvalue(i,j)[1]
-                
-            self.network.patterns[i]=pattern
+            self.network.patterns[i]=Pattern(self,index=i)
     
         for i in range(1,et.ENgetcount(et.EN_CONTROLCOUNT)[1]+1):
-                    c=Control(self)
-                    k=et.ENgetcontrol(i)
-                    self.Error(k[0])
-                    c.ctype=k[1]
-                    if(c.ctype>1): # no node is involved. for types 2 and 3!  
-                        c.node=None
-                    else:
-                        c.node=self.network.nodes[k[4]]
-                    c.level=k[5]
-                    c.link=self.network.links[k[2]]
-                    c.setting=k[3]
-                    self.network.controls[i]=c
+            self.network.controls[i]=Control(self,index=i)
                     
-        k=et.ENgetqualtype()
-        self.Error(k[0])
-        self.network.WaterQualityAnalysisType=k[1]
-        if(k[2]==0):
-            t=None
-        else:
-            t=self.network.nodes[k[2]]
-        self.network.WaterQualityTraceNode=t        
-   
-        k=et.ENgetoption(Network.EN_ACCURACY)
-        self.Error(k[0])
-        self.network.en_accuracy=k[1]
+        self.network.getValues()
         
-        k=et.ENgetoption(Network.EN_DEMANDMULT)
-        self.Error(k[0])
-        self.network.en_demandmult=k[1]
-        
-        k=et.ENgetoption(Network.EN_EMITEXPON)
-        self.Error(k[0])
-        self.network.en_emitexpon=k[1]
-        
-        k=et.ENgetoption(Network.EN_TOLERANCE)
-        self.Error(k[0])
-        self.network.en_tolerance=k[1]  
-        
-        k=et.ENgetoption(Network.EN_TRIALS)
-        self.Error(k[0])
-        self.network.en_trials=k[1]        
+    def reset_results(self):
+        self.network.reset_results()
     
     def __getattribute__(self, name):
         try:

@@ -86,11 +86,11 @@ class Test1(unittest.TestCase):
         
         
         
-    def test_input_type_node_or_node_data_has_only_one_value(self):
+    def test_in_input_type_nodes_node_data_has_only_one_value(self):
         def mod1():
             for j,node in self.es.network.nodes.items():
                 for t,i in Node.value_type.items():
-                    if(i>=Node.computed_values_start):
+                    if(not i in Node.settable_values):
                         continue
                     self.assertEqual(len(node.results[i]),1)
         mod1()        
@@ -99,27 +99,27 @@ class Test1(unittest.TestCase):
         self.es.runq()
         mod1()
             
-    def test_output_type_node_or_node_data_has_multiple_value(self):
+    def test_in_output_type_nodes_node_data_has_multiple_values(self):
         def mod1(before_run=True):
             for j,node in self.es.network.nodes.items():
                 for t,i in Node.value_type.items():
-                    if(i<Node.computed_values_start):
+                    if(i in Node.input_values):
                         continue
                     if(before_run):
                         self.assertEqual(len(node.results[i]),0)
                     else: 
-                        self.assertEqual(len(node.results[i]),len(self.es.time))
+                        self.assertEqual(len(node.results[i]),len(self.es.network.time))
         mod1()        
         self.es.run()
         mod1(False)
         self.es.runq()
         mod1(False)    
         
-    def test_input_type_node_or_link_data_has_only_one_value(self):
+    def test_for_input_type_links_link_data_has_only_one_value(self):
         def mod1():
             for j,link in self.es.network.links.items():
                 for t,i in Link.value_type.items():
-                    if(i>=Link.computed_values_start):
+                    if(not i in Link.settable_values):
                         continue
                     self.assertEqual(len(link.results[i]),1)
         mod1()        
@@ -128,16 +128,16 @@ class Test1(unittest.TestCase):
         self.es.runq()
         mod1()
         
-    def test_output_type_node_or_link_data_has_multiple_value(self):
+    def test_for_output_type_links_link_data_has_multiple_values(self):
         def mod1(before_run=True):
             for j,link in self.es.network.links.items():
                 for t,i in Link.value_type.items():
-                    if(i<Link.computed_values_start):
+                    if(i in Link.settable_values):
                         continue
                     if(before_run):
                         self.assertEqual(len(link.results[i]),0)
                     else: 
-                        self.assertEqual(len(link.results[i]),len(self.es.time))
+                        self.assertEqual(len(link.results[i]),len(self.es.network.time))
         mod1()        
         self.es.run()
         mod1(False)
@@ -212,8 +212,10 @@ class Test1(unittest.TestCase):
             p=Node.value_type['EN_PRESSURE']
             self.assertAlmostEqual(self.es.network.nodes['103'].results[p][5],59.301,places=3)
             self.assertAlmostEqual(self.es.network.nodes['125'].results[p][5],66.051,places=3)
-            self.assertEqual(self.es.time[5],15213)
-            self.assertEqual(len(self.es.time),len(self.es.network.nodes[1].results[p]))
+            self.assertEqual(self.es.network.time[5],15213)
+            self.assertEqual(self.es.network.tsteps[5],2787)
+            self.assertEqual(self.es.network.tsteps[6],3600)
+            self.assertEqual(len(self.es.network.time),len(self.es.network.nodes[1].results[p]))
             
             d=Node.value_type['EN_DEMAND']
             h=Node.value_type['EN_HEAD']
@@ -235,7 +237,6 @@ class Test1(unittest.TestCase):
         q=Node.value_type['EN_QUALITY']
         self.assertAlmostEqual(self.es.network.nodes['117'].results[q][4],85.317,places=3)
         self.assertAlmostEqual(self.es.network.nodes['117'].results[q][5],100.0)
-        
         e=Link.value_type['EN_ENERGY']
         self.assertAlmostEquals(self.es.network.links['111'].results[e][23],.00685,places=2)
         mod1()
@@ -262,6 +263,28 @@ class Test1(unittest.TestCase):
         self.assertFalse(os.path.exists(self.es.rptfile))
         self.assertFalse(os.path.exists(self.es.binfile))
         self.assertFalse(os.path.exists(self.es.hydraulicfile))
+        
+    def test_settable_values_for_links_and_nodes(self):
+        self.assertEqual(Link.settable_values,[0,1,2,3,4,5,6,7,11,12])
+        self.assertEqual(Node.settable_values,[0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 20, 21, 22, 23])
+        
+    def test_node_values_are_saved_when_synced(self):
+        #change copule'a values
+        p=Link.value_type['EN_DIAMETER']
+        self.es.network.links[1].results[p][0]=152.0
+        self.es.network.links['105'].results[p][0]=18.0    
+        #first without 'syncing""
+        self.assertAlmostEquals(self.es._legacy_get('LINK',1,p),99.0,places=1) 
+        self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,p),12.0,places=1)
+        #now after 'syncing'
+        self.es.sync()
+        self.assertAlmostEquals(self.es._legacy_get('LINK',1,p),152.0,places=1) 
+        self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,p),18.0,places=1)
+         
+        
+       
+        
+        
         
 
 tc=Test1()
