@@ -204,8 +204,8 @@ class Test1(unittest.TestCase):
         
         
     def test_each_node_and_link_has_the_epanetsimulation_object_linked_to_it_as_variable_es(self):
-        self.assertIsInstance(self.es.network.links[1].es,EPANetSimulation)
-        self.assertIsInstance(self.es.network.nodes[1].es,EPANetSimulation)
+        self.assertIsInstance(self.es.network.links[1].network.es,EPANetSimulation)
+        self.assertIsInstance(self.es.network.nodes[1].network.es,EPANetSimulation)
     
     def test_runs_a_simulation_and_get_results(self):
         def mod1():

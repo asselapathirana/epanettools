@@ -59,8 +59,8 @@ class Node(object):
 
         
 
-    def __init__(self,es,index=False):
-        self.es=es
+    def __init__(self,network,index=False):
+        self.network=network
         self.links=[]
         self.results={}
         #get the inverse of value_type
@@ -111,8 +111,8 @@ class Link(object):
             "EN_SETTING":     12,
             "EN_ENERGY":      13,    }
     
-    def __init__(self,es,index=False):
-        self.es=es
+    def __init__(self,network,index=False):
+        self.network=network
         self.results={}
         if(index):
             self.readValues(index)
@@ -125,12 +125,12 @@ class Link(object):
         a,b=check_and_return(et.ENgetlinknodes(index))
         
         try:
-            self.start=self.es.network.nodes[a]
-            self.end=self.es.network.nodes[b]
+            self.start=self.network.nodes[a]
+            self.end=self.network.nodes[b]
             self.link_type=check_and_return(et.ENgetlinktype(index))
         
-            self.es.network.nodes[a].links.append(self)
-            self.es.network.nodes[b].links.append(self)
+            self.network.nodes[a].links.append(self)
+            self.network.nodes[b].links.append(self)
         except Exception as e:
             print("No Nodes present! Check if nodes have been read.",file=sys.stderr)
             raise(e)
@@ -170,8 +170,8 @@ class Control(object):
     
     control_types={'LOW_LEVEL_CONTROL':0, 'HIGH_LEVEL_CONTROL':1, 'TIMER_CONTROL':2, 'TIME_OF_DAY_CONTROL':3}
 
-    def __init__(self,es, index=False):
-        self.es=es
+    def __init__(self,network, index=False):
+        self.network=network
         if(index):
             self.readValues(index)
     
@@ -181,9 +181,9 @@ class Control(object):
         if(self.ctype>1): # no node is involved. for types 2 and 3!  
             self.node=None
         else:
-            self.node=self.es.network.nodes[k[3]]
+            self.node=self.network.nodes[k[3]]
         self.level=k[4]
-        self.link=self.es.network.links[k[1]]
+        self.link=self.network.links[k[1]]
         self.setting=k[2]        
         
     def sync(self):
@@ -236,11 +236,30 @@ class Network(object):
     EN_EMITEXPON =  3
     EN_DEMANDMULT = 4
     
-    def __init__(self):
+    def __init__(self,es,readData=True):
         self.links=Links()
         self.nodes=Nodes()
         self.patterns=Patterns()
         self.controls=Controls() 
+        self.es=es
+        if(readData):
+            self.read_data()
+            
+            
+    def read_data(self):
+        for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
+            self.nodes[i]=Node(self,index=i) 
+            
+        for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
+            self.links[i]=Link(self,index=i)
+            
+        for i in range(1,et.ENgetcount(et.EN_PATCOUNT)[1]+1):
+            self.patterns[i]=Pattern(self,index=i)
+    
+        for i in range(1,et.ENgetcount(et.EN_CONTROLCOUNT)[1]+1):
+            self.controls[i]=Control(self,index=i)
+                    
+        self.getValues()        
         
     def reset_results(self):
         self.time=[]
@@ -284,8 +303,6 @@ class EPANetSimulation(object):
     def __init__(self,inputFileName):
         self._enOpenStatus=False
         self._enHOpenStatus=False
-        #
-        
         self.OriginalInputFileName=inputFileName
         self.inputfile=self.create_temporary_copy(inputFileName)
         self.rptfile=self.inputfile[:-3]+"rpt"
@@ -293,7 +310,7 @@ class EPANetSimulation(object):
         self.hydraulicfile=self.inputfile[:-3]+"hyd"
         self._open()
         self._getNetworkData()
-        self.reset_results()
+        self.network.reset_results()
         self._getInputData()
         self._close()
       
@@ -320,7 +337,7 @@ class EPANetSimulation(object):
         self.network.sync()
 
     def run(self, save=True):
-        self.reset_results()
+        self.network.reset_results()
         self._open()
         #get the input_data results
         self._getInputData()
@@ -355,7 +372,7 @@ class EPANetSimulation(object):
      
      
     def runq(self):
-        self.reset_results()
+        self.network.reset_results()
         self._open()
         #get the input_data results
         self._getInputData()        
@@ -434,28 +451,14 @@ class EPANetSimulation(object):
         for  i,node in self.network.nodes.items():
             node.get_node_result_set(input_data=True)          
         for  i,link in self.network.links.items():
-                link.get_link_result_set(input_data=True)  
+            link.get_link_result_set(input_data=True)  
                 
         
     def _getNetworkData(self):
-        self.network=Network()
         self._open()
-        for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
-            self.network.nodes[i]=Node(self,index=i) 
-            
-        for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
-            self.network.links[i]=Link(self,index=i)
-            
-        for i in range(1,et.ENgetcount(et.EN_PATCOUNT)[1]+1):
-            self.network.patterns[i]=Pattern(self,index=i)
-    
-        for i in range(1,et.ENgetcount(et.EN_CONTROLCOUNT)[1]+1):
-            self.network.controls[i]=Control(self,index=i)
-                    
-        self.network.getValues()
+        self.network=Network(self,readData=True)
         
-    def reset_results(self):
-        self.network.reset_results()
+        
     
     def __getattribute__(self, name):
         try:
