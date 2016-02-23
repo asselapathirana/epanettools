@@ -1,0 +1,5 @@
+1. Update git hub
+2. Use zest releaser
+a. update ./docs/HISTORY.txt
+b. fullrelease
+
