@@ -366,10 +366,6 @@ class EPANetSimulation(object):
             Error(et.ENsavehydfile(self.hydraulicfile))
         self._HClose()
         self._close()
-
-            
-     
-     
      
     def runq(self):
         self.network.reset_results()
@@ -404,7 +400,6 @@ class EPANetSimulation(object):
         if(not self._enOpenStatus):
             Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
             et.cvar.TmpDir=tempfile._get_default_tempdir()
-            #print("Opening",file=sys.stderr)
         self._enOpenStatus=True
         
     def _close(self):
