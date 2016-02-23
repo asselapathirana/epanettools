@@ -1,11 +1,5 @@
 # Change Log
 All notable changes to this project will be documented in this file.
-0.5.0.8 (unreleased)
-
-
-- Nothing changed yet.
-
-
 0.5.0.7 (2016-02-23)
 
 
