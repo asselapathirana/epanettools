@@ -1,5 +1,5 @@
 1. Update git hub
-2. Use zest releaser
-a. update ./docs/HISTORY.txt
-b. fullrelease
+2. change version in setup.py
+3. Github release (web interface)
+4. Upload new release to pypi
 
