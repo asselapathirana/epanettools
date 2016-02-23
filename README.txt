@@ -30,6 +30,69 @@ Usage:
 ::
 
     >>> import os
+    >>> from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, \
+    ... Links, Patterns, Pattern, Controls, Control
+    >>> from epanettools.examples import simple 
+    >>> file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp')
+    >>> es=EPANetSimulation(file)
+    >>> list(es.network.nodes)[:5] # just get indexes of nodes
+    [1, 2, 3, 4, 5]
+    >>> n=es.network.nodes
+    >>> n[1].id
+    '10'
+    >>> n[94].id
+    'Lake'
+    >>> m=es.network.links
+    >>> m[1].id
+    '20'
+    >>> m[3].id
+    '50'
+    >>> m[119].id
+    '335'
+    >>> [m[1].start.id,m[1].end.id]
+    ['3', '20']
+    >>> [m[118].start.id,m[118].end.id]
+    ['Lake', '10']
+    >>> sorted([i.id for i in n['169'].links])
+    ['183', '185', '187', '211']
+    
+
+Get some results of simulation. 
+
+:: 
+
+   >>> es.run()
+   >>> p=Node.value_type['EN_PRESSURE']
+   >>> print("%.3f" % es.network.nodes['103'].results[p][5] )
+   59.301
+   >>> d=Node.value_type['EN_DEMAND']
+   >>> h=Node.value_type['EN_HEAD']
+   >>> print("%.3f" % es.network.nodes['103'].results[d][5])
+   101.232
+   >>> print("%.3f" % es.network.nodes['103'].results[h][5])
+   179.858
+   >>> d=Link.value_type['EN_DIAMETER']
+   >>> print("%.3f" % es.network.links[1].results[d][0])
+   99.000
+   >>> es.runq() # run water quality simulation 
+   >>> q=Node.value_type['EN_QUALITY']
+   >>> print("%.3f" % es.network.nodes['117'].results[q][4])
+   85.317
+   >>> e=Link.value_type['EN_ENERGY']
+   >>> print("%.5f" % es.network.links['111'].results[e][23])
+   0.00685
+
+
+
+
+Legacy Interface
+----------------
+
+Do not use the following methods unless for compatibility!
+
+::
+
+    >>> import os
     >>> from epanettools import epanet2 as et
     >>> from epanettools.examples import simple 
     >>> file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp')

@@ -15,3 +15,4 @@ proj.launch-config = {loc('../setup.py'): ('project',
         (u'test tests',
          ''))}
 proj.main-file = loc('../tests/test_EPANetSimulation.py')
+testing.test-framework = {None: ':internal doctest'}
