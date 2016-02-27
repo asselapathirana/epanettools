@@ -139,7 +139,23 @@ Get some results of simulation.
    >>> e=Link.value_type['EN_ENERGY']
    >>> print("%.5f" % es.network.links['111'].results[e][23])
    0.00685
+   
 
+Some advanced result queries
+
+::
+
+    >>> print("%.3f" % min(es.network.nodes['103'].results[p])) # minimum recorded pressure of node '103'
+    44.169
+    >>> n=es.network.nodes
+    >>> # All nodes recording negative pressure. 
+    >>> sorted([y.id for x,y in n.items() if min(n[y.id].results[p])<0])
+    ['10']
+    >>> # Nodes that deliver a flow of more than 4500 flow units
+    >>> d=Node.value_type['EN_DEMAND']
+    >>> j=Node.node_types['JUNCTION']
+    >>> sorted([y.id for x,y in n.items() if ( max(n[y.id].results[d])>4500 and n[y.id].node_type==j )])
+    ['203']
 
 
 

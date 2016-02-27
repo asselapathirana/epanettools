@@ -1,6 +1,6 @@
 #!/usr/bin/env python 
 """
-setup.py file for EPANET2 pyton library  - Assela Pathirana
+setup.py file for EPANET2 python library  - Assela Pathirana
 """
 import os, sys
 from setuptools import setup, Extension
