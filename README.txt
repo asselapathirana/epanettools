@@ -29,19 +29,29 @@ Usage:
 
 ::
 
-    >>> import os
+    >>> import os, pprint
+    >>> pp=pprint.PrettyPrinter() # we'll use this later. 
     >>> from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, \
-    ... Links, Patterns, Pattern, Controls, Control
-    >>> from epanettools.examples import simple 
-    >>> file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp')
-    >>> es=EPANetSimulation(file)
+    ... Links, Patterns, Pattern, Controls, Control # import all elements needed 
+    >>> from epanettools.examples import simple # this is just to get the path of standard examples
+    >>> file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp') # open an example
+    >>> es=EPANetSimulation(file) 
     >>> list(es.network.nodes)[:5] # just get indexes of nodes
     [1, 2, 3, 4, 5]
+    >>> [es.network.nodes[x].id for x in list(es.network.nodes)[:5]] # Get ids of first five nodes. 
+    ['10', '15', '20', '35', '40']
     >>> n=es.network.nodes
     >>> n[1].id
     '10'
     >>> n[94].id
     'Lake'
+    >>> n['10'].index # get the index of the node with id '10' 
+    1
+
+Now links
+
+::
+    
     >>> m=es.network.links
     >>> m[1].id
     '20'
@@ -49,14 +59,50 @@ Usage:
     '50'
     >>> m[119].id
     '335'
-    >>> [m[1].start.id,m[1].end.id]
+
+Information about connectivity
+
+::
+
+    >>> [m[1].start.id,m[1].end.id] # get the two ends of a link
     ['3', '20']
     >>> [m[118].start.id,m[118].end.id]
     ['Lake', '10']
-    >>> sorted([i.id for i in n['169'].links])
+    >>> sorted([i.id for i in n['169'].links]) # get the links connected to a node. 
     ['183', '185', '187', '211']
-    
 
+Types of links and nodes
+
+::
+    >>> pp.pprint(Node.node_types) # these are the type codes for nodes. 
+    {'JUNCTION': 0, 'RESERVOIR': 1, 'TANK': 2}
+    >>> n[94].node_type
+    1
+    >>> n[1].node_type
+    0
+    >>> n['2'].node_type
+    2
+    >>> pp.pprint(Link.link_types) # these are the type codes for links
+    {'CVPIPE': 0,
+     'FCV': 6,
+     'GPV': 8,
+     'PBV': 5,
+     'PIPE': 1,
+     'PRV': 3,
+     'PSV': 4,
+     'PUMP': 2,
+     'TCV': 7}
+    >>> m['335'].link_type # Pump
+    2
+    >>> m['101'].link_type # PIPE
+    1
+    >>> m[1].link_type # 
+    1
+    >>> [y.id for x,y in m.items() if y.link_type==Link.link_types['PUMP']] # get ids of pumps
+    ['10', '335']
+    >>> [y.id for x,y in n.items() if y.node_type==Node.node_types['TANK']] # get ids of tanks
+    ['1', '2', '3']
+    
 Get some results of simulation. 
 
 :: 
