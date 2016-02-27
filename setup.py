@@ -37,7 +37,7 @@ epanet2_module = Extension('_epanet2',
                            sources=sources,
                            extra_compile_args=cargs,
                            extra_link_args=cargs,
-                           )
+                           ) 
 
 
 
