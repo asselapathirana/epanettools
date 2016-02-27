@@ -36,6 +36,16 @@ Usage:
     >>> from epanettools.examples import simple # this is just to get the path of standard examples
     >>> file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp') # open an example
     >>> es=EPANetSimulation(file) 
+    
+
+
+
+Node information
+
+::
+
+    >>> len(es.network.nodes)
+    97
     >>> list(es.network.nodes)[:5] # just get indexes of nodes
     [1, 2, 3, 4, 5]
     >>> [es.network.nodes[x].id for x in list(es.network.nodes)[:5]] # Get ids of first five nodes. 
@@ -53,6 +63,8 @@ Now links
 ::
     
     >>> m=es.network.links
+    >>> len(m)
+    119
     >>> m[1].id
     '20'
     >>> m[3].id
