@@ -114,6 +114,16 @@ Types of links and nodes
     ['10', '335']
     >>> [y.id for x,y in n.items() if y.node_type==Node.node_types['TANK']] # get ids of tanks
     ['1', '2', '3']
+  
+Network properties are available (even before we run the simulation)
+
+    >>> d=Link.value_type['EN_DIAMETER']
+    >>> print("%.3f" % es.network.links[1].results[d][0])
+    99.000
+    
+  
+    
+::
     
 Get some results of simulation. 
 
@@ -149,12 +159,12 @@ Some advanced result queries
     44.169
     >>> n=es.network.nodes
     >>> # All nodes recording negative pressure. 
-    >>> sorted([y.id for x,y in n.items() if min(n[y.id].results[p])<0])
+    >>> sorted([y.id for x,y in n.items() if min(y.results[p])<0])
     ['10']
     >>> # Nodes that deliver a flow of more than 4500 flow units
     >>> d=Node.value_type['EN_DEMAND']
     >>> j=Node.node_types['JUNCTION']
-    >>> sorted([y.id for x,y in n.items() if ( max(n[y.id].results[d])>4500 and n[y.id].node_type==j )])
+    >>> sorted([y.id for x,y in n.items() if ( max(y.results[d])>4500 and y.node_type==j )])
     ['203']
 
 
