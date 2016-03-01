@@ -268,18 +268,23 @@ class Test1(unittest.TestCase):
         self.assertEqual(Link.settable_values,[0,1,2,3,4,5,6,7,11,12])
         self.assertEqual(Node.settable_values,[0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 20, 21, 22, 23])
         
-    def test_node_values_are_saved_when_synced(self):
+    def xtest_node_values_are_saved_when_synced(self):
         #change copule'a values
-        p=Link.value_type['EN_DIAMETER']
-        self.es.network.links[1].results[p][0]=152.0
-        self.es.network.links['105'].results[p][0]=18.0    
+        d=Link.value_type['EN_DIAMETER']
+        self.es.network.links[1].results[d][0]
+        self.es.network.links[1].results[d][0]=152.0
+        self.es.network.links['105'].results[d][0]=18.0    
         #first without 'syncing""
-        self.assertAlmostEquals(self.es._legacy_get('LINK',1,p),99.0,places=1) 
-        self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,p),12.0,places=1)
+        self.assertAlmostEquals(self.es._legacy_get('LINK',1,d),99.0,places=1) 
+
+        self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,d),12.0,places=1)
         #now after 'syncing'
         self.es.sync()
-        self.assertAlmostEquals(self.es._legacy_get('LINK',1,p),152.0,places=1) 
-        self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,p),18.0,places=1)
+        self.assertAlmostEquals(self.es._legacy_get('LINK',1,d),152.0,places=1) 
+        self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,d),18.0,places=1)
+        # now run and get results
+        self.es.run()
+        self.assertAlmostEquals(self.es.network.links[1].results[Link.value_type["EN_FLOW"]][0],-2246.30,places=1)        
          
         
        
