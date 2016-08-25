@@ -1,0 +1,128 @@
+#define WRAPPER_ERROR_FILE_OPEN 900000
+#define WRAPPER_ERROR_NOT_IMPLEMENTED 910000
+
+#include <string>
+using namespace std;
+
+
+DLLEXPORT ENepanet_wrap(char * f1,  char * f2,  char * f3,  void (*pviewprog) (char *));
+DLLEXPORT ENopen_wrap(char * a1,  char * a2,  char * a3);
+DLLEXPORT ENsaveinpfile_wrap(char *a1);
+DLLEXPORT ENclose_wrap(void);
+DLLEXPORT ENsolveH_wrap(void);
+DLLEXPORT ENsaveH_wrap(void);
+DLLEXPORT ENopenH_wrap(void);
+DLLEXPORT ENinitH_wrap(int a1);
+DLLEXPORT ENrunH_wrap(long *a1);
+DLLEXPORT ENnextH_wrap(long *a1);
+DLLEXPORT ENcloseH_wrap(void);
+DLLEXPORT ENsavehydfile_wrap(char *a1);
+DLLEXPORT ENusehydfile_wrap(char *a1);
+DLLEXPORT ENsolveQ_wrap(void);
+DLLEXPORT ENopenQ_wrap(void);
+DLLEXPORT ENinitQ_wrap(int a1);
+DLLEXPORT ENrunQ_wrap(long *a1);
+DLLEXPORT ENnextQ_wrap(long *a1) ;
+DLLEXPORT ENstepQ_wrap(long *a1) ;
+DLLEXPORT ENcloseQ_wrap(void);
+DLLEXPORT ENwriteline_wrap(char *a1) ;
+DLLEXPORT ENreport_wrap(void);
+DLLEXPORT ENresetreport_wrap(void);
+DLLEXPORT ENsetreport_wrap(char *a1) ;
+DLLEXPORT ENgetcontrol_wrap(int a1,  int * a2,  int * a3,  float * a4, int* a5, float * a6)  ;
+DLLEXPORT ENgetcount_wrap(int a1,  int *a2) ;
+DLLEXPORT ENgetoption_wrap(int a1,  float *a2) ;
+DLLEXPORT ENgettimeparam_wrap(int a1,  long *a2) ;
+DLLEXPORT ENgetflowunits_wrap(int *a1) ;
+DLLEXPORT ENgetpatternindex_wrap(char * a1,  int *a2) ;
+DLLEXPORT ENgetpatternid_wrap(int a1,  char *a2) ;
+DLLEXPORT ENgetpatternlen_wrap(int a1,  int *a2) ;
+DLLEXPORT ENgetpatternvalue_wrap(int a1,  int a2,  float *a3) ;
+DLLEXPORT ENgetqualtype_wrap(int * a1,  int *a2) ;
+DLLEXPORT ENgeterror_wrap(int a1,  char * a2,  int a3);
+DLLEXPORT ENgetnodeindex_wrap(char * a1,  int *a2) ;
+DLLEXPORT ENgetnodeid_wrap(int a1,  char *a2) ;
+DLLEXPORT ENgetnodetype_wrap(int a1,  int *a2) ;
+DLLEXPORT ENgetnodevalue_wrap(int a1,  int a2,  float *a3) ;
+DLLEXPORT ENgetlinkindex_wrap(char * a1,  int *a2) ;
+DLLEXPORT ENgetlinkid_wrap(int a1,  char *a2) ;
+DLLEXPORT ENgetlinktype_wrap(int a1,  int *a2) ;
+DLLEXPORT ENgetlinknodes_wrap(int a1,  int * a2,  int *a3) ;
+DLLEXPORT ENgetlinkvalue_wrap(int a1,  int a2,  float *a3) ;
+DLLEXPORT ENgetversion_wrap(int *a1) ;
+DLLEXPORT ENsetcontrol_wrap(int a1,  int a2,  int a3,  float a4,  int a5,  float a6);
+DLLEXPORT ENsetnodevalue_wrap(int a1,  int a2,  float a3);
+DLLEXPORT ENsetlinkvalue_wrap(int a1,  int a2,  float a3);
+DLLEXPORT ENaddpattern_wrap(char *a1) ;
+DLLEXPORT ENsetpattern_wrap(int a1,  float * a2,  int a3);
+DLLEXPORT ENsetpatternvalue_wrap(int a1,  int a2,  float a3);
+DLLEXPORT ENsettimeparam_wrap(int a1,  long a2);
+DLLEXPORT ENsetoption_wrap(int a1,  float a2);
+DLLEXPORT ENsetstatusreport_wrap(int a1);
+DLLEXPORT ENsetqualtype_wrap(int a1,  char * a2,  char * a3,  char *a4) ;
+DLLEXPORT ENsetECUP_wrap(float a1, float a2);
+DLLEXPORT ENgetemitter_wrap(float *a1, float *a2);
+
+/* Call this function to write a note to the epanet2 report file */
+extern int  write_sign(string str);
+extern long getcurrenttime();
+
+
+        int run_before_ENopen();
+        int run_before_ENsaveinpfile();
+        int run_before_ENclose();
+        int run_before_ENsaveH();
+        int run_before_ENinitH();
+        int run_before_runh ();
+        int run_before_nexth ();
+        int run_before_ENnextH();
+        int run_before_ENcloseH();
+        int run_before_ENsavehydfile();
+        int run_before_ENusehydfile();
+        int run_before_ENsolveQ();
+        int run_before_ENopenQ();
+        int run_before_ENinitQ();
+        int run_before_ENrunQ();
+        int run_before_ENnextQ();
+        int run_before_ENstepQ();
+        int run_before_ENcloseQ();
+        int run_before_ENwriteline();
+        int run_before_ENreport();
+        int run_before_ENresetreport();
+        int run_before_ENsetreport();
+        int run_before_ENgetcontrol();
+        int run_before_ENgetcount();
+        int run_before_ENgetoption();
+        int run_before_ENgettimeparam();
+        int run_before_ENgetflowunits();
+        int run_before_ENgetpatternindex();
+        int run_before_ENgetpatternid();
+        int run_before_ENgetpatternlen();
+        int run_before_ENgetpatternvalue();
+        int run_before_ENgetqualtype();
+        int run_before_ENgeterror();
+        int run_before_ENgetnodeindex();
+        int run_before_ENgetnodeid();
+        int run_before_ENgetnodetype();
+        int run_before_ENgetnodevalue();
+        int run_before_ENgetlinkindex();
+        int run_before_ENgetlinkid();
+        int run_before_ENgetlinktype();
+        int run_before_ENgetlinknodes();
+        int run_before_ENgetlinkvalue();
+        int run_before_ENgetversion();
+        int run_before_ENsetcontrol();
+        int run_before_ENsetnodevalue();
+        int run_before_ENsetlinkvalue();
+        int run_before_ENaddpattern();
+        int run_before_ENsetpattern();
+        int run_before_ENsetpatternvalue();
+        int run_before_ENsettimeparam();
+        int run_before_ENsetoption();
+        int run_before_ENsetstatusreport();
+        int run_before_ENsetqualtype();
+		int run_before_ENopenH();
+		int run_before_ENrunh ();
+
+		void getEmitterData(float *eexp_, float *ecup_);
+		void setEmitterData(float eexp_, float ecup_);

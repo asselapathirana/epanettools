@@ -28,11 +28,16 @@ sources=[ "epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
                                "quality.c",
                                "report.c",
                                "rules.c",
-                               "smatrix.c"                          
+                               "smatrix.c"                        
                                      ]]
 sources.append("epanettools"+os.sep+"epanet2_wrap.c")
- 
-cargs=['-Wno-unused-but-set-variable','-Wno-format','-Wno-char-subscripts', '-fopenmp','-Wno-deprecated','-O3']
+
+# 25-Aug-2016 - append emitter modification files
+sources=sources+list( "epanettools"+os.sep+"pdd"+os.sep+x for x in ["emitter_analysis.c",
+                                                              "mods.c", "wrap.c",
+                                                              ])
+print (sources)
+cargs=['-Wno-implicit-function-declaration','-Wno-unused-but-set-variable','-Wno-format','-Wno-char-subscripts', '-fopenmp','-Wno-deprecated','-O3']
 epanet2_module = Extension('_epanet2',
                            sources=sources,
                            extra_compile_args=cargs,
