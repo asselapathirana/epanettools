@@ -1,5 +1,6 @@
 from __future__ import print_function
 from . import epanet2 as et
+from . import pdd as pd
 import tempfile, shutil, os, sys
 from pickle import dumps
 
@@ -337,7 +338,7 @@ class EPANetSimulation(object):
         """ Syncs the changes variable values with underlying toolkit system."""
         self.network.sync()
 
-    def run(self, save=True):
+    def run(self, save=True, pdd=True):
         self.network.reset_results()
         self._open()
         #get the input_data results

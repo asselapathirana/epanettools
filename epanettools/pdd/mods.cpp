@@ -193,7 +193,7 @@ int run_before_ENopenH(){
 	write_sign("Starting the custom hydraulic analysis...");
 	return 0;
 }
-int run_before_ENrunh (){
+int run_before_ENrunH (){
 	int ret=emitter_analysis();
 	if(ret!=0){
 		write_sign("ERROR: Non-converging emitter analysis!!!");

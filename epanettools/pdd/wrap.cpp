@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib.>
 #include "wrapper.h"
+#include <cstring>
 static bool usehydfile=false;
 static long currenttime=-9999;
 using namespace std;
@@ -107,7 +108,7 @@ DLLEXPORT ENinitH_wrap (int a1){
 
 /* this is the function the interface use to run hydraulics */
 DLLEXPORT ENrunH_wrap (long *a1){
-	int ret=run_before_ENrunh ();
+	int ret=run_before_ENrunH ();
     int ret1=ENrunH (a1); 
 	currenttime= (*a1);
 	return ret1==0?ret:ret1;

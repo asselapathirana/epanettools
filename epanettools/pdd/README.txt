@@ -1,6 +1,5 @@
-Create a seperate interface file for pdd - called pdd.i
-swig  -python  epanet2.i
-swig -c++ -python pdd.i
+Now compiling is OK. 
+Tests are passing for non emitter but, test_EPANetPDD.py is not really testinng PDD
 
-then add the resulting *.c and *.cxx files to setup.py 
-python setup.py test
+Question: what is the most elegant (maintainable) way to have epanettools.py (in fact class EPANetSimulation)
+to be duplicated to make all calls to pdd instead of normal epanet?

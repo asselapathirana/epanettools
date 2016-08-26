@@ -35,6 +35,8 @@ Call read_newvalues() only after all checks, just before resuming the next loop 
 #include <sstream>
 #include <fstream>
 #include <limits>
+#include <float.h>
+#include <cstring>
 
 using namespace std;
 long time_;
@@ -418,7 +420,7 @@ int emitter_analysis()
 				}
 				string str2=str.substr(0,5000);
 				char p[5001];
-				strcpy(p,str2.c_str());
+				std::strcpy(p,str2.c_str());
 				cout << endl << p ;
 				ENwriteline(p);
 				if(lastcount++>5){

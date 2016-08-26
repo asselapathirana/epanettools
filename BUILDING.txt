@@ -1,0 +1,10 @@
+##########################
+C/C++ part
+edit epanet2.i and pdd.i
+then run 
+swig -python epanet2.i
+swig -c++ -python pdd.i
+
+then run 
+python setup.py test
+

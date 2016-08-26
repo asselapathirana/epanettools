@@ -20,6 +20,7 @@ class Test1(unittest.TestCase):
         print("TEAR DOWN!")
         
     def test_runs_a_simulation_and_get_results(self):
+        self.fail("Not yet calling epanet emitter properly")
         def mod1():
             p=Node.value_type['EN_PRESSURE']
             self.assertAlmostEqual(self.es.network.nodes['103'].results[p][5],59.301,places=3)

@@ -1,8 +1,29 @@
+#ifndef WRAP_H
+#define WRAP_H
+
 #define WRAPPER_ERROR_FILE_OPEN 900000
 #define WRAPPER_ERROR_NOT_IMPLEMENTED 910000
 
+#undef WINDOWS
+#undef __WIN32__
+
+// --- define DLLEXPORT
+#ifndef DLLEXPORT
+ #ifdef __cplusplus
+  #define DLLEXPORT extern "C" int
+ #else
+  #define DLLEXPORT extern int
+ #endif
+#endif
+
+
+
 #include <string>
 using namespace std;
+
+ /* 26-Aug-2016 : IMPORTANT: all output parameters in wrapper.h has to be named and then declared below. See epanet2.h and epanet2.i files for examples.
+At the moment only a few were done to test.  
+*/
 
 
 DLLEXPORT ENepanet_wrap(char * f1,  char * f2,  char * f3,  void (*pviewprog) (char *));
@@ -13,17 +34,17 @@ DLLEXPORT ENsolveH_wrap(void);
 DLLEXPORT ENsaveH_wrap(void);
 DLLEXPORT ENopenH_wrap(void);
 DLLEXPORT ENinitH_wrap(int a1);
-DLLEXPORT ENrunH_wrap(long *a1);
-DLLEXPORT ENnextH_wrap(long *a1);
+DLLEXPORT ENrunH_wrap(long *result);
+DLLEXPORT ENnextH_wrap(long *result);
 DLLEXPORT ENcloseH_wrap(void);
 DLLEXPORT ENsavehydfile_wrap(char *a1);
 DLLEXPORT ENusehydfile_wrap(char *a1);
 DLLEXPORT ENsolveQ_wrap(void);
 DLLEXPORT ENopenQ_wrap(void);
 DLLEXPORT ENinitQ_wrap(int a1);
-DLLEXPORT ENrunQ_wrap(long *a1);
-DLLEXPORT ENnextQ_wrap(long *a1) ;
-DLLEXPORT ENstepQ_wrap(long *a1) ;
+DLLEXPORT ENrunQ_wrap(long *result);
+DLLEXPORT ENnextQ_wrap(long *result) ;
+DLLEXPORT ENstepQ_wrap(long *result) ;
 DLLEXPORT ENcloseQ_wrap(void);
 DLLEXPORT ENwriteline_wrap(char *a1) ;
 DLLEXPORT ENreport_wrap(void);
@@ -60,7 +81,7 @@ DLLEXPORT ENsettimeparam_wrap(int a1,  long a2);
 DLLEXPORT ENsetoption_wrap(int a1,  float a2);
 DLLEXPORT ENsetstatusreport_wrap(int a1);
 DLLEXPORT ENsetqualtype_wrap(int a1,  char * a2,  char * a3,  char *a4) ;
-DLLEXPORT ENsetECUP_wrap(float a1, float a2);
+DLLEXPORT ENsetemitter_wrap(float a1, float a2);
 DLLEXPORT ENgetemitter_wrap(float *a1, float *a2);
 
 /* Call this function to write a note to the epanet2 report file */
@@ -68,61 +89,64 @@ extern int  write_sign(string str);
 extern long getcurrenttime();
 
 
-        int run_before_ENopen();
-        int run_before_ENsaveinpfile();
-        int run_before_ENclose();
-        int run_before_ENsaveH();
-        int run_before_ENinitH();
-        int run_before_runh ();
-        int run_before_nexth ();
-        int run_before_ENnextH();
-        int run_before_ENcloseH();
-        int run_before_ENsavehydfile();
-        int run_before_ENusehydfile();
-        int run_before_ENsolveQ();
-        int run_before_ENopenQ();
-        int run_before_ENinitQ();
-        int run_before_ENrunQ();
-        int run_before_ENnextQ();
-        int run_before_ENstepQ();
-        int run_before_ENcloseQ();
-        int run_before_ENwriteline();
-        int run_before_ENreport();
-        int run_before_ENresetreport();
-        int run_before_ENsetreport();
-        int run_before_ENgetcontrol();
-        int run_before_ENgetcount();
-        int run_before_ENgetoption();
-        int run_before_ENgettimeparam();
-        int run_before_ENgetflowunits();
-        int run_before_ENgetpatternindex();
-        int run_before_ENgetpatternid();
-        int run_before_ENgetpatternlen();
-        int run_before_ENgetpatternvalue();
-        int run_before_ENgetqualtype();
-        int run_before_ENgeterror();
-        int run_before_ENgetnodeindex();
-        int run_before_ENgetnodeid();
-        int run_before_ENgetnodetype();
-        int run_before_ENgetnodevalue();
-        int run_before_ENgetlinkindex();
-        int run_before_ENgetlinkid();
-        int run_before_ENgetlinktype();
-        int run_before_ENgetlinknodes();
-        int run_before_ENgetlinkvalue();
-        int run_before_ENgetversion();
-        int run_before_ENsetcontrol();
-        int run_before_ENsetnodevalue();
-        int run_before_ENsetlinkvalue();
-        int run_before_ENaddpattern();
-        int run_before_ENsetpattern();
-        int run_before_ENsetpatternvalue();
-        int run_before_ENsettimeparam();
-        int run_before_ENsetoption();
-        int run_before_ENsetstatusreport();
-        int run_before_ENsetqualtype();
-		int run_before_ENopenH();
-		int run_before_ENrunh ();
+extern int run_before_ENopen();
+extern int run_before_ENsaveinpfile();
+extern int run_before_ENclose();
+extern int run_before_ENsaveH();
+extern int run_before_ENinitH();
+extern int run_before_ENrunH ();
+extern int run_before_ENnextH ();
+extern int run_before_ENnextH();
+extern int run_before_ENcloseH();
+extern int run_before_ENsavehydfile();
+extern int run_before_ENusehydfile();
+extern int run_before_ENsolveQ();
+extern int run_before_ENopenQ();
+extern int run_before_ENinitQ();
+extern int run_before_ENrunQ();
+extern int run_before_ENnextQ();
+extern int run_before_ENstepQ();
+extern int run_before_ENcloseQ();
+extern int run_before_ENwriteline();
+extern int run_before_ENreport();
+extern int run_before_ENresetreport();
+extern int run_before_ENsetreport();
+extern int run_before_ENgetcontrol();
+extern int run_before_ENgetcount();
+extern int run_before_ENgetoption();
+extern int run_before_ENgettimeparam();
+extern int run_before_ENgetflowunits();
+extern int run_before_ENgetpatternindex();
+extern int run_before_ENgetpatternid();
+extern int run_before_ENgetpatternlen();
+extern int run_before_ENgetpatternvalue();
+extern int run_before_ENgetqualtype();
+extern int run_before_ENgeterror();
+extern int run_before_ENgetnodeindex();
+extern int run_before_ENgetnodeid();
+extern int run_before_ENgetnodetype();
+extern int run_before_ENgetnodevalue();
+extern int run_before_ENgetlinkindex();
+extern int run_before_ENgetlinkid();
+extern int run_before_ENgetlinktype();
+extern int run_before_ENgetlinknodes();
+extern int run_before_ENgetlinkvalue();
+extern int run_before_ENgetversion();
+extern int run_before_ENsetcontrol();
+extern int run_before_ENsetnodevalue();
+extern int run_before_ENsetlinkvalue();
+extern int run_before_ENaddpattern();
+extern int run_before_ENsetpattern();
+extern int run_before_ENsetpatternvalue();
+extern int run_before_ENsettimeparam();
+extern int run_before_ENsetoption();
+extern int run_before_ENsetstatusreport();
+extern int run_before_ENsetqualtype();
+	int run_before_ENopenH();
+	int run_before_ENrunH ();
 
-		void getEmitterData(float *eexp_, float *ecup_);
-		void setEmitterData(float eexp_, float ecup_);
+	void getEmitterData(float *eexp_, float *ecup_);
+	void setEmitterData(float eexp_, float ecup_);
+
+
+#endif
