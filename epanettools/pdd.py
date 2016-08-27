@@ -552,6 +552,538 @@ getEmitterData = _pdd.getEmitterData
 def setEmitterData(eexp_, ecup_):
     return _pdd.setEmitterData(eexp_, ecup_)
 setEmitterData = _pdd.setEmitterData
+
+_pdd.EN_ELEVATION_swigconstant(_pdd)
+EN_ELEVATION = _pdd.EN_ELEVATION
+
+_pdd.EN_BASEDEMAND_swigconstant(_pdd)
+EN_BASEDEMAND = _pdd.EN_BASEDEMAND
+
+_pdd.EN_PATTERN_swigconstant(_pdd)
+EN_PATTERN = _pdd.EN_PATTERN
+
+_pdd.EN_EMITTER_swigconstant(_pdd)
+EN_EMITTER = _pdd.EN_EMITTER
+
+_pdd.EN_INITQUAL_swigconstant(_pdd)
+EN_INITQUAL = _pdd.EN_INITQUAL
+
+_pdd.EN_SOURCEQUAL_swigconstant(_pdd)
+EN_SOURCEQUAL = _pdd.EN_SOURCEQUAL
+
+_pdd.EN_SOURCEPAT_swigconstant(_pdd)
+EN_SOURCEPAT = _pdd.EN_SOURCEPAT
+
+_pdd.EN_SOURCETYPE_swigconstant(_pdd)
+EN_SOURCETYPE = _pdd.EN_SOURCETYPE
+
+_pdd.EN_TANKLEVEL_swigconstant(_pdd)
+EN_TANKLEVEL = _pdd.EN_TANKLEVEL
+
+_pdd.EN_DEMAND_swigconstant(_pdd)
+EN_DEMAND = _pdd.EN_DEMAND
+
+_pdd.EN_HEAD_swigconstant(_pdd)
+EN_HEAD = _pdd.EN_HEAD
+
+_pdd.EN_PRESSURE_swigconstant(_pdd)
+EN_PRESSURE = _pdd.EN_PRESSURE
+
+_pdd.EN_QUALITY_swigconstant(_pdd)
+EN_QUALITY = _pdd.EN_QUALITY
+
+_pdd.EN_SOURCEMASS_swigconstant(_pdd)
+EN_SOURCEMASS = _pdd.EN_SOURCEMASS
+
+_pdd.EN_INITVOLUME_swigconstant(_pdd)
+EN_INITVOLUME = _pdd.EN_INITVOLUME
+
+_pdd.EN_MIXMODEL_swigconstant(_pdd)
+EN_MIXMODEL = _pdd.EN_MIXMODEL
+
+_pdd.EN_MIXZONEVOL_swigconstant(_pdd)
+EN_MIXZONEVOL = _pdd.EN_MIXZONEVOL
+
+_pdd.EN_TANKDIAM_swigconstant(_pdd)
+EN_TANKDIAM = _pdd.EN_TANKDIAM
+
+_pdd.EN_MINVOLUME_swigconstant(_pdd)
+EN_MINVOLUME = _pdd.EN_MINVOLUME
+
+_pdd.EN_VOLCURVE_swigconstant(_pdd)
+EN_VOLCURVE = _pdd.EN_VOLCURVE
+
+_pdd.EN_MINLEVEL_swigconstant(_pdd)
+EN_MINLEVEL = _pdd.EN_MINLEVEL
+
+_pdd.EN_MAXLEVEL_swigconstant(_pdd)
+EN_MAXLEVEL = _pdd.EN_MAXLEVEL
+
+_pdd.EN_MIXFRACTION_swigconstant(_pdd)
+EN_MIXFRACTION = _pdd.EN_MIXFRACTION
+
+_pdd.EN_TANK_KBULK_swigconstant(_pdd)
+EN_TANK_KBULK = _pdd.EN_TANK_KBULK
+
+_pdd.EN_DIAMETER_swigconstant(_pdd)
+EN_DIAMETER = _pdd.EN_DIAMETER
+
+_pdd.EN_LENGTH_swigconstant(_pdd)
+EN_LENGTH = _pdd.EN_LENGTH
+
+_pdd.EN_ROUGHNESS_swigconstant(_pdd)
+EN_ROUGHNESS = _pdd.EN_ROUGHNESS
+
+_pdd.EN_MINORLOSS_swigconstant(_pdd)
+EN_MINORLOSS = _pdd.EN_MINORLOSS
+
+_pdd.EN_INITSTATUS_swigconstant(_pdd)
+EN_INITSTATUS = _pdd.EN_INITSTATUS
+
+_pdd.EN_INITSETTING_swigconstant(_pdd)
+EN_INITSETTING = _pdd.EN_INITSETTING
+
+_pdd.EN_KBULK_swigconstant(_pdd)
+EN_KBULK = _pdd.EN_KBULK
+
+_pdd.EN_KWALL_swigconstant(_pdd)
+EN_KWALL = _pdd.EN_KWALL
+
+_pdd.EN_FLOW_swigconstant(_pdd)
+EN_FLOW = _pdd.EN_FLOW
+
+_pdd.EN_VELOCITY_swigconstant(_pdd)
+EN_VELOCITY = _pdd.EN_VELOCITY
+
+_pdd.EN_HEADLOSS_swigconstant(_pdd)
+EN_HEADLOSS = _pdd.EN_HEADLOSS
+
+_pdd.EN_STATUS_swigconstant(_pdd)
+EN_STATUS = _pdd.EN_STATUS
+
+_pdd.EN_SETTING_swigconstant(_pdd)
+EN_SETTING = _pdd.EN_SETTING
+
+_pdd.EN_ENERGY_swigconstant(_pdd)
+EN_ENERGY = _pdd.EN_ENERGY
+
+_pdd.EN_DURATION_swigconstant(_pdd)
+EN_DURATION = _pdd.EN_DURATION
+
+_pdd.EN_HYDSTEP_swigconstant(_pdd)
+EN_HYDSTEP = _pdd.EN_HYDSTEP
+
+_pdd.EN_QUALSTEP_swigconstant(_pdd)
+EN_QUALSTEP = _pdd.EN_QUALSTEP
+
+_pdd.EN_PATTERNSTEP_swigconstant(_pdd)
+EN_PATTERNSTEP = _pdd.EN_PATTERNSTEP
+
+_pdd.EN_PATTERNSTART_swigconstant(_pdd)
+EN_PATTERNSTART = _pdd.EN_PATTERNSTART
+
+_pdd.EN_REPORTSTEP_swigconstant(_pdd)
+EN_REPORTSTEP = _pdd.EN_REPORTSTEP
+
+_pdd.EN_REPORTSTART_swigconstant(_pdd)
+EN_REPORTSTART = _pdd.EN_REPORTSTART
+
+_pdd.EN_RULESTEP_swigconstant(_pdd)
+EN_RULESTEP = _pdd.EN_RULESTEP
+
+_pdd.EN_STATISTIC_swigconstant(_pdd)
+EN_STATISTIC = _pdd.EN_STATISTIC
+
+_pdd.EN_PERIODS_swigconstant(_pdd)
+EN_PERIODS = _pdd.EN_PERIODS
+
+_pdd.EN_NODECOUNT_swigconstant(_pdd)
+EN_NODECOUNT = _pdd.EN_NODECOUNT
+
+_pdd.EN_TANKCOUNT_swigconstant(_pdd)
+EN_TANKCOUNT = _pdd.EN_TANKCOUNT
+
+_pdd.EN_LINKCOUNT_swigconstant(_pdd)
+EN_LINKCOUNT = _pdd.EN_LINKCOUNT
+
+_pdd.EN_PATCOUNT_swigconstant(_pdd)
+EN_PATCOUNT = _pdd.EN_PATCOUNT
+
+_pdd.EN_CURVECOUNT_swigconstant(_pdd)
+EN_CURVECOUNT = _pdd.EN_CURVECOUNT
+
+_pdd.EN_CONTROLCOUNT_swigconstant(_pdd)
+EN_CONTROLCOUNT = _pdd.EN_CONTROLCOUNT
+
+_pdd.EN_JUNCTION_swigconstant(_pdd)
+EN_JUNCTION = _pdd.EN_JUNCTION
+
+_pdd.EN_RESERVOIR_swigconstant(_pdd)
+EN_RESERVOIR = _pdd.EN_RESERVOIR
+
+_pdd.EN_TANK_swigconstant(_pdd)
+EN_TANK = _pdd.EN_TANK
+
+_pdd.EN_CVPIPE_swigconstant(_pdd)
+EN_CVPIPE = _pdd.EN_CVPIPE
+
+_pdd.EN_PIPE_swigconstant(_pdd)
+EN_PIPE = _pdd.EN_PIPE
+
+_pdd.EN_PUMP_swigconstant(_pdd)
+EN_PUMP = _pdd.EN_PUMP
+
+_pdd.EN_PRV_swigconstant(_pdd)
+EN_PRV = _pdd.EN_PRV
+
+_pdd.EN_PSV_swigconstant(_pdd)
+EN_PSV = _pdd.EN_PSV
+
+_pdd.EN_PBV_swigconstant(_pdd)
+EN_PBV = _pdd.EN_PBV
+
+_pdd.EN_FCV_swigconstant(_pdd)
+EN_FCV = _pdd.EN_FCV
+
+_pdd.EN_TCV_swigconstant(_pdd)
+EN_TCV = _pdd.EN_TCV
+
+_pdd.EN_GPV_swigconstant(_pdd)
+EN_GPV = _pdd.EN_GPV
+
+_pdd.EN_NONE_swigconstant(_pdd)
+EN_NONE = _pdd.EN_NONE
+
+_pdd.EN_CHEM_swigconstant(_pdd)
+EN_CHEM = _pdd.EN_CHEM
+
+_pdd.EN_AGE_swigconstant(_pdd)
+EN_AGE = _pdd.EN_AGE
+
+_pdd.EN_TRACE_swigconstant(_pdd)
+EN_TRACE = _pdd.EN_TRACE
+
+_pdd.EN_CONCEN_swigconstant(_pdd)
+EN_CONCEN = _pdd.EN_CONCEN
+
+_pdd.EN_MASS_swigconstant(_pdd)
+EN_MASS = _pdd.EN_MASS
+
+_pdd.EN_SETPOINT_swigconstant(_pdd)
+EN_SETPOINT = _pdd.EN_SETPOINT
+
+_pdd.EN_FLOWPACED_swigconstant(_pdd)
+EN_FLOWPACED = _pdd.EN_FLOWPACED
+
+_pdd.EN_CFS_swigconstant(_pdd)
+EN_CFS = _pdd.EN_CFS
+
+_pdd.EN_GPM_swigconstant(_pdd)
+EN_GPM = _pdd.EN_GPM
+
+_pdd.EN_MGD_swigconstant(_pdd)
+EN_MGD = _pdd.EN_MGD
+
+_pdd.EN_IMGD_swigconstant(_pdd)
+EN_IMGD = _pdd.EN_IMGD
+
+_pdd.EN_AFD_swigconstant(_pdd)
+EN_AFD = _pdd.EN_AFD
+
+_pdd.EN_LPS_swigconstant(_pdd)
+EN_LPS = _pdd.EN_LPS
+
+_pdd.EN_LPM_swigconstant(_pdd)
+EN_LPM = _pdd.EN_LPM
+
+_pdd.EN_MLD_swigconstant(_pdd)
+EN_MLD = _pdd.EN_MLD
+
+_pdd.EN_CMH_swigconstant(_pdd)
+EN_CMH = _pdd.EN_CMH
+
+_pdd.EN_CMD_swigconstant(_pdd)
+EN_CMD = _pdd.EN_CMD
+
+_pdd.EN_TRIALS_swigconstant(_pdd)
+EN_TRIALS = _pdd.EN_TRIALS
+
+_pdd.EN_ACCURACY_swigconstant(_pdd)
+EN_ACCURACY = _pdd.EN_ACCURACY
+
+_pdd.EN_TOLERANCE_swigconstant(_pdd)
+EN_TOLERANCE = _pdd.EN_TOLERANCE
+
+_pdd.EN_EMITEXPON_swigconstant(_pdd)
+EN_EMITEXPON = _pdd.EN_EMITEXPON
+
+_pdd.EN_DEMANDMULT_swigconstant(_pdd)
+EN_DEMANDMULT = _pdd.EN_DEMANDMULT
+
+_pdd.EN_LOWLEVEL_swigconstant(_pdd)
+EN_LOWLEVEL = _pdd.EN_LOWLEVEL
+
+_pdd.EN_HILEVEL_swigconstant(_pdd)
+EN_HILEVEL = _pdd.EN_HILEVEL
+
+_pdd.EN_TIMER_swigconstant(_pdd)
+EN_TIMER = _pdd.EN_TIMER
+
+_pdd.EN_TIMEOFDAY_swigconstant(_pdd)
+EN_TIMEOFDAY = _pdd.EN_TIMEOFDAY
+
+_pdd.EN_AVERAGE_swigconstant(_pdd)
+EN_AVERAGE = _pdd.EN_AVERAGE
+
+_pdd.EN_MINIMUM_swigconstant(_pdd)
+EN_MINIMUM = _pdd.EN_MINIMUM
+
+_pdd.EN_MAXIMUM_swigconstant(_pdd)
+EN_MAXIMUM = _pdd.EN_MAXIMUM
+
+_pdd.EN_RANGE_swigconstant(_pdd)
+EN_RANGE = _pdd.EN_RANGE
+
+_pdd.EN_MIX1_swigconstant(_pdd)
+EN_MIX1 = _pdd.EN_MIX1
+
+_pdd.EN_MIX2_swigconstant(_pdd)
+EN_MIX2 = _pdd.EN_MIX2
+
+_pdd.EN_FIFO_swigconstant(_pdd)
+EN_FIFO = _pdd.EN_FIFO
+
+_pdd.EN_LIFO_swigconstant(_pdd)
+EN_LIFO = _pdd.EN_LIFO
+
+_pdd.EN_NOSAVE_swigconstant(_pdd)
+EN_NOSAVE = _pdd.EN_NOSAVE
+
+_pdd.EN_SAVE_swigconstant(_pdd)
+EN_SAVE = _pdd.EN_SAVE
+
+_pdd.EN_INITFLOW_swigconstant(_pdd)
+EN_INITFLOW = _pdd.EN_INITFLOW
+
+def ENepanet(arg1, arg2, arg3, arg4):
+    return _pdd.ENepanet(arg1, arg2, arg3, arg4)
+ENepanet = _pdd.ENepanet
+
+def ENopen(arg1, arg2, arg3):
+    return _pdd.ENopen(arg1, arg2, arg3)
+ENopen = _pdd.ENopen
+
+def ENsaveinpfile(arg1):
+    return _pdd.ENsaveinpfile(arg1)
+ENsaveinpfile = _pdd.ENsaveinpfile
+
+def ENclose():
+    return _pdd.ENclose()
+ENclose = _pdd.ENclose
+
+def ENsolveH():
+    return _pdd.ENsolveH()
+ENsolveH = _pdd.ENsolveH
+
+def ENsaveH():
+    return _pdd.ENsaveH()
+ENsaveH = _pdd.ENsaveH
+
+def ENopenH():
+    return _pdd.ENopenH()
+ENopenH = _pdd.ENopenH
+
+def ENinitH(arg1):
+    return _pdd.ENinitH(arg1)
+ENinitH = _pdd.ENinitH
+
+def ENrunH():
+    return _pdd.ENrunH()
+ENrunH = _pdd.ENrunH
+
+def ENnextH():
+    return _pdd.ENnextH()
+ENnextH = _pdd.ENnextH
+
+def ENcloseH():
+    return _pdd.ENcloseH()
+ENcloseH = _pdd.ENcloseH
+
+def ENsavehydfile(arg1):
+    return _pdd.ENsavehydfile(arg1)
+ENsavehydfile = _pdd.ENsavehydfile
+
+def ENusehydfile(arg1):
+    return _pdd.ENusehydfile(arg1)
+ENusehydfile = _pdd.ENusehydfile
+
+def ENsolveQ():
+    return _pdd.ENsolveQ()
+ENsolveQ = _pdd.ENsolveQ
+
+def ENopenQ():
+    return _pdd.ENopenQ()
+ENopenQ = _pdd.ENopenQ
+
+def ENinitQ(arg1):
+    return _pdd.ENinitQ(arg1)
+ENinitQ = _pdd.ENinitQ
+
+def ENrunQ():
+    return _pdd.ENrunQ()
+ENrunQ = _pdd.ENrunQ
+
+def ENnextQ():
+    return _pdd.ENnextQ()
+ENnextQ = _pdd.ENnextQ
+
+def ENstepQ():
+    return _pdd.ENstepQ()
+ENstepQ = _pdd.ENstepQ
+
+def ENcloseQ():
+    return _pdd.ENcloseQ()
+ENcloseQ = _pdd.ENcloseQ
+
+def ENwriteline(arg1):
+    return _pdd.ENwriteline(arg1)
+ENwriteline = _pdd.ENwriteline
+
+def ENreport():
+    return _pdd.ENreport()
+ENreport = _pdd.ENreport
+
+def ENresetreport():
+    return _pdd.ENresetreport()
+ENresetreport = _pdd.ENresetreport
+
+def ENsetreport(arg1):
+    return _pdd.ENsetreport(arg1)
+ENsetreport = _pdd.ENsetreport
+
+def ENgetcontrol(arg1):
+    return _pdd.ENgetcontrol(arg1)
+ENgetcontrol = _pdd.ENgetcontrol
+
+def ENgetcount(arg1):
+    return _pdd.ENgetcount(arg1)
+ENgetcount = _pdd.ENgetcount
+
+def ENgetoption(arg1):
+    return _pdd.ENgetoption(arg1)
+ENgetoption = _pdd.ENgetoption
+
+def ENgettimeparam(arg1):
+    return _pdd.ENgettimeparam(arg1)
+ENgettimeparam = _pdd.ENgettimeparam
+
+def ENgetflowunits():
+    return _pdd.ENgetflowunits()
+ENgetflowunits = _pdd.ENgetflowunits
+
+def ENgetpatternindex(arg1):
+    return _pdd.ENgetpatternindex(arg1)
+ENgetpatternindex = _pdd.ENgetpatternindex
+
+def ENgetpatternid(arg1):
+    return _pdd.ENgetpatternid(arg1)
+ENgetpatternid = _pdd.ENgetpatternid
+
+def ENgetpatternlen(arg1):
+    return _pdd.ENgetpatternlen(arg1)
+ENgetpatternlen = _pdd.ENgetpatternlen
+
+def ENgetpatternvalue(arg1, arg2):
+    return _pdd.ENgetpatternvalue(arg1, arg2)
+ENgetpatternvalue = _pdd.ENgetpatternvalue
+
+def ENgetqualtype():
+    return _pdd.ENgetqualtype()
+ENgetqualtype = _pdd.ENgetqualtype
+
+def ENgeterror(arg1, arg3):
+    return _pdd.ENgeterror(arg1, arg3)
+ENgeterror = _pdd.ENgeterror
+
+def ENgetnodeindex(arg1):
+    return _pdd.ENgetnodeindex(arg1)
+ENgetnodeindex = _pdd.ENgetnodeindex
+
+def ENgetnodeid(arg1):
+    return _pdd.ENgetnodeid(arg1)
+ENgetnodeid = _pdd.ENgetnodeid
+
+def ENgetnodetype(arg1):
+    return _pdd.ENgetnodetype(arg1)
+ENgetnodetype = _pdd.ENgetnodetype
+
+def ENgetnodevalue(arg1, arg2):
+    return _pdd.ENgetnodevalue(arg1, arg2)
+ENgetnodevalue = _pdd.ENgetnodevalue
+
+def ENgetlinkindex(arg1):
+    return _pdd.ENgetlinkindex(arg1)
+ENgetlinkindex = _pdd.ENgetlinkindex
+
+def ENgetlinkid(arg1):
+    return _pdd.ENgetlinkid(arg1)
+ENgetlinkid = _pdd.ENgetlinkid
+
+def ENgetlinktype(arg1):
+    return _pdd.ENgetlinktype(arg1)
+ENgetlinktype = _pdd.ENgetlinktype
+
+def ENgetlinknodes(arg1):
+    return _pdd.ENgetlinknodes(arg1)
+ENgetlinknodes = _pdd.ENgetlinknodes
+
+def ENgetlinkvalue(arg1, arg2):
+    return _pdd.ENgetlinkvalue(arg1, arg2)
+ENgetlinkvalue = _pdd.ENgetlinkvalue
+
+def ENgetversion():
+    return _pdd.ENgetversion()
+ENgetversion = _pdd.ENgetversion
+
+def ENsetcontrol(arg1, arg2, arg3, arg4, arg5, arg6):
+    return _pdd.ENsetcontrol(arg1, arg2, arg3, arg4, arg5, arg6)
+ENsetcontrol = _pdd.ENsetcontrol
+
+def ENsetnodevalue(arg1, arg2, arg3):
+    return _pdd.ENsetnodevalue(arg1, arg2, arg3)
+ENsetnodevalue = _pdd.ENsetnodevalue
+
+def ENsetlinkvalue(arg1, arg2, arg3):
+    return _pdd.ENsetlinkvalue(arg1, arg2, arg3)
+ENsetlinkvalue = _pdd.ENsetlinkvalue
+
+def ENaddpattern(arg1):
+    return _pdd.ENaddpattern(arg1)
+ENaddpattern = _pdd.ENaddpattern
+
+def ENsetpattern(arg1, floatarray):
+    return _pdd.ENsetpattern(arg1, floatarray)
+ENsetpattern = _pdd.ENsetpattern
+
+def ENsetpatternvalue(arg1, arg2, arg3):
+    return _pdd.ENsetpatternvalue(arg1, arg2, arg3)
+ENsetpatternvalue = _pdd.ENsetpatternvalue
+
+def ENsettimeparam(arg1, arg2):
+    return _pdd.ENsettimeparam(arg1, arg2)
+ENsettimeparam = _pdd.ENsettimeparam
+
+def ENsetoption(arg1, arg2):
+    return _pdd.ENsetoption(arg1, arg2)
+ENsetoption = _pdd.ENsetoption
+
+def ENsetstatusreport(arg1):
+    return _pdd.ENsetstatusreport(arg1)
+ENsetstatusreport = _pdd.ENsetstatusreport
+
+def ENsetqualtype(arg1, arg2, arg3, arg4):
+    return _pdd.ENsetqualtype(arg1, arg2, arg3, arg4)
+ENsetqualtype = _pdd.ENsetqualtype
 # This file is compatible with both classic and new-style classes.
 
 cvar = _pdd.cvar

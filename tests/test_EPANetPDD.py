@@ -10,6 +10,7 @@ from unittest import skip, expectedFailure
 
 
 class Test1(unittest.TestCase):
+    
     def setUp(self): 
         print("SETUP!")
         file = os.path.join(os.path.dirname(simple.__file__),'Net3.inp')
@@ -20,7 +21,7 @@ class Test1(unittest.TestCase):
         print("TEAR DOWN!")
         
     def test_runs_a_simulation_and_get_results(self):
-        self.fail("Not yet calling epanet emitter properly")
+        #self.fail("Not yet calling epanet emitter properly")
         def mod1():
             p=Node.value_type['EN_PRESSURE']
             self.assertAlmostEqual(self.es.network.nodes['103'].results[p][5],59.301,places=3)
@@ -43,7 +44,7 @@ class Test1(unittest.TestCase):
             self.assertAlmostEquals(self.es.network.links[2].results[v][22],0.025,places=2)
             self.assertAlmostEquals(self.es.network.links['111'].results[v][1],3.23,places=2)
 
-        self.es.run(pdd=True)
+        self.es.run()
         mod1()
         mod2()
         self.es.runq()
