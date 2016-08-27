@@ -9,7 +9,6 @@ from pickle import dumps
 
 from . import tools
 
-pd=pdd_wrapper_class()
 
 def Error(e):
     if(e):
@@ -323,7 +322,8 @@ class EPANetSimulation(object):
         self._getInputData()
         self._close()
       
-
+    def set_pdd(self,pdd=False):
+        self.pd.set_pdd(pdd)
 
     def _legacy_get(self,entitytype, index, param=-1):
         """Legacy interface 'get' ONLY FOR TESTING. 
@@ -343,6 +343,7 @@ class EPANetSimulation(object):
         
     def sync(self):
         """ Syncs the changes variable values with underlying toolkit system."""
+        raise Exception("Don't use sync. It is not yet properly implemented.")
         self.network.sync()
 
     def run(self, save=True, pdd=True):
@@ -408,7 +409,7 @@ class EPANetSimulation(object):
     def _open(self): 
         if(not self._enOpenStatus):
             Error(self.pd.ENopen(self.inputfile,self.rptfile,self.binfile))
-            pd.cvar.TmpDir=tempfile._get_default_tempdir()
+            self.pd.cvar.TmpDir=tempfile._get_default_tempdir()
         self._enOpenStatus=True
         
     def _close(self):
@@ -474,7 +475,7 @@ class EPANetSimulation(object):
         self._open()
         # if(hasattr(et,name)): # search legacy interface            
         #     return getattr(et,name)
-        if(hasattr(pd,name)): #
-            return getattr(pd,name)
+        if(hasattr(self.pd,name)): #
+            return getattr(self.pd,name)
         raise AttributeError("The attribute %s not found with this class or underlying c interface" % name)    
         
