@@ -1,3 +1,4 @@
+?.inp
 *.pyd
 *.pyc
 build/
@@ -14,3 +15,6 @@ tests/s???
 *.wpu
 /py*.egg/
 junk/*.layout
+*.o
+*.depend
+*.exe
