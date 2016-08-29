@@ -7,7 +7,7 @@ from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Node
       Links, Patterns, Pattern, Controls, Control
 
 from unittest import skip, expectedFailure
-
+import tools_for_testing as tt
 
 class Test1(unittest.TestCase):
     def setUp(self): 
@@ -267,6 +267,13 @@ class Test1(unittest.TestCase):
     def test_settable_values_for_links_and_nodes(self):
         self.assertEqual(Link.settable_values,[0,1,2,3,4,5,6,7,11,12])
         self.assertEqual(Node.settable_values,[0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 20, 21, 22, 23])
+        
+    def xtest_sync_does_not_make_mistakes_in_saving_back_same_values(self):
+        self.es.ENsaveinpfile("a.inp")
+        self.es.sync()
+        self.es.ENsaveinpfile("b.inp")
+        self.assertEqual(tt.compareFiles("a.inp","b.inp"),'16.0000>788288.0000')  
+        
         
     def xtest_node_values_are_saved_when_synced(self):
         #change copule'a values

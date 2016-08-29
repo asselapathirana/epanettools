@@ -1,20 +1,12 @@
 import unittest
-import difflib
-import os
+import os, sys
 from epanettools import epanet2 as et
+from epanettools import pdd as pd
 from epanettools.examples import simple
-
+import tools_for_testing as tt
 
 class Test1(unittest.TestCase):
     
-    def compareFiles(self, first, second):
-        with open(first, 'r') as myfile:
-            f=myfile.read()
-        with open(second, 'r') as myfile:
-            s=myfile.read()
-            
-        s = difflib.SequenceMatcher(lambda x: x == " ",f,s)
-        return s.get_opcodes()   
     
     def Error(self,e):
         if(e):
@@ -34,7 +26,15 @@ class Test1(unittest.TestCase):
         self.Error(et.ENsaveinpfile("1.inp"))
         self.Error(et.ENsetlinkvalue(81,0,9999))
         self.Error(et.ENsaveinpfile("2.inp"))
-        self.assertEqual(self.compareFiles("1.inp","2.inp")[1],"('replace', 16946, 16983, 16946, 16983)")        
+        self.assertEqual(tt.compareFiles("1.inp","2.inp"),'16.0000>9999.0000')
+        
+    def test_alter_with_ENset_via_PDD_and_check_with_a_file(self):
+        self.Error(pd.ENopen(self.file,"t.rpt",""))   
+        self.Error(pd.ENsaveinpfile_wrap("1.inp"))
+        self.Error(pd.ENsetlinkvalue_wrap(81,0,788288))
+        self.Error(pd.ENsaveinpfile_wrap("2.inp"))
+        self.assertEqual(tt.compareFiles("1.inp","2.inp"),'16.0000>788288.0000')  
+        self.Error(pd.ENclose())
     
 
 tc=Test1()

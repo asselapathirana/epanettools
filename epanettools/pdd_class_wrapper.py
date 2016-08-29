@@ -22,7 +22,7 @@ class pdd_wrapper_class(object):
             else:
                 f=name
         if(hasattr(self.pd,name)): #
-            print ("Name:"+name+" f="+f)
+            #print ("Name:"+name+" f="+f)
             return getattr(self.pd,name)
         raise AttributeError("The attribute %s not found with this class or underlying c interface" % name) 
             
