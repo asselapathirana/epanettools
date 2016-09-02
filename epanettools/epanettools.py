@@ -1,13 +1,15 @@
 from __future__ import print_function
-#from . import epanet2 as et
+from . import epanet2 as et
 from .pdd_class_wrapper import pdd_wrapper_class 
-import tempfile, shutil, os, sys
+import tempfile, shutil, os, sys, math
 from pickle import dumps
 
 """" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
      Never use ENOpenH ENcloseH without keeping tab. -- always use _HClose and _HOpen methods instead."""
 
 from . import tools
+
+RIDICULOUS_VALUE=-999999999
 
 
 def Error(e):
@@ -21,7 +23,7 @@ def check_and_return(result_list,silent=False):
         Error(r[0])
         
     if(r[0]>0):
-        return float('nan')
+        return RIDICULOUS_VALUE
     else:
         if(len(r)==2):
             return r[1]
@@ -66,6 +68,7 @@ class Node(object):
         self.pd=self.network.es.pd
         self.links=[]
         self.results={}
+        self.results_original={}
         #get the inverse of value_type
         self.vti={b:a for a,b in self.value_type.items()} 
         if(index):
@@ -82,12 +85,21 @@ class Node(object):
         for key,rt in Node.value_type.items():
             if ((not input_data) and (not rt in Node.input_values)) or \
                ((input_data) and (rt in Node.input_values)):
-                self.results[rt].append(check_and_return(self.pd.ENgetnodevalue(self.index,rt),silent=True))
-                                                         
+                k=check_and_return(self.pd.ENgetnodevalue(self.index,rt),silent=True)
+                self.results[rt].append(k)
+                self.results_original[rt].append(k)  
+                
     def sync(self):
         for key,rt in Node.value_type.items():
+           
             if (rt in Node.settable_values):
-                self.pd.ENsetnodevalue(self.index,rt,self.results[0][0])               
+                if(self.results[rt][0]==self.results_original[rt][0]):
+                    continue                
+                if(self.results[rt][0]!=RIDICULOUS_VALUE):
+                    self.pd.ENsetnodevalue(self.index,rt,self.results[rt][0])
+       
+                
+                    
                 
             
             
@@ -118,6 +130,7 @@ class Link(object):
         self.network=network
         self.pd=self.network.es.pd
         self.results={}
+        self.results_original={}
         if(index):
             self.readValues(index)
             
@@ -144,12 +157,16 @@ class Link(object):
         for key,rt in Link.value_type.items():
             if ((not input_data) and (not rt in Link.input_values)) or \
                ((input_data) and (rt in  Link.input_values)):
-                self.results[rt].append(check_and_return(self.pd.ENgetlinkvalue(self.index,rt), silent=True))
+                k=check_and_return(self.pd.ENgetlinkvalue(self.index,rt), silent=True)
+                self.results[rt].append(k)
+                self.results_original[rt].append(k)       
 
     def sync(self):
         for key,rt in Link.value_type.items():
             if (rt in Link.settable_values):
-                self.pd.ENsetlinkvalue(self.index,rt,self.results[0][0])    
+                 if(self.results[rt][0]==self.results_original[rt][0]):
+                     continue
+                 if(self.results[rt][0]!=RIDICULOUS_VALUE):self.pd.ENsetlinkvalue(self.index,rt,self.results[rt][0])    
 
 class Pattern(tools.TransformedDict):
     
@@ -230,6 +247,8 @@ class Controls(index_id_type):
     pass
 
 class Network(object):
+    
+    
     WaterQualityAnalysisTypes = {
     "EN_NONE":         0,
     "EN_CHEM":         1,
@@ -274,12 +293,14 @@ class Network(object):
         for i,n in self.nodes.items():
             for key,rt in Node.value_type.items():
                 n.results[rt]=[]
+                n.results_original[rt]=[]
         for i,n in self.links.items():
             for key,rt in Link.value_type.items():
-                n.results[rt]=[]      
+                n.results[rt]=[]  
+                n.results_original[rt]=[]
     
     def _sync(self):
-        """"Syncs the anything other than nodes, links, patterns, conrols"""
+        """"Syncs anything other than nodes, links, patterns, conrols"""
         pass
     
     def sync(self):
@@ -308,7 +329,12 @@ class EPANetSimulation(object):
     
     
     def __init__(self,inputFileName):
+        self.initialize(inputFileName)
+
+    def initialize(self, inputFileName):
         self.pd=pdd_wrapper_class()
+        #self.pd=et
+        #print("Warning: no pdd")
         self._enOpenStatus=False
         self._enHOpenStatus=False
         self.OriginalInputFileName=inputFileName
@@ -341,10 +367,14 @@ class EPANetSimulation(object):
         raise (Exception,"UNKNOWN type")
         
         
-    def sync(self):
+    def sync(self, i_know_what_i_am_doing=False):
         """ Syncs the changes variable values with underlying toolkit system."""
-        raise Exception("Don't use sync. It is not yet properly implemented.")
+        if (not i_know_what_i_am_doing):
+            raise Exception("Don't use sync. It is not yet properly implemented.")
         self.network.sync()
+        #now replace the original input file with this data. 
+        Error(self.pd.ENsaveinpfile(self.inputfile))
+        self.initialize(self.inputfile)
 
     def run(self, save=True, pdd=True):
         self.network.reset_results()

@@ -1,5 +1,6 @@
 import os
 import math
+import copy
 import unittest
 import epanettools
 from epanettools.examples import simple
@@ -7,7 +8,7 @@ from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Node
       Links, Patterns, Pattern, Controls, Control
 
 from unittest import skip, expectedFailure
-import tools_for_testing as tt
+from tests import tools_for_testing as tt
 
 class Test1(unittest.TestCase):
     def setUp(self): 
@@ -193,8 +194,44 @@ class Test1(unittest.TestCase):
         self.assertEqual(m['335'].id,'335')
         self.assertEqual(m['335'].index,119)
         
+        
+        
         # get the links connected to a node. 
         self.assertEqual(sorted([i.id for i in n['169'].links]),['183', '185', '187', '211'] )
+
+
+
+    def xtest_sync_does_not_make_mistakes_in_saving_back_same_values(self):
+        self.es.ENsaveinpfile("a.inp")
+        self.es.sync(i_know_what_i_am_doing=True)
+        self.es.ENsaveinpfile("b.inp")
+        self.assertEqual(tt.compareFiles("a.inp","b.inp"),'')      
+
+    def test_results_get_correct_values(self):
+        n=self.es.network.nodes
+        nan=float("NaN")
+        #Tank has correct values
+        r={0: [116.5], 1: [0.0], 2: [0.0], 3: [0.0], 4: [0.0], 5: [nan], 6: [nan], 7: [nan], 8: [23.5], 9: [], 10: [], 11: [], 12: [], 13: [], 14: [46142.140625], 15: [0.0], 16: [79128.8671875], 17: [50.0], 18: [12762.7197265625], 19: [0.0], 20: [6.5], 21: [40.29999923706055], 22: [1.0], 23: [0.0]}
+        del r[5], r[7], r[6]
+        a=copy.deepcopy(n['2'].results)
+        del a[5], a[7], a[6]
+        self.assertEqual(a,r)
+        
+        #Reservoirs have correct values
+        r={0: [220.0], 1: [0.0], 2: [0.0], 3: [0.0], 4: [0.0], 5: [nan], 6: [nan], 7: [nan], 8: [0.0], 9: [], 10: [], 11: [], 12: [], 13: [], 14: [0.0], 15: [0.0], 16: [0.0], 17: [0.0], 18: [0.0], 19: [0.0], 20: [0.0], 21: [0.0], 22: [1.0], 23: [0.0]}
+        a=copy.deepcopy(n['River'].results)
+        del r[5], r[7], r[6]
+        del a[5], a[7], a[6]        
+        self.assertEqual(a,r)
+
+        m=self.es.network.links
+        
+        #Link has correct values
+        r={0: [18.0], 1: [14200.0], 2: [110.0], 3: [0.0], 4: [1.0], 5: [110.0], 6: [0.0], 7: [0.0], 8: [], 9: [], 10: [], 11: [0.0], 12: [110.0], 13: []}
+        a=copy.deepcopy(m['101'].results)
+        del r[5], r[7], r[6]
+        del a[5], a[7], a[6]        
+        self.assertEqual(a,r)        
         
         
 
@@ -268,14 +305,10 @@ class Test1(unittest.TestCase):
         self.assertEqual(Link.settable_values,[0,1,2,3,4,5,6,7,11,12])
         self.assertEqual(Node.settable_values,[0, 1, 2, 3, 4, 5, 6, 7, 8, 15, 17, 18, 20, 21, 22, 23])
         
-    def xtest_sync_does_not_make_mistakes_in_saving_back_same_values(self):
-        self.es.ENsaveinpfile("a.inp")
-        self.es.sync()
-        self.es.ENsaveinpfile("b.inp")
-        self.assertEqual(tt.compareFiles("a.inp","b.inp"),'16.0000>788288.0000')  
+
         
         
-    def xtest_node_values_are_saved_when_synced(self):
+    def xtest_synced_link_values_are_saved_when_synced(self):
         #change copule'a values
         d=Link.value_type['EN_DIAMETER']
         self.es.network.links[1].results[d][0]
@@ -285,19 +318,19 @@ class Test1(unittest.TestCase):
         self.assertAlmostEquals(self.es._legacy_get('LINK',1,d),99.0,places=1) 
 
         self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,d),12.0,places=1)
+        #save input file
+        self.es.ENsaveinpfile("a.inp")
         #now after 'syncing'
-        self.es.sync()
+        self.es.sync(i_know_what_i_am_doing=True)
         self.assertAlmostEquals(self.es._legacy_get('LINK',1,d),152.0,places=1) 
         self.assertAlmostEquals(self.es._legacy_get('LINK',self.es.network.links['105'].index,d),18.0,places=1)
-        # now run and get results
+        self.es.ENsaveinpfile("b.inp")
+        #run
         self.es.run()
-        self.assertAlmostEquals(self.es.network.links[1].results[Link.value_type["EN_FLOW"]][0],-2246.30,places=1)        
-         
-        
-       
-        
-        
-        
+        #save input file again
+        self.es.ENsaveinpfile("c.inp")
+        self.assertEqual(tt.compareFiles("a.inp","b.inp"),'99>152; 12>18; ')
+        self.assertEqual(tt.compareFiles("a.inp","c.inp"),'99>152; 12>18; ')  
 
 tc=Test1()
 def clt(fn):
@@ -307,7 +340,7 @@ def clt(fn):
 
 def main():
     for a in dir(tc):
-        if (a.startswith('test_')):
+        if (a.startswith('test_sync')): #test_sync
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )

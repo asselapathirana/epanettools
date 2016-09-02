@@ -1,5 +1,12 @@
 import difflib
 
+def is_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
 def compareFiles( first, second):
     with open(first, 'r') as myfile:
         f=myfile.readlines()
@@ -10,15 +17,24 @@ def compareFiles( first, second):
     d1=""
     d2=""
     for line in diff:
+        if(len(d1)>5000):
+            break
         if line.startswith('-'):
-            d1=d1.join(line[1:])
+            d1=d1+" "+(line[1:])
         elif line.startswith('+'):
-            d2=d2.join(line[1:])     
+            d2=d2+" "+(line[1:])     
     d1=d1.split()
     d2=d2.split()
-    diff=""
-    for i,v in enumerate(d1):
-        if(d1[i]!=d2[i]):
-            diff=diff+d1[i]+">"+d2[i]
+    dif=""
+    for i in range(min(len(d1),len(d2))):
         
-    return diff
+        s=d1[i].strip("\n\t ")
+        if(is_number(s)): s=format(float(s),'.3g')
+        r=d2[i].strip("\n\t ")
+        if(is_number(r)): r=format(float(r),'.3g')        
+        if(s!=r):
+            dif=dif+s+">"+r+"; "
+
+                
+        
+    return dif

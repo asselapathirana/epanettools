@@ -2,28 +2,28 @@
 /* The spurious memory effect was gone once the zero assignments were replace by a very small number
 for emitter and Base demand values */
 
-/* 20081122 -- Now, the program seem to be working, even works well with the GUI. 
-Problems: There is a spurious memory effect in the flow. When pressure turns from 
+/* 20081122 -- Now, the program seem to be working, even works well with the GUI.
+Problems: There is a spurious memory effect in the flow. When pressure turns from
 positive to negative, there remains a fixed demand??
 */
 
-/* Lesson about emitters: 
-epanet computes a quanity called E[i] for each node, that will be set to 1 if there is an emitter in 
-that node AT INITIALIZATION time_ (ENinitH). If emitters are assigned to a node later, this will not happen and 
+/* Lesson about emitters:
+epanet computes a quanity called E[i] for each node, that will be set to 1 if there is an emitter in
+that node AT INITIALIZATION time_ (ENinitH). If emitters are assigned to a node later, this will not happen and
 division by zero error will occure (a bug?)
 */
 
-/* Lesson about instability: 
+/* Lesson about instability:
 Symptom: Erratically, sometime_s the demand just before reaching zero would go very high: (e.g. a)
 .     .a
   .
-    . 
+    .
 --------.-.-.-
-Reason: There is a pressure fluctuation. 
-When in low_pressures(), pressure is negative, so the situation escapes it. 
-When in negative_pressrues(), pressure is positive, so that also is escaped. 
-Solution: Do not run epanet between calls of low_pressure, negative_pressure etc. 
-Call read_newvalues() only after all checks, just before resuming the next loop cycle. 
+Reason: There is a pressure fluctuation.
+When in low_pressures(), pressure is negative, so the situation escapes it.
+When in negative_pressrues(), pressure is positive, so that also is escaped.
+Solution: Do not run epanet between calls of low_pressure, negative_pressure etc.
+Call read_newvalues() only after all checks, just before resuming the next loop cycle.
 */
 
 
@@ -37,6 +37,7 @@ Call read_newvalues() only after all checks, just before resuming the next loop 
 #include <limits>
 #include <float.h>
 #include <cstring>
+#include <stdlib.h>
 
 using namespace std;
 long time_;
@@ -50,13 +51,13 @@ int debug2=false;
 int debug1=true;
 int MAXTRIALS=1000;
 int NOCONVERGE=1;
-float ZEROEMIT=TOLERANCE/TOLERFACT; // this seems to kill the memory effect on demand. 
+float ZEROEMIT=TOLERANCE/TOLERFACT; // this seems to kill the memory effect on demand.
 float ZEROBD    =TOLERANCE/TOLERFACT;
 float NONZERO_SMALL_EMITTER =FLT_MIN; //TOLERANCE/TOLERFACT;
-float NEGLDEMAND=TOLERANCE; // negligible demand. 
+float NEGLDEMAND=TOLERANCE; // negligible demand.
 float ACCURACY;
-float eexp, // emitter exponent, 
-	  ecup; // emitter cutoff pressure m or psi or the pressure units used. 
+float eexp, // emitter exponent,
+	  ecup; // emitter cutoff pressure m or psi or the pressure units used.
 int NITER;
 
 bool comp(float v1, float v2){
@@ -78,8 +79,8 @@ bool error(int i,int value)
 		}else{
 			//if(debug2||value>100) printf(err,"\n");
 		}
-		ENwriteline(msg); // when called from GUI. 
-		cout << msg; // When called on command line. 
+		ENwriteline(msg); // when called from GUI.
+		cout << msg; // When called on command line.
 		//if(value>100){
 		//		cout << "Press any key ...\n"; cin.get();
 		//}
@@ -106,15 +107,15 @@ void read_newvalues(){
 		if(i==6){
 			cout << "";
 		}
-		
+
 		nodes.at(i).pressure=pres;
 
 	}
 	//if(debug2) cout ;
 }
 
-/* 
-All nodes with pressure > critical pressure 
+/*
+All nodes with pressure > critical pressure
 1. Should not have emitters
 2. Should have original demand
 */
@@ -131,9 +132,9 @@ bool large_pressures(){
 			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_EMITTER, (float)ZEROEMIT));
 			sign=true;
 			if(NITER > MAXTRIALS)nodes.at(i).offender=true;
-			
+
 		}
-		
+
 	}
 	//DO NOT CALL THIS HERE. read_newvalues();
 	return sign;
@@ -145,10 +146,10 @@ void set_emitter(int loc){
 
 }
 
-/* 
+/*
 IF 0<pressure<ecup and current demand value is different from saved demand, set
 1. proper emitter value, to get proper demand
-2. demand to zero. 
+2. demand to zero.
 */
 bool low_pressures(){
 	bool sign=false;
@@ -158,11 +159,11 @@ bool low_pressures(){
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_PRESSURE , &pres));
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_DEMAND , &dem));
 		if(
-			(!(pres<0.0) && pres < ecup && comp(nodes.at(i).orig_demand,0) && 
+			(!(pres<0.0) && pres < ecup && comp(nodes.at(i).orig_demand,0) &&
 			comp(dem,nodes.at(i).ec*pow(pres,eexp))
 			)
 			//(dem >= nodes.at(i).orig_demand || dem <= NEGLDEMAND) )
-			
+
 			){
 			set_emitter(i);
 			sign=true;
@@ -172,7 +173,7 @@ bool low_pressures(){
 			sign=true;
 			if(NITER > MAXTRIALS)nodes.at(i).offender=true;
 		}
-		
+
 	}
 
 	////DO NOT CALL THIS HERE. read_newvalues();
@@ -183,7 +184,7 @@ bool low_pressures(){
 
 
 /* sets all nodes with current pressure <0 and non-zero demand
-1. emitter=0, 
+1. emitter=0,
 2. demand=0 */
 bool negative_pressures(){
 	bool sign=false;
@@ -195,28 +196,28 @@ bool negative_pressures(){
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_BASEDEMAND, &bd));
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_EMITTER, &ec));
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_PRESSURE, &pres));
-		
+
 		if(pres < 0.0 && dem > TOLERANCE ){
 			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_EMITTER, (float)ZEROEMIT));
-			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_BASEDEMAND, (float)ZEROBD));			
+			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_BASEDEMAND, (float)ZEROBD));
 			sign=true;
 			if(NITER > MAXTRIALS)nodes.at(i).offender=true;
 		}
 
 		if(dem<-TOLERANCE){
 			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_EMITTER, (float)ZEROEMIT));
-			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_BASEDEMAND, (float)ZEROBD));			
+			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_BASEDEMAND, (float)ZEROBD));
 			sign=true;
 			if(NITER > MAXTRIALS)nodes.at(i).offender=true;
 		}
-		
+
 	}
 	////DO NOT CALL THIS HERE. read_newvalues();
 	return sign;
-}	
+}
 
 void print_results(){
-	
+
 		for(unsigned int i=0;i<nodes.size();i++){
 			if(i==6){
 			float ec, bd;
@@ -326,7 +327,7 @@ void setEmitterData(float eexp_, float ecup_){
 	eexp=eexp_;
 	ecup=ecup_;
 }
-	
+
 
 int emitter_analysis_prepare(){
 		int tmp ;
@@ -345,12 +346,12 @@ int emitter_analysis_prepare(){
 		}
 
 		return 0;
-		
+
 }
 
 bool still_evolving(){
 	bool notyet=false;
-	
+
 	for(unsigned  i=0;i< nodes.size(); i++){
 		float pres,dem;
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_PRESSURE, &pres));
@@ -392,9 +393,9 @@ int emitter_analysis()
 			flag2=negative_pressures();
 			flag3=large_pressures();
 			flag4=still_evolving();
-			read_newvalues(); //CALL THIS HERE. Not at the end of each test above. 
+			read_newvalues(); //CALL THIS HERE. Not at the end of each test above.
 			//if(debug2) cout <<  "looping...\n\n\n";
-			
+
 			if(NITER++ > MAXTRIALS){/* we need to write a message here to the report */
 				char msg[500];
 
@@ -411,10 +412,10 @@ int emitter_analysis()
 				//cout << msg;
 				str+=msg;
 				for(unsigned int i=0;i<nodes.size();i++){
-			
+
 				    if(nodes.at(i).offender){
 						char val[256]; strcpy(val,nodes.at(i).id.c_str());
-						
+
 						str+=string(val);str+=" "; //cout << val; cout << " ";
 					}
 				}
@@ -432,8 +433,8 @@ int emitter_analysis()
 			for(unsigned int i=0;i<nodes.size();i++){nodes.at(i).offender=false;}
 
 		}while(flag1 || flag2|| flag3||last);
-		
-		
+
+
 		return 0;
 }
 
@@ -443,13 +444,13 @@ int getniter(){
 
 int post_analysis_cleanup(){
 	    print_results();
-		reset_network(); // need to set base demands. 
-		nodes.clear(); // clear the nodes array so that new analysis cycle starts fresh. 
+		reset_network(); // need to set base demands.
+		nodes.clear(); // clear the nodes array so that new analysis cycle starts fresh.
 		return 0;
 
 }
 
-int main(int argc, char ** argv){
+/**int main(int argc, char ** argv){
 	long tstep;
 	error(ENopen("../data/nid2280.inp","EMIT_STANDALONE.rpt",""));
     error(ENopenH());
@@ -467,7 +468,7 @@ int main(int argc, char ** argv){
       until (tstep = 0) or (err > 100) or (RunStatus = rsCancelled);
     end;
 
-	*/
+
 	int cc=0;
 	do{
 
@@ -476,7 +477,7 @@ int main(int argc, char ** argv){
 			cout << "";
 		}
 		emitter_analysis();
-		cout << cc++ << " : "; 
+		cout << cc++ << " : ";
 		error(ENrunH(&time_));
 		post_analysis_cleanup();
 		ENnextH(&tstep);
@@ -486,5 +487,6 @@ int main(int argc, char ** argv){
 	ENcloseH();
 
 }
+*/
 
 

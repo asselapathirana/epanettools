@@ -30,7 +30,10 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="../epanettools/epanet" />
+			<Add directory="../epanettools/pdd" />
 		</Compiler>
+		<Unit filename="../cc/src/main2.cxx" />
 		<Unit filename="../epanettools/epanet/enumstxt.h" />
 		<Unit filename="../epanettools/epanet/epanet.c">
 			<Option compilerVar="CC" />
@@ -79,6 +82,11 @@
 		<Unit filename="../epanettools/epanet/toolkit.h" />
 		<Unit filename="../epanettools/epanet/types.h" />
 		<Unit filename="../epanettools/epanet/vars.h" />
+		<Unit filename="../epanettools/pdd/emitter_analysis.cpp" />
+		<Unit filename="../epanettools/pdd/include.h" />
+		<Unit filename="../epanettools/pdd/mods.cpp" />
+		<Unit filename="../epanettools/pdd/wrap.cpp" />
+		<Unit filename="../epanettools/pdd/wrapper.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
