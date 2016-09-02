@@ -30,10 +30,6 @@ class Test1(unittest.TestCase):
         self.assertEqual(tt.compareFiles("1.inp","2.inp"),'16>1e+04; ')
         
 
-        
-        
-    
-
 tc=Test1()
 def clt(fn):
     tc.setUp()
