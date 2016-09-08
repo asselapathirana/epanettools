@@ -32,25 +32,18 @@ sources=[ "epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
                                      ]]
 sources.append("epanettools"+os.sep+"epanet2_wrap.c")
 
-# 25-Aug-2016 - append emitter modification files
-sources=sources+list( "epanettools"+os.sep+"pdd"+os.sep+x for x in ["emitter_analysis.cpp",
-                                                             "mods.cpp", "wrap.cpp",
-                                                              ])
-sources.append("epanettools"+os.sep+"pdd_wrap.cxx")
-
-print (sources)
-cargs=['-I'+"epanettools"+os.sep+"epanet",'-I'+"epanettools"+os.sep+"pdd",'-Wno-implicit-function-declaration','-Wno-unused-but-set-variable','-Wno-format','-Wno-char-subscripts', '-fopenmp','-Wno-deprecated','-O3']
+cargs=['-I'+"epanettools"+os.sep+"epanet",'-Wno-implicit-function-declaration','-Wno-unused-but-set-variable','-Wno-format','-Wno-char-subscripts', '-fopenmp','-Wno-deprecated','-O3']
 epanet2_module = Extension('_epanet2',
                            sources=sources,
                            extra_compile_args=cargs,
                            extra_link_args=cargs,
                            ) 
 
-pdd_module = Extension('_pdd',
-                           sources=sources,
-                           extra_compile_args=cargs,
-                           extra_link_args=cargs,
-                           ) 
+#pdd_module = Extension('_pdd',
+#                           sources=sources,
+#                           extra_compile_args=cargs,
+#                           extra_link_args=cargs,
+#                           ) 
 
 
 EXAMPLES=["simple"]
@@ -106,7 +99,7 @@ setup (name = NAME,
        author_email = "assela@pathirana.net",
        description = """EPANET 2.0  calls from python""",       
        packages = ["epanettools"],
-	   ext_modules = [epanet2_module, pdd_module],
+	   ext_modules = [epanet2_module], #, xxxx_module],
        include_dirs=[numpy.get_include()],
        package_data={'epanettools': package_data},
        license=LICENSE,

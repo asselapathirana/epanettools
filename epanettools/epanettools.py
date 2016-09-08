@@ -1,6 +1,5 @@
 from __future__ import print_function
 from . import epanet2 as et
-from .pdd_class_wrapper import pdd_wrapper_class 
 import tempfile, shutil, os, sys, math
 from pickle import dumps
 
@@ -332,9 +331,7 @@ class EPANetSimulation(object):
         self.initialize(inputFileName)
 
     def initialize(self, inputFileName):
-        self.pd=pdd_wrapper_class()
-        #self.pd=et
-        #print("Warning: no pdd")
+        
         self._enOpenStatus=False
         self._enHOpenStatus=False
         self.OriginalInputFileName=inputFileName
