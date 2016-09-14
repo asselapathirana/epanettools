@@ -1,4 +1,11 @@
 #########################
+Virtualenv for developing and testing:
+(need to install virtualenvwrapper)
+(see : http://hosseinkaz.blogspot.nl/2012/06/how-to-install-virtualenv.html )
+(need to set VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 in ~/.bashrc to use python3)
+use set.bash to setup virtualenv
+
+#########################
 Bug in epanet (perhaps new versions have it fixed)
  case EN_TANKDIAM:
          v = 0.0;
