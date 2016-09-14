@@ -5,7 +5,10 @@ Virtualenv for developing and testing:
 (need to set VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3 in ~/.bashrc to use python3)
 use set.bash to setup virtualenv as
 . set.bash
-
+########################
+coverage testing
+coverage run --source epanettools setup.py test
+coverage html  --omit=epanettools/examples/simple/epanet2_test.py 
 #########################
 Bug in epanet (perhaps new versions have it fixed)
  case EN_TANKDIAM:
