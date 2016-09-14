@@ -444,7 +444,9 @@ class EPANetSimulation(object):
         
     def _close(self):
         if(self._enOpenStatus):
-            Error(self.pd.ENclose())
+            #Bug! the ENclose cause core dumps on posix
+            if(os.name!="posix"):
+                Error(self.pd.ENclose())
             #print("Closing",file=sys.stderr)
             self._enOpenStatus=False    
 
