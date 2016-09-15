@@ -5,6 +5,7 @@ import epanettools
 from epanettools.examples import simple
 from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, \
       Links, Patterns, Pattern, Controls, Control
+import tools_for_testing as t4t
 
 from unittest import skip, expectedFailure
 
@@ -35,7 +36,9 @@ class Test1(unittest.TestCase):
         self.es.ENsaveinpfile(file)
         #now create a new object with the new file. 
         es=EPANetSimulation(file,pdd=True) 
+        t4t.redirect_stdout()
         es.run()  
+        print("End run.")
         p=Node.value_type['EN_PRESSURE']
         d=Node.value_type['EN_DEMAND']
         self.assertAlmostEquals(es.network.nodes['215'].results[p][5],-1.3,places=1)
