@@ -2,7 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <cstdlib.>
+#include <cstdlib>
 #include "wrapper.h"
 #include <cstring>
 static bool usehydfile=false;

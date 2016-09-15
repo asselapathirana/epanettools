@@ -328,17 +328,18 @@ class Network(object):
 class EPANetSimulation(object):
     
     
-    def __init__(self,inputFileName):
-        self.initialize(inputFileName)
+    def __init__(self,inputFileName,pdd=False):
+        self.initialize(inputFileName,pdd)
+        
 
-    def initialize(self, inputFileName):
-        self.pd=pdd_wrapper_class()
-        #self.pd=et
+    def initialize(self, inputFileName,pdd):
+        self.pd=pdd_wrapper_class(pdd)
         #print("Warning: no pdd")
         self._enOpenStatus=False
         self._enHOpenStatus=False
-        self.OriginalInputFileName=inputFileName
-        self.inputfile=self.create_temporary_copy(inputFileName)
+        if(inputFileName):
+            self.OriginalInputFileName=inputFileName
+        self.inputfile=self.create_temporary_copy(self.OriginalInputFileName)
         self.rptfile=self.inputfile[:-3]+"rpt"
         self.binfile=self.inputfile[:-3]+"bin"
         self.hydraulicfile=self.inputfile[:-3]+"hyd"
@@ -348,8 +349,6 @@ class EPANetSimulation(object):
         self._getInputData()
         self._close()
       
-    def set_pdd(self,pdd=False):
-        self.pd.set_pdd(pdd)
 
     def _legacy_get(self,entitytype, index, param=-1):
         """Legacy interface 'get' ONLY FOR TESTING. 
@@ -444,7 +443,9 @@ class EPANetSimulation(object):
         
     def _close(self):
         if(self._enOpenStatus):
-            Error(self.pd.ENclose())
+            #Bug! the ENclose cause core dumps on posix
+            if(os.name!="posix"):
+                Error(self.pd.ENclose())
             #print("Closing",file=sys.stderr)
             self._enOpenStatus=False    
 
