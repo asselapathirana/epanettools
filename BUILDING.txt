@@ -9,6 +9,7 @@ use set.bash to setup virtualenv as
 coverage testing
 coverage run --source epanettools setup.py test
 coverage html  --omit=epanettools/examples/simple/epanet2_test.py 
+open htmlcov/index.html 
 #########################
 Bug in epanet (perhaps new versions have it fixed)
  case EN_TANKDIAM:
