@@ -1430,7 +1430,7 @@ extern int  ENgetnodevalue(int index, int code, float *value)
          v = 0.0;
          if ( index > Njuncs )
          {
-            v = 4.0/PI*sqrt(Tank[index-Njuncs].A)*Ucf[ELEV];
+            v = sqrt(4.0/PI*Tank[index-Njuncs].A)*Ucf[ELEV];
          }
          break;
 
@@ -2917,8 +2917,24 @@ char* getTmpName(char* fname)
 
     // --- for non-Windows systems:
     #else
+      strcpy(name,"enXXXXXX");
+      n = strlen(TmpDir);
+      if ( n > 0 ) 
+      {
+	  strcpy(fname, TmpDir);
+	  if ( fname[n-1] != '/' ) strcat(fname, "/");
+      }
+
+      // --- otherwise, use the relative path notation as the file name
+      //     prefix so that the file will be placed in the current directory
+      else
+      {
+	  strcpy(fname, "./");
+      }    
+    
       // --- use system function mkstemp() to create a temporary file name
-      strcpy(fname, "enXXXXXX");
+      strcat(fname,name );
+      printf("Writing temp file %s %s\n", TmpDir,fname);
       mkstemp(fname);
     #endif
     return fname;

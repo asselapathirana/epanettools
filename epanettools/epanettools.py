@@ -1,6 +1,7 @@
 from __future__ import print_function
 from . import epanet2 as et
-import tempfile, shutil, os, sys
+from .pdd_class_wrapper import pdd_wrapper_class 
+import tempfile, shutil, os, sys, math
 from pickle import dumps
 
 """" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
@@ -8,10 +9,12 @@ from pickle import dumps
 
 from . import tools
 
+RIDICULOUS_VALUE=-999999999
+
 
 def Error(e):
     if(e):
-        s="Epanet Error: %d : %s" %(e,et.ENgeterror(e,500)[1])
+        s="Epanet Error: %d : %s" %(e,self.pd.ENgeterror(e,500)[1])
         raise Exception(s) 
     
 def check_and_return(result_list,silent=False):
@@ -20,7 +23,7 @@ def check_and_return(result_list,silent=False):
         Error(r[0])
         
     if(r[0]>0):
-        return float('nan')
+        return RIDICULOUS_VALUE
     else:
         if(len(r)==2):
             return r[1]
@@ -62,8 +65,10 @@ class Node(object):
 
     def __init__(self,network,index=False):
         self.network=network
+        self.pd=self.network.es.pd
         self.links=[]
         self.results={}
+        self.results_original={}
         #get the inverse of value_type
         self.vti={b:a for a,b in self.value_type.items()} 
         if(index):
@@ -72,20 +77,29 @@ class Node(object):
         
     def readValues(self,index):
         self.index=index 
-        self.id=check_and_return(et.ENgetnodeid(index))
-        self.node_type=check_and_return(et.ENgetnodetype(index)) 
+        self.id=check_and_return(self.pd.ENgetnodeid(index))
+        self.node_type=check_and_return(self.pd.ENgetnodetype(index)) 
         
     def get_node_result_set(self,input_data=False):
         
         for key,rt in Node.value_type.items():
             if ((not input_data) and (not rt in Node.input_values)) or \
                ((input_data) and (rt in Node.input_values)):
-                self.results[rt].append(check_and_return(et.ENgetnodevalue(self.index,rt),silent=True))
-                                                         
+                k=check_and_return(self.pd.ENgetnodevalue(self.index,rt),silent=True)
+                self.results[rt].append(k)
+                self.results_original[rt].append(k)  
+                
     def sync(self):
         for key,rt in Node.value_type.items():
+           
             if (rt in Node.settable_values):
-                et.ENsetnodevalue(self.index,rt,self.results[0][0])               
+                if(self.results[rt][0]==self.results_original[rt][0]):
+                    continue                
+                if(self.results[rt][0]!=RIDICULOUS_VALUE):
+                    self.pd.ENsetnodevalue(self.index,rt,self.results[rt][0])
+       
+                
+                    
                 
             
             
@@ -114,21 +128,23 @@ class Link(object):
     
     def __init__(self,network,index=False):
         self.network=network
+        self.pd=self.network.es.pd
         self.results={}
+        self.results_original={}
         if(index):
             self.readValues(index)
             
             
     def readValues(self,index):
         self.index=index 
-        self.id=check_and_return(et.ENgetlinkid(index))
-        self.link_type=check_and_return(et.ENgetlinktype(index)) 
-        a,b=check_and_return(et.ENgetlinknodes(index))
+        self.id=check_and_return(self.pd.ENgetlinkid(index))
+        self.link_type=check_and_return(self.pd.ENgetlinktype(index)) 
+        a,b=check_and_return(self.pd.ENgetlinknodes(index))
         
         try:
             self.start=self.network.nodes[a]
             self.end=self.network.nodes[b]
-            self.link_type=check_and_return(et.ENgetlinktype(index))
+            self.link_type=check_and_return(self.pd.ENgetlinktype(index))
         
             self.network.nodes[a].links.append(self)
             self.network.nodes[b].links.append(self)
@@ -141,26 +157,31 @@ class Link(object):
         for key,rt in Link.value_type.items():
             if ((not input_data) and (not rt in Link.input_values)) or \
                ((input_data) and (rt in  Link.input_values)):
-                self.results[rt].append(check_and_return(et.ENgetlinkvalue(self.index,rt), silent=True))
+                k=check_and_return(self.pd.ENgetlinkvalue(self.index,rt), silent=True)
+                self.results[rt].append(k)
+                self.results_original[rt].append(k)       
 
     def sync(self):
         for key,rt in Link.value_type.items():
             if (rt in Link.settable_values):
-                et.ENsetlinkvalue(self.index,rt,self.results[0][0])    
+                 if(self.results[rt][0]==self.results_original[rt][0]):
+                     continue
+                 if(self.results[rt][0]!=RIDICULOUS_VALUE):self.pd.ENsetlinkvalue(self.index,rt,self.results[rt][0])    
 
 class Pattern(tools.TransformedDict):
     
     def __init__(self,es, index=False):
         super(Pattern,self).__init__()
         self.es=es
+        self.pd=self.es.pd
         if(index):
             self.readValues(index)
     
     def readValues(self,index):
         self.index=index
-        self.id=check_and_return(et.ENgetpatternid(index))
-        for j in range(1,check_and_return(et.ENgetpatternlen(index))+1):
-            self[j]=et.ENgetpatternvalue(index,j)[1]        
+        self.id=check_and_return(self.pd.ENgetpatternid(index))
+        for j in range(1,check_and_return(self.pd.ENgetpatternlen(index))+1):
+            self[j]=self.pd.ENgetpatternvalue(index,j)[1]        
         
     def sync(self):
         """"Pattrn syncing not implemented"""
@@ -173,11 +194,12 @@ class Control(object):
 
     def __init__(self,network, index=False):
         self.network=network
+        self.pd=self.network.es.pd
         if(index):
             self.readValues(index)
     
     def readValues(self,index):
-        k=check_and_return(et.ENgetcontrol(index))
+        k=check_and_return(self.pd.ENgetcontrol(index))
         self.ctype=k[0]
         if(self.ctype>1): # no node is involved. for types 2 and 3!  
             self.node=None
@@ -225,6 +247,8 @@ class Controls(index_id_type):
     pass
 
 class Network(object):
+    
+    
     WaterQualityAnalysisTypes = {
     "EN_NONE":         0,
     "EN_CHEM":         1,
@@ -243,21 +267,22 @@ class Network(object):
         self.patterns=Patterns()
         self.controls=Controls() 
         self.es=es
+        self.pd=es.pd
         if(readData):
             self.read_data()
             
             
     def read_data(self):
-        for i in range(1,et.ENgetcount(et.EN_NODECOUNT)[1]+1):
+        for i in range(1,self.pd.ENgetcount(self.pd.EN_NODECOUNT)[1]+1):
             self.nodes[i]=Node(self,index=i) 
             
-        for i in range(1,et.ENgetcount(et.EN_LINKCOUNT)[1]+1):
+        for i in range(1,self.pd.ENgetcount(self.pd.EN_LINKCOUNT)[1]+1):
             self.links[i]=Link(self,index=i)
             
-        for i in range(1,et.ENgetcount(et.EN_PATCOUNT)[1]+1):
+        for i in range(1,self.pd.ENgetcount(self.pd.EN_PATCOUNT)[1]+1):
             self.patterns[i]=Pattern(self,index=i)
     
-        for i in range(1,et.ENgetcount(et.EN_CONTROLCOUNT)[1]+1):
+        for i in range(1,self.pd.ENgetcount(self.pd.EN_CONTROLCOUNT)[1]+1):
             self.controls[i]=Control(self,index=i)
                     
         self.getValues()        
@@ -268,12 +293,14 @@ class Network(object):
         for i,n in self.nodes.items():
             for key,rt in Node.value_type.items():
                 n.results[rt]=[]
+                n.results_original[rt]=[]
         for i,n in self.links.items():
             for key,rt in Link.value_type.items():
-                n.results[rt]=[]      
+                n.results[rt]=[]  
+                n.results_original[rt]=[]
     
     def _sync(self):
-        """"Syncs the anything other than nodes, links, patterns, conrols"""
+        """"Syncs anything other than nodes, links, patterns, conrols"""
         pass
     
     def sync(self):
@@ -285,27 +312,34 @@ class Network(object):
         
         
     def getValues(self):
-        self.WaterQualityAnalysisType,k=check_and_return(et.ENgetqualtype())
+        self.WaterQualityAnalysisType,k=check_and_return(self.pd.ENgetqualtype())
         if(k==0):
             self.WaterQualityTraceNode=None
         else:
             self.WaterQualityTraceNode=self.nodes[k]
    
-        self.en_accuracy=check_and_return(et.ENgetoption(Network.EN_ACCURACY))
-        self.en_demandmult=check_and_return(et.ENgetoption(Network.EN_DEMANDMULT))
-        self.en_emitexpon=check_and_return(et.ENgetoption(Network.EN_EMITEXPON))
-        self.en_tolerance=check_and_return(et.ENgetoption(Network.EN_TOLERANCE))  
-        self.en_trials=check_and_return(et.ENgetoption(Network.EN_TRIALS))        
+        self.en_accuracy=check_and_return(self.pd.ENgetoption(Network.EN_ACCURACY))
+        self.en_demandmult=check_and_return(self.pd.ENgetoption(Network.EN_DEMANDMULT))
+        self.en_emitexpon=check_and_return(self.pd.ENgetoption(Network.EN_EMITEXPON))
+        self.en_tolerance=check_and_return(self.pd.ENgetoption(Network.EN_TOLERANCE))  
+        self.en_trials=check_and_return(self.pd.ENgetoption(Network.EN_TRIALS))        
     
 
 class EPANetSimulation(object):
     
     
-    def __init__(self,inputFileName):
+    def __init__(self,inputFileName,pdd=False):
+        self.initialize(inputFileName,pdd)
+        
+
+    def initialize(self, inputFileName,pdd):
+        self.pd=pdd_wrapper_class(pdd)
+        #print("Warning: no pdd")
         self._enOpenStatus=False
         self._enHOpenStatus=False
-        self.OriginalInputFileName=inputFileName
-        self.inputfile=self.create_temporary_copy(inputFileName)
+        if(inputFileName):
+            self.OriginalInputFileName=inputFileName
+        self.inputfile=self.create_temporary_copy(self.OriginalInputFileName)
         self.rptfile=self.inputfile[:-3]+"rpt"
         self.binfile=self.inputfile[:-3]+"bin"
         self.hydraulicfile=self.inputfile[:-3]+"hyd"
@@ -316,28 +350,32 @@ class EPANetSimulation(object):
         self._close()
       
 
-
     def _legacy_get(self,entitytype, index, param=-1):
         """Legacy interface 'get' ONLY FOR TESTING. 
         param : result type for LINK and NODE. timeperiod for PATTERN. For option it is not used
         """ 
         self._open()
         if (entitytype=="LINK"):
-            return check_and_return(et.ENgetlinkvalue(index,param))
+            return check_and_return(self.pd.ENgetlinkvalue(index,param))
         if (entitytype=="NODE"):
-            return check_and_return(et.ENgetnodevalue(index,param))
+            return check_and_return(self.pd.ENgetnodevalue(index,param))
         if (entitytype=="PATTERN"):
-            return check_and_return(et.ENgetpatternvalue(index,param))
+            return check_and_return(self.pd.ENgetpatternvalue(index,param))
         if (entitytype=="LINK"):
-            return check_and_return(et.ENgetoption(index,param))
+            return check_and_return(self.pd.ENgetoption(index,param))
         raise (Exception,"UNKNOWN type")
         
         
-    def sync(self):
+    def sync(self, i_know_what_i_am_doing=False):
         """ Syncs the changes variable values with underlying toolkit system."""
+        if (not i_know_what_i_am_doing):
+            raise Exception("Don't use sync. It is not yet properly implemented.")
         self.network.sync()
+        #now replace the original input file with this data. 
+        Error(self.pd.ENsaveinpfile(self.inputfile))
+        self.initialize(self.inputfile)
 
-    def run(self, save=True):
+    def run(self, save=True, pdd=True):
         self.network.reset_results()
         self._open()
         #get the input_data results
@@ -347,9 +385,9 @@ class EPANetSimulation(object):
             init=1
         else:
             init=0
-        et.ENinitH(init)
+        self.pd.ENinitH(init)
         while True :
-            ret,t=et.ENrunH()
+            ret,t=self.pd.ENrunH()
             self.network.time.append(t)
             # Retrieve hydraulic results for time t
             for  i,node in self.network.nodes.items():
@@ -358,13 +396,13 @@ class EPANetSimulation(object):
             for  i,link in self.network.links.items():
                 link.get_link_result_set(input_data=False)
                 
-            ret,tstep=et.ENnextH()
+            ret,tstep=self.pd.ENnextH()
             self.network.tsteps.append(tstep)
             
             if (tstep<=0):
                 break
         if(save):
-            Error(et.ENsavehydfile(self.hydraulicfile))
+            Error(self.pd.ENsavehydfile(self.hydraulicfile))
         self._HClose()
         self._close()
      
@@ -373,21 +411,21 @@ class EPANetSimulation(object):
         self._open()
         #get the input_data results
         self._getInputData()        
-        Error(et.ENusehydfile(self.hydraulicfile))
-        Error(et.ENopenQ()) 
-        Error(et.ENinitQ(1))
+        Error(self.pd.ENusehydfile(self.hydraulicfile))
+        Error(self.pd.ENopenQ()) 
+        Error(self.pd.ENinitQ(1))
         while(True):
-            ret,t=et.ENrunQ()
+            ret,t=self.pd.ENrunQ()
             self.network.time.append(t)
             Error(ret)
             for i,node in self.network.nodes.items():
                 node.get_node_result_set(input_data=False)
             for  i,link in self.network.links.items():
                 link.get_link_result_set(input_data=False)             
-            self.network.tsteps.append(check_and_return(et.ENnextQ()))
+            self.network.tsteps.append(check_and_return(self.pd.ENnextQ()))
             if(self.network.tsteps[-1]==0):
                 break
-        et.ENcloseQ();         
+        self.pd.ENcloseQ();         
         self._close()
     
        
@@ -399,25 +437,27 @@ class EPANetSimulation(object):
     
     def _open(self): 
         if(not self._enOpenStatus):
-            Error(et.ENopen(self.inputfile,self.rptfile,self.binfile))
-            et.cvar.TmpDir=tempfile._get_default_tempdir()
+            Error(self.pd.ENopen(self.inputfile,self.rptfile,self.binfile))
+            self.pd.cvar.TmpDir=tempfile._get_default_tempdir()
         self._enOpenStatus=True
         
     def _close(self):
         if(self._enOpenStatus):
-            Error(et.ENclose())
+            #Bug! the ENclose cause core dumps on posix
+            if(os.name!="posix"):
+                Error(self.pd.ENclose())
             #print("Closing",file=sys.stderr)
             self._enOpenStatus=False    
 
 
     def _HOpen(self):
         if(not self._enHOpenStatus):
-            Error(et.ENopenH())
+            Error(self.pd.ENopenH())
         self._enHOpenStatus=True
         
     def _HClose(self):
         if(self._enOpenStatus):
-            Error(et.ENcloseH())
+            Error(self.pd.ENcloseH())
         self._enHOpenStatus=False
         
     def clean(self):
@@ -457,13 +497,16 @@ class EPANetSimulation(object):
         
     
     def __getattribute__(self, name):
+                
         try:
             return object.__getattribute__(self, name)
         except:
             pass
 
         self._open()
-        if(hasattr(et,name)): # search legacy interface            
-            return getattr(et,name)
+        # if(hasattr(et,name)): # search legacy interface            
+        #     return getattr(et,name)
+        if(hasattr(self.pd,name)): #
+            return getattr(self.pd,name)
         raise AttributeError("The attribute %s not found with this class or underlying c interface" % name)    
         
