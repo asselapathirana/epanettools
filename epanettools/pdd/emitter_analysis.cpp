@@ -48,7 +48,7 @@ float TOLERANCE=(float)1E-2;
 float TOLERFACT=(float)1.E25;
 vector<node> nodes;
 int debug2=false;
-int debug1=true;
+int debug1=false;
 int MAXTRIALS=1000;
 int NOCONVERGE=1;
 float ZEROEMIT=TOLERANCE/TOLERFACT; // this seems to kill the memory effect on demand.
@@ -80,10 +80,11 @@ bool error(int i,int value)
 			//if(debug2||value>100) printf(err,"\n");
 		}
 		ENwriteline(msg); // when called from GUI.
-		cout << msg; // When called on command line.
-		//if(value>100){
-		//		cout << "Press any key ...\n"; cin.get();
-		//}
+		//cout << msg; // When called on command line.
+		if(value>100){
+				//cout << "Press any key ...\n"; cin.get();
+				cout << msg;
+		}
 		return true;
 
 	}
@@ -443,7 +444,7 @@ int getniter(){
 }
 
 int post_analysis_cleanup(){
-	    print_results();
+	    //print_results();
 		reset_network(); // need to set base demands.
 		nodes.clear(); // clear the nodes array so that new analysis cycle starts fresh.
 		return 0;

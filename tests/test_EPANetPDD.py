@@ -5,7 +5,6 @@ import epanettools
 from epanettools.examples import simple
 from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, \
       Links, Patterns, Pattern, Controls, Control
-import tools_for_testing as t4t
 
 from unittest import skip, expectedFailure
 
@@ -36,9 +35,7 @@ class Test1(unittest.TestCase):
         self.es.ENsaveinpfile(file)
         #now create a new object with the new file. 
         es=EPANetSimulation(file,pdd=True) 
-        t4t.redirect_stdout()
         es.run()  
-        print("End run.")
         p=Node.value_type['EN_PRESSURE']
         d=Node.value_type['EN_DEMAND']
         self.assertAlmostEquals(es.network.nodes['215'].results[p][5],-1.3,places=1)
@@ -103,7 +100,7 @@ class Test1(unittest.TestCase):
         mod3()
 
         file = "1.inp"
-        self.es.ENsaveinpfile(file)
+        self.Error(self.es.ENsaveinpfile(file))
         #now create a new object with the new file. 
         es=EPANetSimulation(file,pdd=True) 
         es.run()  
@@ -119,7 +116,8 @@ def clt(fn):
 
 def main():
     for a in dir(tc):
-        if (a.startswith('test_runs_a_simulation_with_pipe_closed_and_get_results_pdd_give_reasonable_results')):#test_')):
+        if (a.startswith('test_')):        
+        #if (a.startswith('test_runs_a_simulation_with_pipe_closed_and_get_results_pdd_give_reasonable_results')):#test_')):
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )
