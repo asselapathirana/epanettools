@@ -1,4 +1,4 @@
-import os
+import os, sys
 import math
 import copy
 import unittest
@@ -83,7 +83,16 @@ class Test1(unittest.TestCase):
             assert False
             
     def test_non_existing_file_raise_error(self):
-        self.assertRaises(FileNotFoundError, EPANetSimulation,"Silly file")
+        v1=sys.version_info[0]
+        v2=sys.version_info[1]
+        if (v1==3):
+            self.assertRaises(FileNotFoundError, EPANetSimulation,"Silly file")
+            return
+        if (v1==2):
+            if(v2>=7):
+                self.assertRaises(IOError, EPANetSimulation,"Silly file")
+            else:
+                self.fail
         
         
         
