@@ -37,13 +37,14 @@ class Test1(unittest.TestCase):
       
         
         
-tc=Test1()
+tc=None
 def clt(fn):
     tc.setUp()
     fn()
     tc.tearDown()
-
+        
 def main():
+    tc=Test1()
     for a in dir(tc):
         if (a.startswith('test_pattern')): #test_sync
             b=getattr(tc,a)

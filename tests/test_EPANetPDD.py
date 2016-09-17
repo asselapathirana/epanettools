@@ -108,13 +108,14 @@ class Test1(unittest.TestCase):
         mod2()  
         mod3()
 
-tc=Test1()
+tc=None
 def clt(fn):
     tc.setUp()
     fn()
     tc.tearDown()
 
 def main():
+    tc=Test1()
     for a in dir(tc):
         if (a.startswith('test_')):        
         #if (a.startswith('test_runs_a_simulation_with_pipe_closed_and_get_results_pdd_give_reasonable_results')):#test_')):

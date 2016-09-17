@@ -332,21 +332,23 @@ class Test1(unittest.TestCase):
         self.assertEqual(tt.compareFiles("a.inp","b.inp"),'99>152; 12>18; ')
         self.assertEqual(tt.compareFiles("a.inp","c.inp"),'99>152; 12>18; ')  
 
-tc=Test1()
+        
+tc=None
 def clt(fn):
     tc.setUp()
     fn()
     tc.tearDown()
 
 def main():
+    tc=Test1()
     for a in dir(tc):
-        if (a.startswith('test_sync')): #test_sync
+        if (a.startswith('test_pattern')): #test_sync
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )
                 clt(b)
-           
+
 
 
 if __name__ == "__main__":
-        main()
+    main()
