@@ -14,5 +14,5 @@ proj.file-type = 'shared'
 proj.launch-config = {loc('../setup.py'): ('project',
         (u'test tests',
          ''))}
-proj.main-file = loc('../tests/test_EPANetSimulation2.py')
+proj.main-file = loc('../tests/test_EPANetPDD.py')
 testing.test-framework = {None: ':internal doctest'}

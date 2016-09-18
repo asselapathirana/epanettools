@@ -37,8 +37,8 @@ class Test1(unittest.TestCase):
       
         
         
-tc=None
-def clt(fn):
+
+def clt(fn,tc):
     tc.setUp()
     fn()
     tc.tearDown()
@@ -50,7 +50,7 @@ def main():
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )
-                clt(b)
+                clt(b,tc)
            
 
 
