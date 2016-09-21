@@ -100,7 +100,7 @@ class Test1(unittest.TestCase):
         mod3()
 
         file = "1.inp"
-        self.es.ENsaveinpfile(file)
+        self.Error(self.es.ENsaveinpfile(file))
         #now create a new object with the new file. 
         es=EPANetSimulation(file,pdd=True) 
         es.run()  
@@ -108,19 +108,21 @@ class Test1(unittest.TestCase):
         mod2()  
         mod3()
 
-tc=Test1()
-def clt(fn):
+
+def clt(fn,tc):
     tc.setUp()
     fn()
     tc.tearDown()
 
 def main():
+    tc=Test1()
     for a in dir(tc):
-        if (a.startswith('test_runs_a_simulation_with_pipe_closed_and_get_results_pdd_give_reasonable_results')):#test_')):
+        if (a.startswith('test_')):        
+        #if (a.startswith('test_runs_a_simulation_with_pipe_closed_and_get_results_pdd_give_reasonable_results')):#test_')):
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )
-                clt(b)
+                clt(b,tc)
            
 
 

@@ -1,5 +1,7 @@
 Epanet 2.0 Python calling interface 
  
+Since version 0.5.0.1 the library has the epanet-emitter engine enabling Pressure-based Demand Analysis (http://assela.pathirana.net/EPANET-Emitter).
+
 Since version 0.4.0.1 the library is compatible with Python 3.0
 
 What is it?
@@ -116,41 +118,50 @@ Types of links and nodes
     >>> [y.id for x,y in n.items() if y.node_type==Node.node_types['TANK']] # get ids of tanks
     ['1', '2', '3']
   
+ ::
+  
 Network properties are available (even before we run the simulation)
+
+::
 
     >>> d=Link.value_type['EN_DIAMETER']
     >>> print("%.3f" % es.network.links[1].results[d][0])
     99.000
     
-  
+    >>> p1=es.network.patterns[1]
+    >>> l=list(p1.values())
+    >>> print("%2.1f "*len(l) % tuple(l )) # doctest: +NORMALIZE_WHITESPACE
+    1.3 1.9 1.5 1.4 0.8 0.9 0.9 1.1 1.0 1.1 1.1 1.2 1.2 1.1 1.0 0.8 0.8 0.7 0.6 0.6 0.9 1.0 1.2 1.7  
     
 
     
 Get some results of simulation. 
 
 :: 
-
-   >>> es.run()
-   >>> p=Node.value_type['EN_PRESSURE']
-   >>> print("%.3f" % es.network.nodes['103'].results[p][5] )
-   59.301
-   >>> d=Node.value_type['EN_DEMAND']
-   >>> h=Node.value_type['EN_HEAD']
-   >>> print("%.3f" % es.network.nodes['103'].results[d][5])
-   101.232
-   >>> print("%.3f" % es.network.nodes['103'].results[h][5])
-   179.858
-   >>> d=Link.value_type['EN_DIAMETER']
-   >>> print("%.3f" % es.network.links[1].results[d][0])
-   99.000
-   >>> es.runq() # run water quality simulation 
-   >>> q=Node.value_type['EN_QUALITY']
-   >>> print("%.3f" % es.network.nodes['117'].results[q][4])
-   85.317
-   >>> e=Link.value_type['EN_ENERGY']
-   >>> print("%.5f" % es.network.links['111'].results[e][23])
-   0.00685
+     
+     
+     >>> es.run()
+     >>> p=Node.value_type['EN_PRESSURE']
+     >>> print("%.3f" % es.network.nodes['103'].results[p][5] )
+     59.301
+     >>> d=Node.value_type['EN_DEMAND']
+     >>> h=Node.value_type['EN_HEAD']
+     >>> print("%.3f" % es.network.nodes['103'].results[d][5])
+     101.232
+     >>> print("%.3f" % es.network.nodes['103'].results[h][5])
+     179.858
+     >>> d=Link.value_type['EN_DIAMETER']
+     >>> print("%.3f" % es.network.links[1].results[d][0])
+     99.000
+     >>> es.runq() # run water quality simulation 
+     >>> q=Node.value_type['EN_QUALITY']
+     >>> print("%.3f" % es.network.nodes['117'].results[q][4])
+     85.317
+     >>> e=Link.value_type['EN_ENERGY']
+     >>> print("%.5f" % es.network.links['111'].results[e][23])
+     0.00685
    
+ ::
 
 Some advanced result queries
 
@@ -167,6 +178,88 @@ Some advanced result queries
     >>> j=Node.node_types['JUNCTION']
     >>> sorted([y.id for x,y in n.items() if ( max(y.results[d])>4500 and y.node_type==j )])
     ['203']
+
+
+Changing the network
+-----------------------
+Currently the new (object-based) interface above only supports read access to the underlying network. To change the values of the network, it is recommended to use the Legacy interface calls.  Legacy calls can be accessed from within the new interface. The steps in changing network:
+
+1. Create an object of EPANetSimulation with the network file
+2. Change needed values using ENsetxxxx calls (just changing the attributes of EPANetSimulation will not  work!)
+3. Save the changed data to a new file using ENsaveinpfile.
+4. Create an object of EPANetSimulation with the new saved file. 
+
+ Following is an example:
+
+::
+
+	>>> d=Link.value_type['EN_DIAMETER']
+	>>> e=Node.value_type['EN_ELEVATION']
+	>>> es.ENgetlinkvalue(81,d)[1] #low level interface
+	16.0
+	>>> es.network.links[81].results[d] # new interface
+	[16.0]
+	>>> es.ENgetnodevalue(55,e)[1] # low level interface
+	15.5
+	>>> es.network.nodes[55].results[e] #new interface
+	[15.5]
+	>>> r=es.ENsetlinkvalue(81,d,99) # now let's change values - link
+	>>> r # zero means no error!
+	0
+	>>> r=es.ENsetnodevalue(55,e,18.25) # change elevation of node
+	>>> r #zero means no error
+	0
+	>>> # Note: the original network is not changed! Only the low level values changed. This is a limitation of current implementation
+	>>> es.network.links[81].results[d], es.ENgetlinkvalue(81,d)[1], es.network.nodes[55].results[e], es.ENgetnodevalue(55,e)[1] 
+	([16.0], 99.0, [15.5], 18.25)
+	>>> # to permanantly change values, the changed network has to  be written to a new file
+	 >>> import tempfile, os
+      	>>> f=os.path.join(tempfile.gettempdir(),"temp.inp")
+      	>>> es.ENsaveinpfile(f) # save the changed file
+      	0
+      	>>> e2=EPANetSimulation(f)
+       	>>> e2.network.links[81].results[d], e2.ENgetlinkvalue(81,d)[1], e2.network.nodes[55].results[e], e2.ENgetnodevalue(55,e)[1]
+	([99.0], 99.0, [18.25], 18.25)
+	>>> # now in both high level and low level interfaces, we have the right value. 
+   	
+
+::
+
+PDD type analysis
+-------------------------
+
+Look at http://assela.pathirana.net/EPANET-Emitter  for details and desktop (windows only) application that does the same analysis. 
+
+::
+
+    >>> # lets create a pressure deficient network to demonstate this. 
+    >>> d=Link.value_type['EN_DIAMETER']
+    >>> l=es.network.links['247'] .index # get the index of '247' node.
+    >>> r=es.ENsetlinkvalue(l,d,2.5) # now let's change values - link diameter to a  small value.
+    >>> r # zero means no error!
+    0
+    >>> f=os.path.join(tempfile.gettempdir(),"temp.inp")
+    >>> es.ENsaveinpfile(f) # save the changed file
+    0
+    >>> #now lets analyse this with 'normal' epanet engine
+    >>> e2=EPANetSimulation(f, pdd=False) #note pdd=False is default, no need to write this
+    >>> e2.run() #simulate
+    >>> p=Node.value_type['EN_PRESSURE']
+    >>> e2.network.nodes['225'].results[p][10] < -10.0 # we should get a large negative pressure value
+    True
+    >>> d=Node.value_type['EN_DEMAND']
+    >>> print("%4.2f" %e2.network.nodes['225'].results[d][10]) # the demand does not change/ 
+    25.08
+    >>> e3=EPANetSimulation(f,pdd=True) # now we enable pdd
+    >>> e3.run()
+    >>> p225=e3.network.nodes['225'].results[p][10] # pressure should be nearly zero
+    >>> (p225 > -3 and p225 < 3)
+    True
+    >>> d=Node.value_type['EN_DEMAND']
+    >>> d225=e3.network.nodes['225'].results[d][10]  # the demand should be nearly zero
+    >>> (d225 > -.1 and d225 < .1)
+    True
+    
 
 
 

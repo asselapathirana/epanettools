@@ -37,23 +37,26 @@ class Test1(unittest.TestCase):
         self.Error(pd.ENclose())
     
 
-tc=Test1()
+
+        
+tc=None
 def clt(fn):
     tc.setUp()
     fn()
-    tc.tearDown()   
-    
+    tc.tearDown()
+
 def main():
+    tc=Test1()
     for a in dir(tc):
-        if (a.startswith('test_')):
+        if (a.startswith('test_pattern')): #test_sync
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )
                 clt(b)
-           
+
 
 
 if __name__ == "__main__":
-        main()    
+            main()
         
 

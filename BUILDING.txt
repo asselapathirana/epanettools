@@ -30,4 +30,4 @@ swig -c++ -python pdd.i
 
 then run 
 python setup.py test
-
+python -m doctest -v README.txt

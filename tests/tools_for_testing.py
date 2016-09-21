@@ -1,4 +1,27 @@
 import difflib
+import os, sys
+
+def redirect_stdout():
+    print ("Redirecting stdout")
+    sys.stdout.flush() # <--- important when redirecting to files
+
+    # Duplicate stdout (file descriptor 1)
+    # to a different file descriptor number
+    newstdout = os.dup(1)
+
+    # /dev/null is used just to discard what is being printed
+    devnull = os.open('/dev/null', os.O_WRONLY)
+
+    # Duplicate the file descriptor for /dev/null
+    # and overwrite the value for stdout (file descriptor 1)
+    os.dup2(devnull, 1)
+
+    # Close devnull after duplication (no longer needed)
+    os.close(devnull)
+
+    # Use the original stdout to still be able
+    # to print to stdout within python
+    sys.stdout = os.fdopen(newstdout, 'w')
 
 def is_number(s):
     try:

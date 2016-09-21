@@ -2934,7 +2934,7 @@ char* getTmpName(char* fname)
     
       // --- use system function mkstemp() to create a temporary file name
       strcat(fname,name );
-      printf("Writing temp file %s %s\n", TmpDir,fname);
+      //printf("Writing temp file %s %s\n", TmpDir,fname);
       mkstemp(fname);
     #endif
     return fname;

@@ -1,4 +1,4 @@
-import os
+import os, sys
 import math
 import copy
 import unittest
@@ -83,7 +83,16 @@ class Test1(unittest.TestCase):
             assert False
             
     def test_non_existing_file_raise_error(self):
-        self.assertRaises(FileNotFoundError, EPANetSimulation,"Silly file")
+        v1=sys.version_info[0]
+        v2=sys.version_info[1]
+        if (v1==3):
+            self.assertRaises(FileNotFoundError, EPANetSimulation,"Silly file")
+            return
+        if (v1==2):
+            if(v2>=7):
+                self.assertRaises(IOError, EPANetSimulation,"Silly file")
+            else:
+                self.fail
         
         
         
@@ -332,21 +341,23 @@ class Test1(unittest.TestCase):
         self.assertEqual(tt.compareFiles("a.inp","b.inp"),'99>152; 12>18; ')
         self.assertEqual(tt.compareFiles("a.inp","c.inp"),'99>152; 12>18; ')  
 
-tc=Test1()
+        
+tc=None
 def clt(fn):
     tc.setUp()
     fn()
     tc.tearDown()
 
 def main():
+    tc=Test1()
     for a in dir(tc):
-        if (a.startswith('test_sync')): #test_sync
+        if (a.startswith('test_pattern')): #test_sync
             b=getattr(tc,a)
             if(hasattr(b, '__call__')):
                 print ("calling %s **********************************" % a )
                 clt(b)
-           
+
 
 
 if __name__ == "__main__":
-        main()
+    main()
