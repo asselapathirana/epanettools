@@ -4,7 +4,7 @@ Since version 0.4.0.1 the library is compatible with Python 3.0
 
 What is it?
 -----------
-A python package enabling user to call all the `epanet programmers toolkit <http://www.epa.gov/nrmrl/wswrd/dw/epanet.html#toolkit>`_ functions within python scripts. 
+A python package enabling user to call all the `epanet programmers toolkit <http://www.epa.gov/nrmrl/wswrd/dw/epanet.html>`_ functions within python scripts. 
 
 Installation
 ------------
@@ -86,6 +86,7 @@ Information about connectivity
 Types of links and nodes
 
 ::
+
     >>> pp.pprint(Node.node_types) # these are the type codes for nodes. 
     {'JUNCTION': 0, 'RESERVOIR': 1, 'TANK': 2}
     >>> n[94].node_type
@@ -123,7 +124,7 @@ Network properties are available (even before we run the simulation)
     
   
     
-::
+
     
 Get some results of simulation. 
 

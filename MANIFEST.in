@@ -1,2 +1,4 @@
 include epanettools/epanet/*.h
 graft epanettools/epanet
+include epanettools/pdd/*.h
+graft epanettools/pdd
