@@ -20,7 +20,9 @@ class Test1(unittest.TestCase):
         self.es=EPANetSimulation(self.file)
     
     def tearDown(self):
-        self.Error(self.es.ENclose())
+        #Bug! the ENclose cause core dumps on posix
+        if(os.name!="posix"):        
+            self.Error(self.es.ENclose())
         print("TEAR DOWN!")
         
     def test_alter_with_ENset_and_check_with_a_file(self):
