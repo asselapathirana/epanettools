@@ -1,3 +1,65 @@
+========
+Overview
+========
+
+.. start-badges
+
+.. list-table::
+    :stub-columns: 1
+
+    * - docs
+      - |docs|
+    * - tests
+      - | |travis| |appveyor| |requires|
+        | |coveralls|
+    * - package
+      - |version| |downloads| |wheel| |supported-versions| |supported-implementations|
+
+.. |docs| image:: https://readthedocs.org/projects/epanettools/badge/?style=flat
+    :target: https://readthedocs.org/projects/epanettools
+    :alt: Documentation Status
+
+.. |travis| image:: https://travis-ci.org/asselapathirana/epanettools.svg?branch=master
+    :alt: Travis-CI Build Status
+    :target: https://travis-ci.org/asselapathirana/epanettools
+
+.. |appveyor| image:: https://ci.appveyor.com/api/projects/status/github/asselapathirana/epanettools?branch=master&svg=true
+    :alt: AppVeyor Build Status
+    :target: https://ci.appveyor.com/project/asselapathirana/epanettools
+
+.. |requires| image:: https://requires.io/github/asselapathirana/epanettools/requirements.svg?branch=master
+    :alt: Requirements Status
+    :target: https://requires.io/github/asselapathirana/epanettools/requirements/?branch=master
+
+.. |coveralls| image:: https://coveralls.io/repos/asselapathirana/epanettools/badge.svg?branch=master&service=github
+    :alt: Coverage Status
+    :target: https://coveralls.io/r/asselapathirana/epanettools
+
+.. |version| image:: https://img.shields.io/pypi/v/epanettools.svg?style=flat
+    :alt: PyPI Package latest release
+    :target: https://pypi.python.org/pypi/epanettools
+
+.. |downloads| image:: https://img.shields.io/pypi/dm/epanettools.svg?style=flat
+    :alt: PyPI Package monthly downloads
+    :target: https://pypi.python.org/pypi/epanettools
+
+.. |wheel| image:: https://img.shields.io/pypi/wheel/epanettools.svg?style=flat
+    :alt: PyPI Wheel
+    :target: https://pypi.python.org/pypi/epanettools
+
+.. |supported-versions| image:: https://img.shields.io/pypi/pyversions/epanettools.svg?style=flat
+    :alt: Supported versions
+    :target: https://pypi.python.org/pypi/epanettools
+
+.. |supported-implementations| image:: https://img.shields.io/pypi/implementation/epanettools.svg?style=flat
+    :alt: Supported implementations
+    :target: https://pypi.python.org/pypi/epanettools
+
+
+.. end-badges
+
+Epanet 2.0 Python calling interface
+
 Epanet 2.0 Python calling interface 
  
 Since version 0.5.0.1 the library has the epanet-emitter engine enabling Pressure-based Demand Analysis (http://assela.pathirana.net/EPANET-Emitter).

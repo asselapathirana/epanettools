@@ -1,122 +1,101 @@
-#!/usr/bin/env python 
-"""
-setup.py file for EPANET2 python library  - Assela Pathirana
-"""
-import os, sys
-from setuptools import setup, Extension
-from setuptools.command.test import test as TestCommand
-	
-import numpy 
+#!/usr/bin/env python
+# -*- encoding: utf-8 -*-
+from __future__ import absolute_import
+from __future__ import print_function
 
-from itertools import product
+import io
+import os
+import re
+from glob import glob
+from os.path import basename
+from os.path import dirname
+from os.path import join
+from os.path import relpath
+from os.path import splitext
 
-version = '0.6.0.3'
+from setuptools import Extension
+from setuptools import find_packages
+from setuptools import setup
 
-with open("README.txt","r") as f:
-    README=f.read()
-	
-
-sources=[ "epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
-                               "hash.c",
-                               "hydraul.c",
-                               "inpfile.c",
-                               "input1.c",
-                               "input2.c",
-                               "input3.c",
-                               "mempool.c",
-                               "output.c",
-                               "quality.c",
-                               "report.c",
-                               "rules.c",
-                               "smatrix.c"                        
-                                     ]]
-sources.append("epanettools"+os.sep+"epanet2_wrap.c")
-
-# 25-Aug-2016 - append emitter modification files
-sources=sources+list( "epanettools"+os.sep+"pdd"+os.sep+x for x in ["emitter_analysis.cpp",
-                                                             "mods.cpp", "wrap.cpp",
-                                                              ])
-sources.append("epanettools"+os.sep+"pdd_wrap.cxx")
-
-print (sources)
-cargs=['-I'+"epanettools"+os.sep+"epanet",'-I'+"epanettools"+os.sep+"pdd",'-Wno-implicit-function-declaration','-Wno-unused-but-set-variable','-Wno-format','-Wno-char-subscripts', '-fopenmp','-Wno-deprecated','-O3']
-epanet2_module = Extension('_epanet2',
-                           sources=sources,
-                           extra_compile_args=cargs,
-                           extra_link_args=cargs,
-                           ) 
-
-pdd_module = Extension('_pdd',
-                           sources=sources,
-                           extra_compile_args=cargs,
-                           extra_link_args=cargs,
-                           ) 
+import numpy
 
 
-EXAMPLES=["simple"]
-EXTS=["inp", "py"]
-EXTS.extend([x.upper() for x in EXTS])
-EXAMPLES=list(product(EXAMPLES,EXTS))
-package_data=[ "examples/"+x[0]+"/*."+x[1] for x in EXAMPLES]
-NAME='EPANETTOOLS'
-VERSION=version
-SETUPNAME=NAME+"-"+version
-LICENSE=u"GNU General Public License version 3"
-LONGDISC="""Python interface for the popular water network model EPANET 2.0 engine. 
-EPANET2 is realeased by United States Environmental Protection Agency to public domain. 
-This python package is copyrighted by Assela Pathirana and released under %(lc)s. 
+def read(*names, **kwargs):
+    return io.open(
+        join(dirname(__file__), *names),
+        encoding=kwargs.get('encoding', 'utf8')
+    ).read()
 
-==========
-README.txt
-==========
 
-%(rm)s
+# Enable code coverage for C code: we can't use CFLAGS=-coverage in tox.ini, since that may mess with compiling
+# dependencies (e.g. numpy). Therefore we set SETUPPY_CFLAGS=-coverage in tox.ini and copy it to CFLAGS here (after
+# deps have been safely installed).
+if 'TOXENV' in os.environ and 'SETUPPY_CFLAGS' in os.environ:
+    os.environ['CFLAGS'] = os.environ['SETUPPY_CFLAGS']
 
-""" % {"lc": LICENSE, "rm": README}
-CLASSIFY=[
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Environment :: Other Environment",
-        "Intended Audience :: Education",
-        "Intended Audience :: Developers",
-        "Intended Audience :: Science/Research",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
-        "Operating System :: POSIX",
-        "Operating System :: Microsoft :: Windows",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        "Development Status :: 4 - Beta",
-        "Natural Language :: English"
+setup(
+    name='epanettools',
+    version='0.7.0',
+    license='BSD',
+    description='Epanet 2.0 Python calling interface',
+    long_description='%s\n%s' % (
+        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
+        re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
+    ),
+    author='Assela Pathirana',
+    author_email='assela@pathirana.net',
+    url='https://github.com/asselapathirana/epanettools',
+    packages=find_packages('src'),
+    include_dirs=[numpy.get_include()],
+    package_dir={'': 'src'},
+    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    include_package_data=True,
+    zip_safe=False,
+    classifiers=[
+        # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: BSD License',
+        'Operating System :: Unix',
+        'Operating System :: POSIX',
+        'Operating System :: Microsoft :: Windows',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: Implementation :: PyPy',
+        # uncomment if you test on these interpreters:
+        # 'Programming Language :: Python :: Implementation :: IronPython',
+        # 'Programming Language :: Python :: Implementation :: Jython',
+        # 'Programming Language :: Python :: Implementation :: Stackless',
+        'Topic :: Utilities',
+    ],
+    keywords=[
+        # eg: 'keyword1', 'keyword2', 'keyword3',
+    ],
+    install_requires=[
+        # eg: 'aspectlib==1.1.1', 'six>=1.7',
+    ],
+    extras_require={
+        # eg:
+        #   'rst': ['docutils>=0.11'],
+        #   ':python_version=="2.6"': ['argparse'],
+    },
+    entry_points={
+        'console_scripts': [
+            'epanettools = epanettools.cli:main',
         ]
-		
-
-class PyTest(TestCommand):
-    def finalize_options(self):
-        TestCommand.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        import pytest
-        errcode = pytest.main(self.test_args)
-        sys.exit(errcode)		
-
-setup (name = NAME,
-       version = version,
-       author      = "Assela Pathirana",
-       author_email = "assela@pathirana.net",
-       description = """EPANET 2.0  calls from python""",       
-       packages = ["epanettools"],
-	   ext_modules = [epanet2_module, pdd_module],
-       include_dirs=[numpy.get_include()],
-       package_data={'epanettools': package_data},
-       license=LICENSE,
-       url=u"http://assela.pathirana.net/EPANET-Python",
-       long_description = LONGDISC, 
-       classifiers=CLASSIFY,
-	   tests_require=['pytest'],
-	   cmdclass={'test': PyTest},
-	   extras_require={
-        'testing': ['pytest'],
-    }
-	   
-       )
+    },
+    ext_modules=[
+        Extension(
+            splitext(relpath(path, 'src').replace(os.sep, '.'))[0],
+            sources=[path],
+            include_dirs=[dirname(path)]
+        )
+        for root, _, _ in os.walk('src')
+        for path in glob(join(root, '*.c'))
+    ],
+)

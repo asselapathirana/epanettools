@@ -1,0 +1,16 @@
+[paths]
+source =
+   src/epanettools
+   */site-packages/epanettools
+
+[run]
+branch = true
+source =
+    epanettools
+    tests
+parallel = true
+
+[report]
+show_missing = true
+precision = 2
+omit = *migrations*
