@@ -29,5 +29,6 @@ swig -python epanet2.i
 swig -c++ -python pdd.i
 
 then run 
-python setup.py test
+tox -e 'pyxx'
+#xx are python versions available in the test machine. 
 python -m doctest -v README.txt

@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import io
+import sys
 import os
 import re
 from glob import glob
@@ -16,8 +17,30 @@ from os.path import splitext
 from setuptools import Extension
 from setuptools import find_packages
 from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 import numpy
+
+
+class Tox(TestCommand):
+    user_options = [('tox-args=', 'a', "Arguments to pass to tox")]
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.tox_args = None
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    def run_tests(self):
+        #import here, cause outside the eggs aren't loaded
+        import tox
+        import shlex
+        args = self.tox_args
+        if args:
+            args = shlex.split(self.tox_args)
+        tox.cmdline(args=args)
+
+
 
 
 def read(*names, **kwargs):
@@ -33,10 +56,36 @@ def read(*names, **kwargs):
 if 'TOXENV' in os.environ and 'SETUPPY_CFLAGS' in os.environ:
     os.environ['CFLAGS'] = os.environ['SETUPPY_CFLAGS']
 
+sources=[ "src"+os.sep+"epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
+                                                           "hash.c",
+                                                           "hydraul.c",
+                                                           "inpfile.c",
+                                                           "input1.c",
+                                                           "input2.c",
+                                                           "input3.c",
+                                                           "mempool.c",
+                                                           "output.c",
+                                                           "quality.c",
+                                                           "report.c",
+                                                           "rules.c",
+                                                           "smatrix.c"                        
+                                                           ]]
+sources.append("src"+os.sep+"epanettools"+os.sep+"epanet2_wrap.c")
+
+# 25-Aug-2016 - append emitter modification files
+sources=sources+list( "src"+os.sep+"epanettools"+os.sep+"pdd"+os.sep+x for x in ["emitter_analysis.cpp",
+                                                                    "mods.cpp", "wrap.cpp",
+                                                                    ])
+sources.append("src"+os.sep+"epanettools"+os.sep+"pdd_wrap.cxx")
+
+cargs=['-Wno-format']
+
+
+
 setup(
     name='epanettools',
     version='0.7.0',
-    license='BSD',
+    license='GPLv3+',
     description='Epanet 2.0 Python calling interface',
     long_description='%s\n%s' % (
         re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
@@ -45,7 +94,7 @@ setup(
     author='Assela Pathirana',
     author_email='assela@pathirana.net',
     url='https://github.com/asselapathirana/epanettools',
-    packages=find_packages('src'),
+    packages = ["epanettools"],
     include_dirs=[numpy.get_include()],
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -55,7 +104,7 @@ setup(
         # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: BSD License',
+        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+) ',
         'Operating System :: Unix',
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
@@ -89,13 +138,20 @@ setup(
             'epanettools = epanettools.cli:main',
         ]
     },
-    ext_modules=[
-        Extension(
-            splitext(relpath(path, 'src').replace(os.sep, '.'))[0],
-            sources=[path],
-            include_dirs=[dirname(path)]
-        )
-        for root, _, _ in os.walk('src')
-        for path in glob(join(root, '*.c'))
-    ],
+    ext_modules = [
+        Extension('_epanet2',
+                                   sources=sources,
+                                   extra_compile_args=cargs,
+                                   #extra_link_args=cargs,
+                                   include_dirs=["src/epanettools/pdd","src/epanettools/epanet"],
+                                   ),
+        Extension('_pdd',
+                               sources=sources,
+                               extra_compile_args=cargs,
+                               #extra_link_args=cargs,
+                               include_dirs=["src/epanettools/pdd","src/epanettools/epanet"]
+                               )         
+        ],    
+        tests_require=['tox'],
+        cmdclass = {'test': Tox},
 )

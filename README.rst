@@ -180,7 +180,7 @@ Types of links and nodes
     >>> [y.id for x,y in n.items() if y.node_type==Node.node_types['TANK']] # get ids of tanks
     ['1', '2', '3']
   
- ::
+
   
 Network properties are available (even before we run the simulation)
 
@@ -222,8 +222,7 @@ Get some results of simulation.
      >>> e=Link.value_type['EN_ENERGY']
      >>> print("%.5f" % es.network.links['111'].results[e][23])
      0.00685
-   
- ::
+
 
 Some advanced result queries
 
@@ -285,7 +284,7 @@ Currently the new (object-based) interface above only supports read access to th
 	>>> # now in both high level and low level interfaces, we have the right value. 
    	
 
-::
+
 
 PDD type analysis
 -------------------------
