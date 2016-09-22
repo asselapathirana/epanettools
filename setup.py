@@ -4,6 +4,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import io
+import sys
 import os
 import re
 from glob import glob
@@ -16,8 +17,30 @@ from os.path import splitext
 from setuptools import Extension
 from setuptools import find_packages
 from setuptools import setup
+from setuptools.command.test import test as TestCommand
 
 import numpy
+
+
+class Tox(TestCommand):
+    user_options = [('tox-args=', 'a', "Arguments to pass to tox")]
+    def initialize_options(self):
+        TestCommand.initialize_options(self)
+        self.tox_args = None
+    def finalize_options(self):
+        TestCommand.finalize_options(self)
+        self.test_args = []
+        self.test_suite = True
+    def run_tests(self):
+        #import here, cause outside the eggs aren't loaded
+        import tox
+        import shlex
+        args = self.tox_args
+        if args:
+            args = shlex.split(self.tox_args)
+        tox.cmdline(args=args)
+
+
 
 
 def read(*names, **kwargs):
@@ -129,15 +152,6 @@ setup(
                                include_dirs=["src/epanettools/pdd","src/epanettools/epanet"]
                                )         
         ],    
-
-        #ext_modules=[
-            #Extension(
-                #splitext(relpath(path, 'src').replace(os.sep, '.'))[0],
-                #sources=[path],
-                #include_dirs=[dirname(path)]
-            #)
-            #for root, _, _ in os.walk('src')
-            #for path in glob(join(root, '*.c'))
-        #],
-
+        tests_require=['tox'],
+        cmdclass = {'test': Tox},
 )
