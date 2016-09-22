@@ -33,6 +33,32 @@ def read(*names, **kwargs):
 if 'TOXENV' in os.environ and 'SETUPPY_CFLAGS' in os.environ:
     os.environ['CFLAGS'] = os.environ['SETUPPY_CFLAGS']
 
+sources=[ "src"+os.sep+"epanettools"+os.sep+"epanet"+os.sep+x for x in ["epanet.c",
+                                                           "hash.c",
+                                                           "hydraul.c",
+                                                           "inpfile.c",
+                                                           "input1.c",
+                                                           "input2.c",
+                                                           "input3.c",
+                                                           "mempool.c",
+                                                           "output.c",
+                                                           "quality.c",
+                                                           "report.c",
+                                                           "rules.c",
+                                                           "smatrix.c"                        
+                                                           ]]
+sources.append("src"+os.sep+"epanettools"+os.sep+"epanet2_wrap.c")
+
+# 25-Aug-2016 - append emitter modification files
+sources=sources+list( "src"+os.sep+"epanettools"+os.sep+"pdd"+os.sep+x for x in ["emitter_analysis.cpp",
+                                                                    "mods.cpp", "wrap.cpp",
+                                                                    ])
+sources.append("src"+os.sep+"epanettools"+os.sep+"pdd_wrap.cxx")
+
+cargs=['-Wno-format']
+
+
+
 setup(
     name='epanettools',
     version='0.7.0',
@@ -45,7 +71,7 @@ setup(
     author='Assela Pathirana',
     author_email='assela@pathirana.net',
     url='https://github.com/asselapathirana/epanettools',
-    packages=find_packages('src'),
+    packages = ["epanettools"],
     include_dirs=[numpy.get_include()],
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
@@ -89,13 +115,29 @@ setup(
             'epanettools = epanettools.cli:main',
         ]
     },
-    ext_modules=[
-        Extension(
-            splitext(relpath(path, 'src').replace(os.sep, '.'))[0],
-            sources=[path],
-            include_dirs=[dirname(path)]
-        )
-        for root, _, _ in os.walk('src')
-        for path in glob(join(root, '*.c'))
-    ],
+    ext_modules = [
+        Extension('_epanet2',
+                                   sources=sources,
+                                   extra_compile_args=cargs,
+                                   #extra_link_args=cargs,
+                                   include_dirs=["src/epanettools/pdd","src/epanettools/epanet"],
+                                   ),
+        Extension('_pdd',
+                               sources=sources,
+                               extra_compile_args=cargs,
+                               #extra_link_args=cargs,
+                               include_dirs=["src/epanettools/pdd","src/epanettools/epanet"]
+                               )         
+        ],    
+
+        #ext_modules=[
+            #Extension(
+                #splitext(relpath(path, 'src').replace(os.sep, '.'))[0],
+                #sources=[path],
+                #include_dirs=[dirname(path)]
+            #)
+            #for root, _, _ in os.walk('src')
+            #for path in glob(join(root, '*.c'))
+        #],
+
 )
