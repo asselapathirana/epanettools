@@ -6,14 +6,18 @@ env:
     - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
     - SEGFAULT_SIGNALS=all
   matrix:
-    - TOXENV=check
-    - TOXENV=docs
+#    - TOXENV=check
+#    - TOXENV=docs
 
-    - TOXENV=py27,extension-coveralls,coveralls
-    - TOXENV=py33,extension-coveralls,coveralls
-    - TOXENV=py34,extension-coveralls,coveralls
-    - TOXENV=py35,extension-coveralls,coveralls
-    - TOXENV=pypy,extension-coveralls,coveralls
+    - TOXENV=py27
+#,extension-coveralls,coveralls
+    - TOXENV=py33
+#,extension-coveralls,coveralls
+    - TOXENV=py34
+#,extension-coveralls,coveralls
+    - TOXENV=py35
+#,extension-coveralls,coveralls
+#    - TOXENV=pypy,extension-coveralls,coveralls
 before_install:
   - python --version
   - uname -a
