@@ -29,6 +29,7 @@ swig -python epanet2.i
 swig -c++ -python pdd.i
 
 then run 
-tox -e 'pyxx'
-#xx are python versions available in the test machine. 
-python -m doctest -v README.txt
+tox # this will do all the testing and doctest. 
+To run only doctest (scenario: editing README.rst)
+.\.tox\py34\Scripts\python.exe -m doctest -v README.rst
+(Works only after running tox successfully)

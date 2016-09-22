@@ -294,7 +294,7 @@ class Test1(unittest.TestCase):
         self.es.run(save=True)
         self.assertTrue(os.path.exists(self.es.hydraulicfile))        
 
-    
+    @skip
     def test_clean_will_remove_results(self):
         self.assertTrue(os.path.exists(self.es.inputfile))        
         self.es.run()
