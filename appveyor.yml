@@ -55,6 +55,8 @@ init:
 install:
 #  - python -u ci\appveyor-bootstrap.py
   - 'set PATH=%PYTHON_HOME%\Scripts;%PYTHON_HOME%'
+  - 'set "CC=gcc"'
+  - 'set "CXX=g++"'
   - 'virtualenv --version'
   - 'easy_install --version'
   - 'pip --version'
@@ -68,7 +70,7 @@ install:
   
 test_script:
   #- '%WITH_COMPILER% tox'
-  -  'tox'
+  -  'cmd /C "set CC=''gcc'  && tox'
   
 after_test:
   #- IF "%TOXENV:~-6,6%" == "-nocov" %WITH_COMPILER% %TOXPYTHON% setup.py bdist_wheel
