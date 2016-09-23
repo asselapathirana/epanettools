@@ -59,6 +59,7 @@ install:
   - '%PYTHON_HOME%\Scripts\pip --version'
   - '%PYTHON_HOME%\Scripts\tox --version'
   - '%PYTHON_HOME%\Scripts\pip install numpy'
+  - '%PYTHON_HOME%\Scripts\pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
 test_script:
   #- '%WITH_COMPILER% %PYTHON_HOME%\Scripts\tox'
   -  '%PYTHON_HOME%\Scripts\tox'
