@@ -80,6 +80,7 @@ sources=sources+list( "src"+os.sep+"epanettools"+os.sep+"pdd"+os.sep+x for x in 
                                                                     "mods.cpp", "wrap.cpp",
                                                                     ])
 sources.append("src"+os.sep+"epanettools"+os.sep+"pdd_wrap.cxx")
+sources.append("src"+os.sep+"epanettools"+os.sep+"tmpdir.c")
 
 cargs=['-Wno-format']
 
