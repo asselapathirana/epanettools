@@ -3,8 +3,8 @@ build: off
 cache:
   - '%LOCALAPPDATA%\pip\Cache'
 environment:
-  global:
-    WITH_COMPILER: 'cmd /E:ON /V:ON /C .\ci\appveyor-with-compiler.cmd'
+#  global:
+#    WITH_COMPILER: 'cmd /E:ON /V:ON /C .\ci\appveyor-with-compiler.cmd'
   matrix:
 #    - TOXENV: check
 #      PYTHON_HOME: C:\Python27
@@ -53,13 +53,17 @@ init:
   - ps: echo $env:TOXENV
   - ps: ls C:\Python*
 install:
-  - python -u ci\appveyor-bootstrap.py
+#  - python -u ci\appveyor-bootstrap.py
   - '%PYTHON_HOME%\Scripts\virtualenv --version'
   - '%PYTHON_HOME%\Scripts\easy_install --version'
   - '%PYTHON_HOME%\Scripts\pip --version'
   - '%PYTHON_HOME%\Scripts\tox --version'
   - '%PYTHON_HOME%\Scripts\pip install numpy'
   - '%PYTHON_HOME%\Scripts\pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
+  - python.exe setup.py config --compiler=mingw32 --fcompiler=gfortran
+  #may be we don't need ^^^^ check.
+  - python.exe setup.py build --compiler=mingw32
+  
 test_script:
   #- '%WITH_COMPILER% %PYTHON_HOME%\Scripts\tox'
   -  '%PYTHON_HOME%\Scripts\tox'
