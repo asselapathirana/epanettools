@@ -18,6 +18,9 @@ from setuptools import Extension
 from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+from setuptools.command.build_ext import build_ext
+
+from  collections import defaultdict
 
 import numpy
 
@@ -79,6 +82,22 @@ sources=sources+list( "src"+os.sep+"epanettools"+os.sep+"pdd"+os.sep+x for x in 
 sources.append("src"+os.sep+"epanettools"+os.sep+"pdd_wrap.cxx")
 
 cargs=['-Wno-format']
+
+
+BUILD_ARGS = defaultdict(lambda: ['-O3', '-g0'])
+for compiler, args in [
+    ('msvc', []),
+    ('gcc', ['-Wno-format'])]:
+    BUILD_ARGS[compiler] = args
+
+class build_ext_compiler_check(build_ext):
+    def build_extensions(self):
+        compiler = self.compiler.compiler_type
+        args = BUILD_ARGS[compiler]
+        for ext in self.extensions:
+            ext.extra_compile_args = args
+        build_ext.build_extensions(self)
+
 
 
 
@@ -153,5 +172,5 @@ setup(
                                )         
         ],    
         tests_require=['tox'],
-        cmdclass = {'test': Tox},
+        cmdclass = {'test': Tox,'build_ext': build_ext_compiler_check },
 )
