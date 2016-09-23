@@ -54,7 +54,7 @@ init:
   - ps: ls C:\Python*
 install:
 #  - python -u ci\appveyor-bootstrap.py
-  - 'set PATH=%PYTHON_HOME%\Scripts'
+  - 'set PATH=%PYTHON_HOME%\Scripts:%PYTHON_HOME%'
   - 'virtualenv --version'
   - 'easy_install --version'
   - 'pip --version'
@@ -64,8 +64,7 @@ install:
   - 'pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
   - python.exe setup.py config  
   #may be we don't need ^^^^ check.
-  - python.exe setup.py build 
-  #--compiler=mingw32
+  - python.exe setup.py build --compiler=mingw32
   
 test_script:
   #- '%WITH_COMPILER% tox'
