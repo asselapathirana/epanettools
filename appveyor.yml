@@ -54,21 +54,22 @@ init:
   - ps: ls C:\Python*
 install:
 #  - python -u ci\appveyor-bootstrap.py
-  - '%PYTHON_HOME%\Scripts\virtualenv --version'
-  - '%PYTHON_HOME%\Scripts\easy_install --version'
-  - '%PYTHON_HOME%\Scripts\pip --version'
-  - '%PYTHON_HOME%\Scripts\pip install tox'
-  - '%PYTHON_HOME%\Scripts\tox --version'
-  - '%PYTHON_HOME%\Scripts\pip install numpy'
-  - '%PYTHON_HOME%\Scripts\pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
+  - 'set PATH=%PYTHON_HOME%\Scripts'
+  - 'virtualenv --version'
+  - 'easy_install --version'
+  - 'pip --version'
+  - 'pip install tox'
+  - 'tox --version'
+  - 'pip install numpy'
+  - 'pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
   - python.exe setup.py config  
   #may be we don't need ^^^^ check.
   - python.exe setup.py build 
   #--compiler=mingw32
   
 test_script:
-  #- '%WITH_COMPILER% %PYTHON_HOME%\Scripts\tox'
-  -  '%PYTHON_HOME%\Scripts\tox'
+  #- '%WITH_COMPILER% tox'
+  -  'tox'
   
 after_test:
   #- IF "%TOXENV:~-6,6%" == "-nocov" %WITH_COMPILER% %TOXPYTHON% setup.py bdist_wheel
