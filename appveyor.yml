@@ -70,7 +70,7 @@ install:
   
 test_script:
   #- '%WITH_COMPILER% tox'
-  -  'cmd /C "set CC=''gcc'  && tox'
+  -  'tox'
   
 after_test:
   #- IF "%TOXENV:~-6,6%" == "-nocov" %WITH_COMPILER% %TOXPYTHON% setup.py bdist_wheel
