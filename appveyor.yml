@@ -59,6 +59,7 @@ install:
   - '%PYTHON_HOME%\Scripts\pip --version'
   - '%PYTHON_HOME%\Scripts\tox --version'
   - '%PYTHON_HOME%\Scripts\pip install numpy'
+  - '%PYTHON_HOME%\Scripts\pip install tox'
   - '%PYTHON_HOME%\Scripts\pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
   - python.exe setup.py config --compiler=mingw32 --fcompiler=gfortran
   #may be we don't need ^^^^ check.
