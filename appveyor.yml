@@ -70,7 +70,7 @@ install:
   
 test_script:
   #- '%WITH_COMPILER% tox'
-  -  py.test 
+  -  python setup.py test 
   #'tox -- --compiler=mingw32'
   
 after_test:
