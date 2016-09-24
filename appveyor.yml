@@ -70,7 +70,8 @@ install:
   
 test_script:
   #- '%WITH_COMPILER% tox'
-  -  'tox -- --compiler=mingw32'
+  -  py.test 
+  #'tox -- --compiler=mingw32'
   
 after_test:
   #- IF "%TOXENV:~-6,6%" == "-nocov" %WITH_COMPILER% %TOXPYTHON% setup.py bdist_wheel
