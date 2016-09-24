@@ -3,7 +3,7 @@
  /* Includes the header in the wrapper code */
  #include "./pdd/wrapper.h"
  #include "./epanet/epanet2.h"
- extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
+ /* extern char TmpDir[200]; *//* this makes it possible to overrride the TmpDir */ 
  %}
 
 
