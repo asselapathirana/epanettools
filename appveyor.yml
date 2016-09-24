@@ -64,13 +64,14 @@ install:
   - 'tox --version'
   - 'pip install numpy'
   - 'pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
-  - python.exe setup.py config  
-  #may be we don't need ^^^^ check.
-  - python.exe setup.py build --compiler=mingw32
+
+  
   
 test_script:
   #- '%WITH_COMPILER% tox'
-  -  python setup.py test 
+  - python.exe setup.py build --compiler=mingw32
+  - python.exe setup.py bdist_wheel
+  - python setup.py test 
   #'tox -- --compiler=mingw32'
   
 after_test:
