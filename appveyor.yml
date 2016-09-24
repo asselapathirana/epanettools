@@ -72,7 +72,9 @@ test_script:
   #- '%WITH_COMPILER% tox'
   - python.exe setup.py build --compiler=mingw32
   - python.exe setup.py bdist_wheel
-  - python setup.py test 
+  - python.exe setup.py install
+  - python.exe setup.py test 
+  
   #'tox -- --compiler=mingw32'
   
 after_test:
