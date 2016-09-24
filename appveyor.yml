@@ -64,6 +64,7 @@ install:
   - 'tox --version'
   - 'pip install numpy'
   - 'pip install -i https://pypi.anaconda.org/carlkl/simple mingwpy'
+  - 'pip install wheel'
 
   
   
