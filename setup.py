@@ -85,22 +85,6 @@ sources.append("src"+os.sep+"epanettools"+os.sep+"tmpdir.c")
 cargs=['-Wno-format']
 
 
-BUILD_ARGS = defaultdict(lambda: ['-O3', '-g0'])
-for compiler, args in [
-    ('msvc', []),
-    ('gcc', ['-Wno-format'])]:
-    BUILD_ARGS[compiler] = args
-
-class build_ext_compiler_check(build_ext):
-    def build_extensions(self):
-        compiler = self.compiler.compiler_type
-        args = BUILD_ARGS[compiler]
-        for ext in self.extensions:
-            ext.extra_compile_args = args
-        build_ext.build_extensions(self)
-
-
-
 
 setup(
     name='epanettools',
@@ -173,5 +157,4 @@ setup(
                                )         
         ],    
         tests_require=['tox'],
-        cmdclass = {'test': Tox,'build_ext': build_ext_compiler_check },
 )
