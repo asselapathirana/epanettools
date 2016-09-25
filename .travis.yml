@@ -8,12 +8,6 @@ env:
   matrix:
 #    - TOXENV=check
 #    - TOXENV=docs
-    - os: osx
-          language: generic
-          env: DEPS="numpy" PYTHON_VERSION="2.7" PYTHON_ARCH="32"
-    - os: osx
-          language: generic
-          env: DEPS="numpy" PYTHON_VERSION="3.5" PYTHON_ARCH="32"
 
     - TOXENV=py27,extension-coveralls,coveralls
     - TOXENV=py33,extension-coveralls,coveralls
