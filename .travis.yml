@@ -29,7 +29,7 @@ deploy:
     branch: master
     tags: true
   provider: pypi
-  user: asselapathirana
+  user: assela
 env:
   global:
   - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so

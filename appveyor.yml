@@ -1,4 +1,6 @@
 environment:
+  password:
+    secure: FTXC0Lbagq+isgXzs7VsYFIBJ1axTt2wgwCiwfhouSU=
   matrix:
     - PYTHON_VERSION: "2.7"
     - PYTHON_VERSION: "3.3"
@@ -41,7 +43,12 @@ artifacts:
   # bdist_wheel puts your built wheel in the dist directory
   - path: dist\*.whl
 
-#on_success:
+on_success:
+     - "echo [pypi] > %USERPROFILE%\\.pypirc"
+     - "echo username: assela >> %USERPROFILE%\\.pypirc"
+     - "echo password: %password% >> %USERPROFILE%\\.pypirc"
+     - python setup.py  bdist_wheel upload
+
 #  You can use this step to upload your artifacts to a public website.
 #  See Appveyor's documentation for more details. Or you can simply
 #  access your wheels from the Appveyor "artifacts" tab for your build.
