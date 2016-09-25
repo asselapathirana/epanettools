@@ -43,7 +43,8 @@ artifacts:
   # bdist_wheel puts your built wheel in the dist directory
   - path: dist\*.whl
 
-on_success:
+#on_success:
+deploy_script:
      - "echo [pypi] > %USERPROFILE%\\.pypirc"
      - "echo username: assela >> %USERPROFILE%\\.pypirc"
      - "echo password: %password% >> %USERPROFILE%\\.pypirc"
