@@ -1,40 +1,56 @@
-language: python
-python: '3.5'
-sudo: false
-env:
-  global:
-    - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
-    - SEGFAULT_SIGNALS=all
-  matrix:
-#    - TOXENV=check
-#    - TOXENV=docs
-
-    - TOXENV=py27,extension-coveralls,coveralls
-    - TOXENV=py33,extension-coveralls,coveralls
-    - TOXENV=py34,extension-coveralls,coveralls
-    - TOXENV=py35,extension-coveralls,coveralls
-#    - TOXENV=pypy,extension-coveralls,coveralls
-before_install:
-  - python --version
-  - uname -a
-  - lsb_release -a
-install:
-  - pip install tox
-  - virtualenv --version
-  - easy_install --version
-  - pip --version
-  - tox --version
-script:
-  - tox -v
 after_failure:
-  - more .tox/log/* | cat
-  - more .tox/*/log/* | cat
+- more .tox/log/* | cat
+- more .tox/*/log/* | cat
 before_cache:
-  - rm -rf $HOME/.cache/pip/log
+- rm -rf $HOME/.cache/pip/log
+before_install:
+- python --version
+- uname -a
+- lsb_release -a
 cache:
   directories:
-    - $HOME/.cache/pip
+  - $HOME/.cache/pip
+deploy:
+  password:
+    secure: !!binary |
+      cjFGVmV6TUJncll1emRic0dZRGtzMFduRDRaZmNKZEFGeXZTcCswdVMxOHRoZm5TdC9aWG1qQlYw
+      aHJNdTBxODE0NUlFT0tBOVR6KzVqeFVVeVNOYURLV1o3a1JtcWlvK2FGS3lWc1FpTEFHWE1uZW1s
+      cnJTelFuTXJjTWRjTHdRNnNLZEdadkFqYkJRM0NXS2VLKzRXUWlaaDlVQkU4ZXFLZWdVN0pkcTR2
+      d1dOazlXeGgvVFhwMUp5MTFkalE3UG45bW5vVi9KYzB4RUlidGFnOE5nTFpGUWtaaDA4aVR4c3VJ
+      Qm1yemJBVVBNekZVWDY1Ris2MWZtZ2psU3JOcUZ3UGttS0hwREQvNEhSUHdrSk5ya0R4QVJUZUtu
+      YjJXSlFra1cvQk81ZkxhTFhzV0pBcS93YlR5bzE5T0FYZFU3NjE2eGNoMDRiUTQzYm5RaWhSUlNr
+      QXorRDk0Y2ZCUmhJUGJuQzBKelMyeUp0RzJIckVud1Bma0d4MjFhMTh0eGRLRnZiMm5pM2tjbit3
+      RzBNVEE5eEdqZTI3aFFUUzVueS9zUnB2M0luM2FkZUFBazlRZXowaTZZUFFQK0NtYjBkaUp2R3RU
+      SVE0eTdhZHNQN0FvL0FNUDFsQ29TQXJselFFeEkwODVJQVlJUE9zNEFNVFRmazZDY0pUeXllaWFT
+      V2UwZ0FwS2U1MVZ1UXVYSm5tVktJeEpXZS92QkR5b1cvbWdyUGUyOTVOdHlSWm1kT3hzSVZiWW5Z
+      NjY5M0c5aGE4blJRdlVFanFFN3dJRWorR3JaTXFESVdNZ3dFbDRSb3F0aDl4QjB1eTQ4YVZwSTBq
+      TlRJUVgvVTBGSzV4TWVUL3NZSzdrdlU3N0tTOXpqUjZlTllNYXZCNVQxZ015NDg0WXVOSlZhNjA9
+  true:
+    branch: master
+    tags: true
+  provider: pypi
+  user: assela
+env:
+  global:
+  - LD_PRELOAD=/lib/x86_64-linux-gnu/libSegFault.so
+  - SEGFAULT_SIGNALS=all
+  matrix:
+  - TOXENV=py27,extension-coveralls,coveralls
+  - TOXENV=py33,extension-coveralls,coveralls
+  - TOXENV=py34,extension-coveralls,coveralls
+  - TOXENV=py35,extension-coveralls,coveralls
+install:
+- pip install tox
+- virtualenv --version
+- easy_install --version
+- pip --version
+- tox --version
+language: python
 notifications:
   email:
-    on_success: never
     on_failure: always
+    on_success: never
+python: '3.5'
+script:
+- tox -v
+sudo: false
