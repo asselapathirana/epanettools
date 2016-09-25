@@ -48,7 +48,7 @@ deploy_script:
      - "echo [pypi] > %USERPROFILE%\\.pypirc"
      - "echo username: assela >> %USERPROFILE%\\.pypirc"
      - "echo password: %password% >> %USERPROFILE%\\.pypirc"
-     - python setup.py  bdist_wheel upload
+    # - python setup.py  bdist_wheel upload - this hangs!!
 
 #  You can use this step to upload your artifacts to a public website.
 #  See Appveyor's documentation for more details. Or you can simply
