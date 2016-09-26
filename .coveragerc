@@ -7,7 +7,7 @@ source =
 branch = true
 source =
     epanettools
-    tests
+    #tests
 parallel = true
 
 [report]
