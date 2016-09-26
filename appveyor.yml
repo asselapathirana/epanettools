@@ -1,7 +1,11 @@
 environment:
+  password:
+    secure: FTXC0Lbagq+isgXzs7VsYFIBJ1axTt2wgwCiwfhouSU=
   matrix:
     - PYTHON_VERSION: "2.7"
+    - PYTHON_VERSION: "3.3"
     - PYTHON_VERSION: "3.4"
+#    - PYTHON_VERSION: "3.5" no mingwpy for python 3.5
 
 platform:
   - x86
@@ -40,6 +44,12 @@ artifacts:
   - path: dist\*.whl
 
 #on_success:
+deploy_script:
+     - "echo [pypi] > %USERPROFILE%\\.pypirc"
+     - "echo username: assela >> %USERPROFILE%\\.pypirc"
+     - "echo password: %password% >> %USERPROFILE%\\.pypirc"
+    # - python setup.py  bdist_wheel upload - this hangs!!
+
 #  You can use this step to upload your artifacts to a public website.
 #  See Appveyor's documentation for more details. Or you can simply
 #  access your wheels from the Appveyor "artifacts" tab for your build.
