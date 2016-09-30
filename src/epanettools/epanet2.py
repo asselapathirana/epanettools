@@ -5,9 +5,6 @@
 # the SWIG interface file instead.
 
 
-
-
-
 from sys import version_info
 if version_info >= (2, 6, 0):
     def swig_import_helper():
@@ -70,6 +67,7 @@ def _swig_getattr_nondynamic(self, class_type, name, static=1):
     else:
         raise AttributeError(name)
 
+
 def _swig_getattr(self, class_type, name):
     return _swig_getattr_nondynamic(self, class_type, name, 0)
 
@@ -88,7 +86,6 @@ except AttributeError:
     class _object:
         pass
     _newclass = 0
-
 
 
 _epanet2.EN_ELEVATION_swigconstant(_epanet2)
@@ -403,221 +400,276 @@ EN_SAVE = _epanet2.EN_SAVE
 _epanet2.EN_INITFLOW_swigconstant(_epanet2)
 EN_INITFLOW = _epanet2.EN_INITFLOW
 
+
 def ENepanet(arg1, arg2, arg3, arg4):
     return _epanet2.ENepanet(arg1, arg2, arg3, arg4)
 ENepanet = _epanet2.ENepanet
+
 
 def ENopen(arg1, arg2, arg3):
     return _epanet2.ENopen(arg1, arg2, arg3)
 ENopen = _epanet2.ENopen
 
+
 def ENsaveinpfile(arg1):
     return _epanet2.ENsaveinpfile(arg1)
 ENsaveinpfile = _epanet2.ENsaveinpfile
+
 
 def ENclose():
     return _epanet2.ENclose()
 ENclose = _epanet2.ENclose
 
+
 def ENsolveH():
     return _epanet2.ENsolveH()
 ENsolveH = _epanet2.ENsolveH
+
 
 def ENsaveH():
     return _epanet2.ENsaveH()
 ENsaveH = _epanet2.ENsaveH
 
+
 def ENopenH():
     return _epanet2.ENopenH()
 ENopenH = _epanet2.ENopenH
+
 
 def ENinitH(arg1):
     return _epanet2.ENinitH(arg1)
 ENinitH = _epanet2.ENinitH
 
+
 def ENrunH():
     return _epanet2.ENrunH()
 ENrunH = _epanet2.ENrunH
+
 
 def ENnextH():
     return _epanet2.ENnextH()
 ENnextH = _epanet2.ENnextH
 
+
 def ENcloseH():
     return _epanet2.ENcloseH()
 ENcloseH = _epanet2.ENcloseH
+
 
 def ENsavehydfile(arg1):
     return _epanet2.ENsavehydfile(arg1)
 ENsavehydfile = _epanet2.ENsavehydfile
 
+
 def ENusehydfile(arg1):
     return _epanet2.ENusehydfile(arg1)
 ENusehydfile = _epanet2.ENusehydfile
+
 
 def ENsolveQ():
     return _epanet2.ENsolveQ()
 ENsolveQ = _epanet2.ENsolveQ
 
+
 def ENopenQ():
     return _epanet2.ENopenQ()
 ENopenQ = _epanet2.ENopenQ
+
 
 def ENinitQ(arg1):
     return _epanet2.ENinitQ(arg1)
 ENinitQ = _epanet2.ENinitQ
 
+
 def ENrunQ():
     return _epanet2.ENrunQ()
 ENrunQ = _epanet2.ENrunQ
+
 
 def ENnextQ():
     return _epanet2.ENnextQ()
 ENnextQ = _epanet2.ENnextQ
 
+
 def ENstepQ():
     return _epanet2.ENstepQ()
 ENstepQ = _epanet2.ENstepQ
+
 
 def ENcloseQ():
     return _epanet2.ENcloseQ()
 ENcloseQ = _epanet2.ENcloseQ
 
+
 def ENwriteline(arg1):
     return _epanet2.ENwriteline(arg1)
 ENwriteline = _epanet2.ENwriteline
+
 
 def ENreport():
     return _epanet2.ENreport()
 ENreport = _epanet2.ENreport
 
+
 def ENresetreport():
     return _epanet2.ENresetreport()
 ENresetreport = _epanet2.ENresetreport
+
 
 def ENsetreport(arg1):
     return _epanet2.ENsetreport(arg1)
 ENsetreport = _epanet2.ENsetreport
 
+
 def ENgetcontrol(arg1):
     return _epanet2.ENgetcontrol(arg1)
 ENgetcontrol = _epanet2.ENgetcontrol
+
 
 def ENgetcount(arg1):
     return _epanet2.ENgetcount(arg1)
 ENgetcount = _epanet2.ENgetcount
 
+
 def ENgetoption(arg1):
     return _epanet2.ENgetoption(arg1)
 ENgetoption = _epanet2.ENgetoption
+
 
 def ENgettimeparam(arg1):
     return _epanet2.ENgettimeparam(arg1)
 ENgettimeparam = _epanet2.ENgettimeparam
 
+
 def ENgetflowunits():
     return _epanet2.ENgetflowunits()
 ENgetflowunits = _epanet2.ENgetflowunits
+
 
 def ENgetpatternindex(arg1):
     return _epanet2.ENgetpatternindex(arg1)
 ENgetpatternindex = _epanet2.ENgetpatternindex
 
+
 def ENgetpatternid(arg1):
     return _epanet2.ENgetpatternid(arg1)
 ENgetpatternid = _epanet2.ENgetpatternid
+
 
 def ENgetpatternlen(arg1):
     return _epanet2.ENgetpatternlen(arg1)
 ENgetpatternlen = _epanet2.ENgetpatternlen
 
+
 def ENgetpatternvalue(arg1, arg2):
     return _epanet2.ENgetpatternvalue(arg1, arg2)
 ENgetpatternvalue = _epanet2.ENgetpatternvalue
+
 
 def ENgetqualtype():
     return _epanet2.ENgetqualtype()
 ENgetqualtype = _epanet2.ENgetqualtype
 
+
 def ENgeterror(arg1, arg3):
     return _epanet2.ENgeterror(arg1, arg3)
 ENgeterror = _epanet2.ENgeterror
+
 
 def ENgetnodeindex(arg1):
     return _epanet2.ENgetnodeindex(arg1)
 ENgetnodeindex = _epanet2.ENgetnodeindex
 
+
 def ENgetnodeid(arg1):
     return _epanet2.ENgetnodeid(arg1)
 ENgetnodeid = _epanet2.ENgetnodeid
+
 
 def ENgetnodetype(arg1):
     return _epanet2.ENgetnodetype(arg1)
 ENgetnodetype = _epanet2.ENgetnodetype
 
+
 def ENgetnodevalue(arg1, arg2):
     return _epanet2.ENgetnodevalue(arg1, arg2)
 ENgetnodevalue = _epanet2.ENgetnodevalue
+
 
 def ENgetlinkindex(arg1):
     return _epanet2.ENgetlinkindex(arg1)
 ENgetlinkindex = _epanet2.ENgetlinkindex
 
+
 def ENgetlinkid(arg1):
     return _epanet2.ENgetlinkid(arg1)
 ENgetlinkid = _epanet2.ENgetlinkid
+
 
 def ENgetlinktype(arg1):
     return _epanet2.ENgetlinktype(arg1)
 ENgetlinktype = _epanet2.ENgetlinktype
 
+
 def ENgetlinknodes(arg1):
     return _epanet2.ENgetlinknodes(arg1)
 ENgetlinknodes = _epanet2.ENgetlinknodes
+
 
 def ENgetlinkvalue(arg1, arg2):
     return _epanet2.ENgetlinkvalue(arg1, arg2)
 ENgetlinkvalue = _epanet2.ENgetlinkvalue
 
+
 def ENgetversion():
     return _epanet2.ENgetversion()
 ENgetversion = _epanet2.ENgetversion
+
 
 def ENsetcontrol(arg1, arg2, arg3, arg4, arg5, arg6):
     return _epanet2.ENsetcontrol(arg1, arg2, arg3, arg4, arg5, arg6)
 ENsetcontrol = _epanet2.ENsetcontrol
 
+
 def ENsetnodevalue(arg1, arg2, arg3):
     return _epanet2.ENsetnodevalue(arg1, arg2, arg3)
 ENsetnodevalue = _epanet2.ENsetnodevalue
+
 
 def ENsetlinkvalue(arg1, arg2, arg3):
     return _epanet2.ENsetlinkvalue(arg1, arg2, arg3)
 ENsetlinkvalue = _epanet2.ENsetlinkvalue
 
+
 def ENaddpattern(arg1):
     return _epanet2.ENaddpattern(arg1)
 ENaddpattern = _epanet2.ENaddpattern
+
 
 def ENsetpattern(arg1, floatarray):
     return _epanet2.ENsetpattern(arg1, floatarray)
 ENsetpattern = _epanet2.ENsetpattern
 
+
 def ENsetpatternvalue(arg1, arg2, arg3):
     return _epanet2.ENsetpatternvalue(arg1, arg2, arg3)
 ENsetpatternvalue = _epanet2.ENsetpatternvalue
+
 
 def ENsettimeparam(arg1, arg2):
     return _epanet2.ENsettimeparam(arg1, arg2)
 ENsettimeparam = _epanet2.ENsettimeparam
 
+
 def ENsetoption(arg1, arg2):
     return _epanet2.ENsetoption(arg1, arg2)
 ENsetoption = _epanet2.ENsetoption
 
+
 def ENsetstatusreport(arg1):
     return _epanet2.ENsetstatusreport(arg1)
 ENsetstatusreport = _epanet2.ENsetstatusreport
+
 
 def ENsetqualtype(arg1, arg2, arg3, arg4):
     return _epanet2.ENsetqualtype(arg1, arg2, arg3, arg4)
@@ -625,4 +677,3 @@ ENsetqualtype = _epanet2.ENsetqualtype
 # This file is compatible with both classic and new-style classes.
 
 cvar = _epanet2.cvar
-

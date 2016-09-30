@@ -1,9 +1,11 @@
 import collections
 
+
 class TransformedDict(collections.MutableMapping):
+
     """A dictionary that applies an arbitrary key-altering
        function before accessing the keys.
-       
+
        from: http://stackoverflow.com/questions/3387691/python-how-to-perfectly-override-a-dict
        """
 
@@ -28,5 +30,3 @@ class TransformedDict(collections.MutableMapping):
 
     def __keytransform__(self, key):
         return key
-    
-    
