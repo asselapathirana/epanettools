@@ -1,12 +1,9 @@
 from __future__ import print_function
-from . import epanet2 as et
 from .pdd_class_wrapper import pdd_wrapper_class
 import tempfile
 import shutil
 import os
 import sys
-import math
-from pickle import dumps
 
 """" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
      Never use ENOpenH ENcloseH without keeping tab. -- always use _HClose and _HOpen methods instead."""
@@ -18,7 +15,8 @@ RIDICULOUS_VALUE = -999999999
 
 def Error(e):
     if(e):
-        s = "Epanet Error: %d : %s" % (e, self.pd.ENgeterror(e, 500)[1])
+        s = "Epanet Error: %d : %s" % (
+            e, pdd_wrapper_class.ENgeterror(e, 500)[1])
         raise Exception(s)
 
 
@@ -38,13 +36,33 @@ def check_and_return(result_list, silent=False):
 
 class Node(object):
     node_types = {'JUNCTION': 0, 'RESERVOIR': 1, "TANK": 2}
-    input_values = [0, 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-        # these are also the values that can be retrieved before running.
+    input_values = [
+        0,
+        1,
+     2,
+     3,
+     4,
+     5,
+     6,
+     7,
+     8,
+     14,
+     15,
+     16,
+     17,
+     18,
+     19,
+     20,
+     21,
+     22,
+     23]
+    # these are also the values that can be retrieved before running.
     settable_values = [
         i for i in input_values if i not in [
             14,
             16,
-         19]]  # ENsetnodevalues works only with these.
+            19
+        ]]  # ENsetnodevalues works only with these.
     value_type = {
         "EN_ELEVATION": 0,
         "EN_BASEDEMAND": 1,
@@ -90,9 +108,13 @@ class Node(object):
     def get_node_result_set(self, input_data=False):
 
         for key, rt in Node.value_type.items():
-            if ((not input_data) and (not rt in Node.input_values)) or \
+            if ((not input_data) and (rt not in Node.input_values)) or \
                ((input_data) and (rt in Node.input_values)):
-                k = check_and_return(self.pd.ENgetnodevalue(self.index, rt), silent=True)
+                k = check_and_return(
+                    self.pd.ENgetnodevalue(
+                        self.index,
+                        rt),
+                    silent=True)
                 self.results[rt].append(k)
                 self.results_original[rt].append(k)
 
@@ -160,14 +182,20 @@ class Link(object):
             self.network.nodes[a].links.append(self)
             self.network.nodes[b].links.append(self)
         except Exception as e:
-            print("No Nodes present! Check if nodes have been read.", file=sys.stderr)
+            print(
+                "No Nodes present! Check if nodes have been read.",
+                file=sys.stderr)
             raise(e)
 
     def get_link_result_set(self, input_data=False):
         for key, rt in Link.value_type.items():
             if ((not input_data) and (not rt in Link.input_values)) or \
                ((input_data) and (rt in Link.input_values)):
-                k = check_and_return(self.pd.ENgetlinkvalue(self.index, rt), silent=True)
+                k = check_and_return(
+                    self.pd.ENgetlinkvalue(
+                        self.index,
+                        rt),
+                    silent=True)
                 self.results[rt].append(k)
                 self.results_original[rt].append(k)
 
@@ -234,7 +262,8 @@ class index_id_type(tools.TransformedDict):
     def __setitem__(self, key, value):
         v = self.__keytransform__(key)
         self.store[v] = value
-        self.store[v].index = v  # the index of the entity is also saved as attribute in the item.
+        self.store[
+            v].index = v  # the index of the entity is also saved as attribute in the item.
 
     def __keytransform__(self, key):
         if isinstance(key, str):
@@ -328,17 +357,23 @@ class Network(object):
         # self._sync()
 
     def getValues(self):
-        self.WaterQualityAnalysisType, k = check_and_return(self.pd.ENgetqualtype())
+        self.WaterQualityAnalysisType, k = check_and_return(
+            self.pd.ENgetqualtype())
         if(k == 0):
             self.WaterQualityTraceNode = None
         else:
             self.WaterQualityTraceNode = self.nodes[k]
 
-        self.en_accuracy = check_and_return(self.pd.ENgetoption(Network.EN_ACCURACY))
-        self.en_demandmult = check_and_return(self.pd.ENgetoption(Network.EN_DEMANDMULT))
-        self.en_emitexpon = check_and_return(self.pd.ENgetoption(Network.EN_EMITEXPON))
-        self.en_tolerance = check_and_return(self.pd.ENgetoption(Network.EN_TOLERANCE))
-        self.en_trials = check_and_return(self.pd.ENgetoption(Network.EN_TRIALS))
+        self.en_accuracy = check_and_return(
+            self.pd.ENgetoption(Network.EN_ACCURACY))
+        self.en_demandmult = check_and_return(
+            self.pd.ENgetoption(Network.EN_DEMANDMULT))
+        self.en_emitexpon = check_and_return(
+            self.pd.ENgetoption(Network.EN_EMITEXPON))
+        self.en_tolerance = check_and_return(
+            self.pd.ENgetoption(Network.EN_TOLERANCE))
+        self.en_trials = check_and_return(
+            self.pd.ENgetoption(Network.EN_TRIALS))
 
 
 class EPANetSimulation(object):
@@ -455,7 +490,8 @@ class EPANetSimulation(object):
 
     def _close(self):
         if(self._enOpenStatus):
-           # Bug! the ENclose cause core dumps on posix  -- No, on windows as well!
+           # Bug! the ENclose cause core dumps on posix  -- No, on windows as
+           # well!
             if(False):  # os.name!="posix"):
                 Error(self.pd.ENclose())
             # print("Closing",file=sys.stderr)

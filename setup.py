@@ -4,25 +4,23 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import io
-import sys
+# import sys
 import os
 import re
 from glob import glob
 from os.path import basename
 from os.path import dirname
 from os.path import join
-from os.path import relpath
+# from os.path import relpath
 from os.path import splitext
 
 from setuptools import Extension
-from setuptools import find_packages
+# from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-from setuptools.command.build_ext import build_ext
+# from setuptools.command.build_ext import build_ext
 
-from collections import defaultdict
-
-import numpy
+# from collections import defaultdict
 
 
 class Tox(TestCommand):
@@ -100,7 +98,7 @@ setup(
     author_email='assela@pathirana.net',
     url='https://github.com/asselapathirana/epanettools',
     packages=["epanettools"],
-    include_dirs=[numpy.get_include()],
+    include_dirs=[],
     package_dir={'': 'src'},
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     include_package_data=True,
@@ -131,7 +129,6 @@ setup(
         # eg: 'keyword1', 'keyword2', 'keyword3',
     ],
     install_requires=[
-         'numpy>=1.0'
         # eg: 'aspectlib==1.1.1', 'six>=1.7',
     ],
     extras_require={
@@ -158,5 +155,5 @@ setup(
                   include_dirs=["src/epanettools/pdd", "src/epanettools/epanet"]
                   )
     ],
-        tests_require=['tox'],
+    tests_require=['tox'],
 )
