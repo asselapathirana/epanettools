@@ -16,9 +16,10 @@ proj.directory-list = [{'dirloc': loc('../src/epanettools'),
                         'include_hidden': False,
                         'recursive': True,
                         'watch_for_changes': True}]
+proj.file-list = [loc('../setup.py')]
 proj.file-type = 'shared'
 proj.launch-config = {loc('../setup.py'): ('project',
-        (u'test tests',
+        (u'test ',
          ''))}
 proj.main-file = loc('../tests/test_EPANetPDD.py')
 testing.auto-test-file-specs = (('glob',
