@@ -14,11 +14,11 @@
  %include "cstring.i"
  /* %include "numpy.i" */
  
- %init %{
+/* %init %{
  import_array();
- %} 
+ %} */
  
- %apply (float* IN_ARRAY1, int DIM1) {(float* floatarray, int nfloats)};
+ /* %apply (float* IN_ARRAY1, int DIM1) {(float* floatarray, int nfloats)}; */
  
  /* read http://www.swig.org/Doc1.3/Arguments.html */
  

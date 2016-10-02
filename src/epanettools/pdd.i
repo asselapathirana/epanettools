@@ -3,7 +3,7 @@
  /* Includes the header in the wrapper code */
  #include "./pdd/wrapper.h"
  #include "./epanet/epanet2.h"
- /* extern char TmpDir[200]; *//* this makes it possible to overrride the TmpDir */ 
+ extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
  %}
 
 
@@ -15,11 +15,11 @@
  %include "cstring.i"
 /* %include "numpy.i" */
  
- %init %{
+/* %init %{
  import_array();
- %} 
+ %} */
  
- %apply (float* IN_ARRAY1, int DIM1) {(float* floatarray, int nfloats)};
+ /* %apply (float* IN_ARRAY1, int DIM1) {(float* floatarray, int nfloats)}; */
  
  /* read http://www.swig.org/Doc1.3/Arguments.html */
  /* 26-Aug-2016 : IMPORTANT: all output parameters in wrapper.h has to be named and then declared below. See epanet2.h and epanet2.i files for examples.
