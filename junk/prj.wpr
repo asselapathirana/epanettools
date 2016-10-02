@@ -21,4 +21,6 @@ proj.launch-config = {loc('../setup.py'): ('project',
         (u'test tests',
          ''))}
 proj.main-file = loc('../tests/test_EPANetPDD.py')
-testing.test-framework = {None: ':internal doctest'}
+testing.auto-test-file-specs = (('glob',
+                                 'tests/test*.py'),)
+testing.test-framework = {None: ':internal pytest'}

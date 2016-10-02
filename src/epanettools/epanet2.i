@@ -12,7 +12,7 @@
 %module epanet2
  %include "typemaps.i"
  %include "cstring.i"
- %include "numpy.i"
+ /* %include "numpy.i" */
  
  %init %{
  import_array();
