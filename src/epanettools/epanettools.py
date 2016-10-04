@@ -356,7 +356,7 @@ class EPANetSimulation(object):
     def __init__(self, inputFileName, pdd=False):
         self.initialize(inputFileName, pdd)
 
-    def initialize(self, inputFileName, pdd):
+    def initialize(self, inputFileName=None, pdd=False):
         self.pd = pdd_wrapper_class(pdd)
         # print("Warning: no pdd")
         self._enOpenStatus = False

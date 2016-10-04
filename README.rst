@@ -395,9 +395,7 @@ Get nodes indexes on either side of a link with given index
     >>> ret=et.ENaddpattern(patId)
     >>> print(ret)
     0
-    >>> import numpy as np
-    >>> patFactors=np.array([0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0], 
-    ...                      dtype=np.float32)
+    >>> patFactors=[0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0]
     >>> ret,patIndex=et.ENgetpatternindex(patId)
     >>> print(patIndex)
     6
