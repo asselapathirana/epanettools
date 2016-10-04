@@ -4,26 +4,25 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import io
-import sys
+# import sys
 import os
 import re
 from glob import glob
+# from os.path import relpath
 from os.path import basename
 from os.path import dirname
 from os.path import join
-from os.path import relpath
 from os.path import splitext
 
+import numpy
+# from setuptools import find_packages
 from setuptools import Extension
-from setuptools import find_packages
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
-from setuptools.command.build_ext import build_ext
 
-from collections import defaultdict
 
-import numpy
-
+# from setuptools.command.build_ext import build_ext
+# from collections import defaultdict
 
 class Tox(TestCommand):
     user_options = [('tox-args=', 'a', "Arguments to pass to tox")]
@@ -132,7 +131,7 @@ setup(
     ],
     install_requires=[
          'numpy>=1.0'
-        # eg: 'aspectlib==1.1.1', 'six>=1.7',
+         # eg: 'aspectlib==1.1.1', 'six>=1.7',
     ],
     extras_require={
         # eg:
@@ -158,5 +157,5 @@ setup(
                   include_dirs=["src/epanettools/pdd", "src/epanettools/epanet"]
                   )
     ],
-        tests_require=['tox'],
+    tests_require=['tox'],
 )

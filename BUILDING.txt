@@ -33,4 +33,3 @@ tox # this will do all the testing and doctest.
 To run only doctest (scenario: editing README.rst)
 .\.tox\py34\Scripts\python.exe -m doctest -v README.rst
 (Works only after running tox successfully)
-

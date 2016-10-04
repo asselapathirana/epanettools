@@ -1,10 +1,12 @@
-import unittest
 import os
 import sys
+import unittest
+
+from tests import tools_for_testing as tt
+
 from epanettools import epanet2 as et
 from epanettools import pdd as pd
 from epanettools.examples import simple
-from tests import tools_for_testing as tt
 
 
 class Test1(unittest.TestCase):

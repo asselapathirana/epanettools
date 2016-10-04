@@ -32,7 +32,6 @@ if __name__ == "__main__":
     ret, nnodes = et.ENgetcount(et.EN_NODECOUNT)
     nodes = []
     pres = []
-    time = []
     for index in range(1, nnodes):
         ret, t = et.ENgetnodeid(index)
         nodes.append(t)

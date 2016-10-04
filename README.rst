@@ -452,6 +452,3 @@ Pressure at the node '10'
     ...                                          #doctest: +ELLIPSIS  
     ...                                          #doctest: +NORMALIZE_WHITESPACE   
 	[12.5657, 12.9353, 13.4351, 14.0307, ..., 13.1174, 13.3985, 13.5478]
-	   
-	   
-	
