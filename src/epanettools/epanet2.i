@@ -2,6 +2,7 @@
  #define SWIG_FILE_WITH_INIT
  /* Includes the header in the wrapper code */
  #include "./epanet/epanet2.h"
+ #include "./patch.h"
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
  %}
 
@@ -39,6 +40,7 @@
  
  /* Parse the header file to generate wrappers */
  %include "./epanet/epanet2.h"
+ %include "./patch.h"
  
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
 ;

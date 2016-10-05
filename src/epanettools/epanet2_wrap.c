@@ -3023,6 +3023,7 @@ static swig_module_info swig_module = {swig_types, 5, 0, 0, 0, 0};
  #define SWIG_FILE_WITH_INIT
  /* Includes the header in the wrapper code */
  #include "./epanet/epanet2.h"
+ #include "./patch.h"
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
  
 
@@ -6206,6 +6207,90 @@ fail:
 }
 
 
+SWIGINTERN PyObject *WRAPPER_ERROR_FILE_OPEN_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *module;
+  PyObject *d;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
+  d = PyModule_GetDict(module);
+  if (!d) return NULL;
+  SWIG_Python_SetConstant(d, "WRAPPER_ERROR_FILE_OPEN",SWIG_From_int((int)(900000)));
+  return SWIG_Py_Void();
+}
+
+
+SWIGINTERN PyObject *WRAPPER_ERROR_NOT_IMPLEMENTED_swigconstant(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *module;
+  PyObject *d;
+  if (!PyArg_ParseTuple(args,(char*)"O:swigconstant", &module)) return NULL;
+  d = PyModule_GetDict(module);
+  if (!d) return NULL;
+  SWIG_Python_SetConstant(d, "WRAPPER_ERROR_NOT_IMPLEMENTED",SWIG_From_int((int)(910000)));
+  return SWIG_Py_Void();
+}
+
+
+SWIGINTERN PyObject *_wrap_ENsetpatterndim(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ENsetpatterndim",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ENsetpatterndim" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ENsetpatterndim" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (int)ENsetpatterndim(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ENsetpatterndim_wrap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ENsetpatterndim_wrap",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ENsetpatterndim_wrap" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ENsetpatterndim_wrap" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (int)ENsetpatterndim_wrap(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN int Swig_var_TmpDir_set(PyObject *_val) {
   {
     int res = SWIG_AsCharArray(_val, TmpDir, 200);
@@ -6394,6 +6479,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ENsetoption", _wrap_ENsetoption, METH_VARARGS, NULL},
 	 { (char *)"ENsetstatusreport", _wrap_ENsetstatusreport, METH_VARARGS, NULL},
 	 { (char *)"ENsetqualtype", _wrap_ENsetqualtype, METH_VARARGS, NULL},
+	 { (char *)"WRAPPER_ERROR_FILE_OPEN_swigconstant", WRAPPER_ERROR_FILE_OPEN_swigconstant, METH_VARARGS, NULL},
+	 { (char *)"WRAPPER_ERROR_NOT_IMPLEMENTED_swigconstant", WRAPPER_ERROR_NOT_IMPLEMENTED_swigconstant, METH_VARARGS, NULL},
+	 { (char *)"ENsetpatterndim", _wrap_ENsetpatterndim, METH_VARARGS, NULL},
+	 { (char *)"ENsetpatterndim_wrap", _wrap_ENsetpatterndim_wrap, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 

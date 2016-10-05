@@ -62,9 +62,9 @@ class Test1(unittest.TestCase):
             
     def test_ENsetpatterndim_will_allocate_a_pattern(self):
         patId = "NewPattern";
-        self.assertEqual(et.ENaddpattern(patId),0)
-        ret,index=et.ENgetpatternindex(patId)
-        self.assertEqual(et.ENsetpatterndim(index,24),0)
+        self.assertEqual(self.es.ENaddpattern(patId),0)
+        ret,index=self.es.ENgetpatternindex(patId)
+        self.assertEqual(self.es.ENsetpatterndim(index,24),0)
         self.assertEqual(len(object))
 
 tc = None

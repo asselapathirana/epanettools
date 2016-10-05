@@ -622,6 +622,20 @@ ENsetstatusreport = _epanet2.ENsetstatusreport
 def ENsetqualtype(arg1, arg2, arg3, arg4):
     return _epanet2.ENsetqualtype(arg1, arg2, arg3, arg4)
 ENsetqualtype = _epanet2.ENsetqualtype
+
+_epanet2.WRAPPER_ERROR_FILE_OPEN_swigconstant(_epanet2)
+WRAPPER_ERROR_FILE_OPEN = _epanet2.WRAPPER_ERROR_FILE_OPEN
+
+_epanet2.WRAPPER_ERROR_NOT_IMPLEMENTED_swigconstant(_epanet2)
+WRAPPER_ERROR_NOT_IMPLEMENTED = _epanet2.WRAPPER_ERROR_NOT_IMPLEMENTED
+
+def ENsetpatterndim(index, dim):
+    return _epanet2.ENsetpatterndim(index, dim)
+ENsetpatterndim = _epanet2.ENsetpatterndim
+
+def ENsetpatterndim_wrap(index, dim):
+    return _epanet2.ENsetpatterndim_wrap(index, dim)
+ENsetpatterndim_wrap = _epanet2.ENsetpatterndim_wrap
 # This file is compatible with both classic and new-style classes.
 
 cvar = _epanet2.cvar

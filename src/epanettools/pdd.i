@@ -3,6 +3,7 @@
  /* Includes the header in the wrapper code */
  #include "./pdd/wrapper.h"
  #include "./epanet/epanet2.h"
+ #include "./patch.h"
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
  %}
 
@@ -44,6 +45,7 @@ At the moment only a few were done to test.
  /* Parse the header file to generate wrappers */
  %include "./pdd/wrapper.h"
  %include "./epanet/epanet2.h"
- 
+ %include "./patch.h"
+
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
 ;
