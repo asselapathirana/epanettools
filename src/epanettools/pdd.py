@@ -1084,6 +1084,14 @@ ENsetstatusreport = _pdd.ENsetstatusreport
 def ENsetqualtype(arg1, arg2, arg3, arg4):
     return _pdd.ENsetqualtype(arg1, arg2, arg3, arg4)
 ENsetqualtype = _pdd.ENsetqualtype
+
+def ENsetpatterndim(index, dim):
+    return _pdd.ENsetpatterndim(index, dim)
+ENsetpatterndim = _pdd.ENsetpatterndim
+
+def ENsetpatterndim_wrap(index, dim):
+    return _pdd.ENsetpatterndim_wrap(index, dim)
+ENsetpatterndim_wrap = _pdd.ENsetpatterndim_wrap
 # This file is compatible with both classic and new-style classes.
 
 cvar = _pdd.cvar

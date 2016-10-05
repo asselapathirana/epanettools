@@ -65,7 +65,14 @@ class Test1(unittest.TestCase):
         self.assertEqual(self.es.ENaddpattern(patId),0)
         ret,index=self.es.ENgetpatternindex(patId)
         self.assertEqual(self.es.ENsetpatterndim(index,24),0)
-        self.assertEqual(len(object))
+        self.assertEqual(self.es.ENgetpatternlen(index),[0,24])
+        for i in range(25):
+            p=self.es.ENgetpatternvalue(index,i+1)
+            if(i<24):
+                self.assertEqual(p[0],0)
+                self.assertAlmostEqual(p[1],0.0, delta=.01)
+            else:
+                self.assertEqual(p[0],251)                
 
 tc = None
 

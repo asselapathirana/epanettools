@@ -1,5 +1,5 @@
-#ifndef WRAP_H
-#define WRAP_H
+#ifndef PATCH_H
+#define PATCH_H
 
 #define WRAPPER_ERROR_FILE_OPEN 900000
 #define WRAPPER_ERROR_NOT_IMPLEMENTED 910000

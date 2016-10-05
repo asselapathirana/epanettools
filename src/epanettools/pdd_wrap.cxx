@@ -8824,6 +8824,68 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ENsetpatterndim(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ENsetpatterndim",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ENsetpatterndim" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ENsetpatterndim" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (int)ENsetpatterndim(arg1,arg2);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ENsetpatterndim_wrap(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  if (!PyArg_ParseTuple(args,(char *)"OO:ENsetpatterndim_wrap",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "ENsetpatterndim_wrap" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ENsetpatterndim_wrap" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  result = (int)ENsetpatterndim_wrap(arg1,arg2);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN int Swig_var_TmpDir_set(PyObject *_val) {
   {
     int res = SWIG_AsCharArray(_val, TmpDir, 200);
@@ -9128,6 +9190,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ENsetoption", _wrap_ENsetoption, METH_VARARGS, NULL},
 	 { (char *)"ENsetstatusreport", _wrap_ENsetstatusreport, METH_VARARGS, NULL},
 	 { (char *)"ENsetqualtype", _wrap_ENsetqualtype, METH_VARARGS, NULL},
+	 { (char *)"ENsetpatterndim", _wrap_ENsetpatterndim, METH_VARARGS, NULL},
+	 { (char *)"ENsetpatterndim_wrap", _wrap_ENsetpatterndim_wrap, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 
