@@ -17,7 +17,8 @@ RIDICULOUS_VALUE = -999999999
 
 def Error(e):
     if(e):
-        s = "Epanet Error: %d : %s" % (e, pdd_wrapper_class.ENgeterror(e, 500)[1])
+        s = "Epanet Error: %d : %s" % (
+            e, pdd_wrapper_class.ENgeterror(e, 500)[1])
         raise Exception(s)
 
 
@@ -174,12 +175,12 @@ class Link(object):
                 self.results[rt].append(k)
                 self.results_original[rt].append(k)
 
-#   # def sync(self):
-#       # for key,rt in Link.value_type.items():
-#           # if (rt in Link.settable_values):
-#                   # if(self.results[rt][0]==self.results_original[rt][0]):
-#                       # continue
-#                   # if(self.results[rt][0]!=RIDICULOUS_VALUE):self.pd.ENsetlinkvalue(self.index,rt,self.results[rt][0])
+# def sync(self):
+# for key,rt in Link.value_type.items():
+# if (rt in Link.settable_values):
+# if(self.results[rt][0]==self.results_original[rt][0]):
+# continue
+# if(self.results[rt][0]!=RIDICULOUS_VALUE):self.pd.ENsetlinkvalue(self.index,rt,self.results[rt][0])
 
 
 class Pattern(tools.TransformedDict):
@@ -197,9 +198,9 @@ class Pattern(tools.TransformedDict):
         for j in range(1, check_and_return(self.pd.ENgetpatternlen(index)) + 1):
             self[j] = self.pd.ENgetpatternvalue(index, j)[1]
 
-#   # def sync(self):
-#       #""""Pattrn syncing not implemented"""
-#       # pass
+# def sync(self):
+# """"Pattrn syncing not implemented"""
+# pass
 
 
 class Control(object):
@@ -227,9 +228,9 @@ class Control(object):
         self.link = self.network.links[k[1]]
         self.setting = k[2]
 
-#   # def sync(self):
-#       #"""Not implemented yet."""
-#       # pass
+# def sync(self):
+# """Not implemented yet."""
+# pass
 
 
 class index_id_type(tools.TransformedDict):
@@ -248,9 +249,9 @@ class index_id_type(tools.TransformedDict):
             raise KeyError("Key %s not found" % key)
         return key
 
-#   # def sync(self):
-#       # for i,item in self.items():
-#           # item.sync()
+# def sync(self):
+# for i,item in self.items():
+# item.sync()
 
 
 class Nodes(index_id_type):
@@ -320,16 +321,16 @@ class Network(object):
                 n.results[rt] = []
                 n.results_original[rt] = []
 
-#   # def _sync(self):
-#       #""""Syncs anything other than nodes, links, patterns, conrols"""
-#       # pass
+# def _sync(self):
+# """"Syncs anything other than nodes, links, patterns, conrols"""
+# pass
 #
-#   # def sync(self):
-#       # self.nodes.sync()
-#       # self.links.sync()
-#       # self.patterns.sync()
-#       # self.controls.sync()
-#       # self._sync()
+# def sync(self):
+# self.nodes.sync()
+# self.links.sync()
+# self.patterns.sync()
+# self.controls.sync()
+# self._sync()
 
     def getValues(self):
         self.WaterQualityAnalysisType, k = check_and_return(
@@ -388,14 +389,14 @@ class EPANetSimulation(object):
             return check_and_return(self.pd.ENgetoption(index, param))
         raise Exception
 
-#   # def sync(self, i_know_what_i_am_doing=False):
-#       #""" Syncs the changes variable values with underlying toolkit system."""
-#       # if (not i_know_what_i_am_doing):
-#           # raise Exception("Don't use sync. It is not yet properly implemented.")
-#       # self.network.sync()
-#       # now replace the original input file with this data.
-#       # Error(self.pd.ENsaveinpfile(self.inputfile))
-#       # self.initialize(self.inputfile)
+# def sync(self, i_know_what_i_am_doing=False):
+# """ Syncs the changes variable values with underlying toolkit system."""
+# if (not i_know_what_i_am_doing):
+# raise Exception("Don't use sync. It is not yet properly implemented.")
+# self.network.sync()
+# now replace the original input file with this data.
+# Error(self.pd.ENsaveinpfile(self.inputfile))
+# self.initialize(self.inputfile)
 
     def run(self, save=True, pdd=True):
         self.network.reset_results()

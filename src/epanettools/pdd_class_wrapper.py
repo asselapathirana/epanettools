@@ -1,7 +1,28 @@
 from . import pdd as pd
 
 
+def Error(e):
+    if(e):
+        s = "Epanet Error: %d : %s" % (
+            e, pdd_wrapper_class.ENgeterror(e, 500)[1])
+        raise Exception(s)
+
+
 class pdd_wrapper_class(object):
+
+    def ENsetpattern(self, patternindex, pattern):
+        """Replacement function for original ENsetpattern
+        function in epanet toolkit. Avoids the need to have either
+        (a) passing pointers from python to c or (b) having to importa
+        and use numpy. """
+
+        if(type(patternindex) == str):
+            ret, patternindex = self.pd.ENgetpatternindex(patternindex)
+            Error(ret)
+        Error(self.pd.ENsetpatterndim(patternindex, len(pattern)))
+        for i in range(1, len(pattern) + 1):
+            Error(self.pd.ENsetpatternvalue(patternindex, i, pattern[i - 1]))
+        return 0
 
     def __init__(self, pdd=False):
         self.pdd = pdd  # THIS MUST BE the first statement.

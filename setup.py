@@ -58,20 +58,21 @@ def read(*names, **kwargs):
 if 'TOXENV' in os.environ and 'SETUPPY_CFLAGS' in os.environ:
     os.environ['CFLAGS'] = os.environ['SETUPPY_CFLAGS']
 
-sources = ["src" + os.sep + "epanettools" + os.sep + "epanet" + os.sep + x for x in ["epanet.c",
-                                                                                     "hash.c",
-                                                                                     "hydraul.c",
-                                                                                     "inpfile.c",
-                                                                                     "input1.c",
-                                                                                     "input2.c",
-                                                                                     "input3.c",
-                                                                                     "mempool.c",
-                                                                                     "output.c",
-                                                                                     "quality.c",
-                                                                                     "report.c",
-                                                                                     "rules.c",
-                                                                                     "smatrix.c"
-                                                                                     ]]
+sources = [
+    "src" + os.sep + "epanettools" + os.sep + "epanet" + os.sep + x for x in ["epanet.c",
+                                                                              "hash.c",
+                                                                              "hydraul.c",
+                                                                              "inpfile.c",
+                                                                              "input1.c",
+                                                                              "input2.c",
+                                                                              "input3.c",
+                                                                              "mempool.c",
+                                                                              "output.c",
+                                                                              "quality.c",
+                                                                              "report.c",
+                                                                              "rules.c",
+                                                                              "smatrix.c"
+                                                                              ]]
 sources.append("src" + os.sep + "epanettools" + os.sep + "epanet2_wrap.c")
 
 # 25-Aug-2016 - append emitter modification files
@@ -91,7 +92,8 @@ setup(
     license='GPLv3+',
     description='Epanet 2.0 Python calling interface',
     long_description='%s\n%s' % (
-        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub('', read('README.rst')),
+        re.compile('^.. start-badges.*^.. end-badges', re.M | re.S).sub(
+            '', read('README.rst')),
         re.sub(':[a-z]+:`~?(.*?)`', r'``\1``', read('CHANGELOG.rst'))
     ),
     author='Assela Pathirana',
@@ -104,7 +106,8 @@ setup(
     include_package_data=True,
     zip_safe=False,
     classifiers=[
-        # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
+        # complete classifier list:
+        # http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+) ',
@@ -129,7 +132,7 @@ setup(
         # eg: 'keyword1', 'keyword2', 'keyword3',
     ],
     install_requires=[
-         # eg: 'aspectlib==1.1.1', 'six>=1.7',
+        # eg: 'aspectlib==1.1.1', 'six>=1.7',
     ],
     extras_require={
         # eg:
@@ -146,13 +149,15 @@ setup(
                   sources=sources,
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
-                  include_dirs=["src/epanettools/pdd", "src/epanettools/epanet"],
+                  include_dirs=[
+                      "src/epanettools/pdd", "src/epanettools/epanet"],
                   ),
         Extension('_pdd',
                   sources=sources,
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
-                  include_dirs=["src/epanettools/pdd", "src/epanettools/epanet"]
+                  include_dirs=[
+                      "src/epanettools/pdd", "src/epanettools/epanet"]
                   )
     ],
     tests_require=['tox'],

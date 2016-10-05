@@ -61,9 +61,7 @@ class Test1(unittest.TestCase):
             self.assertEqual(self.es.ENsetpattern(6,1.,3),0)
             
     def test_ENsetpatterndim_will_allocate_a_pattern(self):
-        patId = "NewPattern";
-        self.assertEqual(self.es.ENaddpattern(patId),0)
-        ret,index=self.es.ENgetpatternindex(patId)
+        index = self.create_pattern()
         self.assertEqual(self.es.ENsetpatterndim(index,24),0)
         self.assertEqual(self.es.ENgetpatternlen(index),[0,24])
         for i in range(25):
@@ -73,6 +71,26 @@ class Test1(unittest.TestCase):
                 self.assertAlmostEqual(p[1],0.0, delta=.01)
             else:
                 self.assertEqual(p[0],251)                
+
+    def create_pattern(self):
+        patId = "NewPattern";
+        self.assertEqual(self.es.ENaddpattern(patId),0)
+        ret,index=self.es.ENgetpatternindex(patId)
+        return index
+
+    def test_ENsetpattern_will_successfully_allocate_and_fill_an_exiting_pattern(self):
+        index=self.create_pattern()
+        pat=[1.0,2.0,3.0,4.0,8.0,9.0,10.0,11.0,
+             1.5,2.5,3.5,4.5,8.5,9.5,10.5,11.5,
+             1.6,2.6,3.6,4.6,8.6,9.6,10.6,11.6,]
+        self.assertEqual(self.es.ENsetpattern(index,pat),0)
+        self.assertEqual(self.es.ENgetpatternlen(index),[0,24])
+        for i in range(len(pat)):
+            p=self.es.ENgetpatternvalue(index,i+1)
+            self.assertEqual(p[0],0)
+            self.assertAlmostEqual(p[1],pat[i],delta=0.001)   
+        
+        
 
 tc = None
 

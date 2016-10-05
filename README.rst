@@ -284,6 +284,32 @@ Currently the new (object-based) interface above only supports read access to th
 	>>> # now in both high level and low level interfaces, we have the right value. 
    	
 
+Pattern manipulation
+--------------------
+
+::
+    
+    >>> patId = "NewPattern";
+    >>> ret=es.ENaddpattern(patId)
+    >>> print(ret)
+    0
+    >>> patFactors=[0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0]
+    >>> ret,patIndex=es.ENgetpatternindex(patId)
+    >>> print(patIndex)
+    6
+    >>> es.ENsetpattern(patIndex, patFactors)
+    0
+    >>> es.ENgetpatternid(6)[1]
+    'NewPattern'
+    >>> es.ENgetpatternlen(6)
+    [0, 12]
+    >>> [round(es.ENgetpatternvalue(6,i)[1],3) for i in range(1,12+1)]
+    [0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0]
+    >>> es.ENsetpatternvalue(6,9,3.3)
+    0
+    >>> [round(es.ENgetpatternvalue(6,i)[1],3) for i in range(1,12+1)]
+    [0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 3.3, 0.8, 0.0, 0.0]
+    
 
 
 PDD type analysis
@@ -327,7 +353,8 @@ Look at http://assela.pathirana.net/EPANET-Emitter  for details and desktop (win
 Legacy Interface
 ----------------
 
-Do not use the following methods unless for compatibility!
+Do not use the following methods unless for compatibility! As of versions > 0.8 pattern setting
+using this interface is not available. 
 
 ::
 
@@ -389,29 +416,7 @@ Get nodes indexes on either side of a link with given index
     [0, 5, 46]
     
     
-::
-    
-    >>> patId = "NewPattern";
-    >>> ret=et.ENaddpattern(patId)
-    >>> print(ret)
-    0
-    >>> patFactors=[0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0]
-    >>> ret,patIndex=et.ENgetpatternindex(patId)
-    >>> print(patIndex)
-    6
-    >>> et.ENsetpattern(patIndex, patFactors)
-    0
-    >>> et.ENgetpatternid(6)[1]
-    'NewPattern'
-    >>> et.ENgetpatternlen(6)
-    [0, 12]
-    >>> [round(et.ENgetpatternvalue(6,i)[1],3) for i in range(1,12+1)]
-    [0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 0.8, 0.8, 0.0, 0.0]
-    >>> et.ENsetpatternvalue(6,9,3.3)
-    0
-    >>> [round(et.ENgetpatternvalue(6,i)[1],3) for i in range(1,12+1)]
-    [0.8, 1.1, 1.4, 1.1, 0.8, 0.7, 0.9, 0.0, 3.3, 0.8, 0.0, 0.0]
-    
+
     
 Hydraulic Simulation
 	
