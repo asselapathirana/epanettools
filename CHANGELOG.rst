@@ -3,7 +3,7 @@ Changelog
 =========
 0.8.0 (2016-10-06)
 -----------------------------------------
-* completely removed dependancy on numpy.  
+* completely removed dependency on numpy.  
 
 0.7.2 (2016-09-28)
 -----------------------------------------
