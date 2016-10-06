@@ -2,6 +2,7 @@
  #define SWIG_FILE_WITH_INIT
  /* Includes the header in the wrapper code */
  #include "./epanet/epanet2.h"
+ #include "./patch.h"
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
  %}
 
@@ -12,13 +13,13 @@
 %module epanet2
  %include "typemaps.i"
  %include "cstring.i"
- %include "numpy.i"
+ /* %include "numpy.i"  
  
- %init %{
+  %init %{
  import_array();
  %} 
  
- %apply (float* IN_ARRAY1, int DIM1) {(float* floatarray, int nfloats)};
+ %apply (float* IN_ARRAY1, int DIM1) {(float* floatarray, int nfloats)}; */
  
  /* read http://www.swig.org/Doc1.3/Arguments.html */
  
@@ -39,6 +40,7 @@
  
  /* Parse the header file to generate wrappers */
  %include "./epanet/epanet2.h"
+ %include "./patch.h"
  
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */
 ;

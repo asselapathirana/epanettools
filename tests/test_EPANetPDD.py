@@ -1,12 +1,21 @@
-import os
 import math
+import os
 import unittest
-import epanettools
-from epanettools.examples import simple
-from  epanettools.epanettools import EPANetSimulation, Node, Link, Network, Nodes, \
-    Links, Patterns, Pattern, Controls, Control
+from unittest import expectedFailure
+from unittest import skip
 
-from unittest import skip, expectedFailure
+import epanettools
+from epanettools.epanettools import Control
+from epanettools.epanettools import Controls
+from epanettools.epanettools import EPANetSimulation
+from epanettools.epanettools import Link
+from epanettools.epanettools import Links
+from epanettools.epanettools import Network
+from epanettools.epanettools import Node
+from epanettools.epanettools import Nodes
+from epanettools.epanettools import Pattern
+from epanettools.epanettools import Patterns
+from epanettools.examples import simple
 
 
 class Test1(unittest.TestCase):

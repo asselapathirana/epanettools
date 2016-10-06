@@ -1,9 +1,11 @@
-import unittest
 import os
 import sys
+import unittest
+
+from tests import tools_for_testing as tt
+
 from epanettools.epanettools import EPANetSimulation
 from epanettools.examples import simple
-from tests import tools_for_testing as tt
 
 
 class Test1(unittest.TestCase):
