@@ -79,6 +79,7 @@ sources.append("src" + os.sep + "epanettools" + os.sep + "epanet2_wrap.c")
 sources = sources + list(
     "src" + os.sep + "epanettools" + os.sep + "pdd" + os.sep + x for x in ["emitter_analysis.cpp",
                                                                            "mods.cpp", "wrap.cpp",
+                                                                           "callepanet.cpp"
                                                                            ])
 sources.append("src" + os.sep + "epanettools" + os.sep + "pdd_wrap.cxx")
 sources.append("src" + os.sep + "epanettools" + os.sep + "patch.c")

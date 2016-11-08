@@ -3122,6 +3122,7 @@ namespace swig {
  /* Includes the header in the wrapper code */
  #include "./pdd/wrapper.h"
  #include "./epanet/epanet2.h"
+ #include "./pdd/withoutlink.h"
  #include "./patch.h"
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
  
@@ -8824,6 +8825,67 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_without_link(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  float arg2 ;
+  float *arg3 = (float *) 0 ;
+  float *arg4 = (float *) 0 ;
+  float *arg5 = (float *) 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  float val2 ;
+  int ecode2 = 0 ;
+  float temp3 ;
+  int res3 = SWIG_TMPOBJ ;
+  float temp4 ;
+  int res4 = SWIG_TMPOBJ ;
+  float temp5 ;
+  int res5 = SWIG_TMPOBJ ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  int result;
+  
+  arg3 = &temp3;
+  arg4 = &temp4;
+  arg5 = &temp5;
+  if (!PyArg_ParseTuple(args,(char *)"OO:without_link",&obj0,&obj1)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(obj0, &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "without_link" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = static_cast< int >(val1);
+  ecode2 = SWIG_AsVal_float(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "without_link" "', argument " "2"" of type '" "float""'");
+  } 
+  arg2 = static_cast< float >(val2);
+  result = (int)without_link(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  if (SWIG_IsTmpObj(res3)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_float((*arg3)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_float, new_flags));
+  }
+  if (SWIG_IsTmpObj(res4)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_float((*arg4)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res4) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_float, new_flags));
+  }
+  if (SWIG_IsTmpObj(res5)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_float((*arg5)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res5) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg5), SWIGTYPE_p_float, new_flags));
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ENsetpatterndim(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -9190,6 +9252,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ENsetoption", _wrap_ENsetoption, METH_VARARGS, NULL},
 	 { (char *)"ENsetstatusreport", _wrap_ENsetstatusreport, METH_VARARGS, NULL},
 	 { (char *)"ENsetqualtype", _wrap_ENsetqualtype, METH_VARARGS, NULL},
+	 { (char *)"without_link", _wrap_without_link, METH_VARARGS, NULL},
 	 { (char *)"ENsetpatterndim", _wrap_ENsetpatterndim, METH_VARARGS, NULL},
 	 { (char *)"ENsetpatterndim_wrap", _wrap_ENsetpatterndim_wrap, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

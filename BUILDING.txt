@@ -39,3 +39,8 @@ flake8 failures:
 try 
 autopep8 --in-place --recursive    --verbose --pep8-passes 5000 <filename>
 
+###########################
+Working with wingide
+(when c parts are changed)
+run python3 setup.py test first
+then test with wingide (with python3)

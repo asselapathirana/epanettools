@@ -3,6 +3,7 @@
  /* Includes the header in the wrapper code */
  #include "./pdd/wrapper.h"
  #include "./epanet/epanet2.h"
+ #include "./pdd/withoutlink.h"
  #include "./patch.h"
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
  %}
@@ -34,10 +35,12 @@ At the moment only a few were done to test.
  %apply float *OUTPUT { float *result };
  %apply float *OUTPUT {float *c1}
  %apply float *OUTPUT {float *c2}
+ %apply float *OUTPUT {float *c3}
  %apply int *OUTPUT {int *ci1}
  %apply int *OUTPUT {int *ci2}
  %apply int *OUTPUT {int *ci3}
  %apply double *OUTPUT { double *result };
+ %apply float *OUTPUT { float *results};
  %cstring_bounded_output(char *result,   1024);
 
 
@@ -45,6 +48,7 @@ At the moment only a few were done to test.
  /* Parse the header file to generate wrappers */
  %include "./pdd/wrapper.h"
  %include "./epanet/epanet2.h"
+ %include "./pdd/withoutlink.h"
  %include "./patch.h"
 
  extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */

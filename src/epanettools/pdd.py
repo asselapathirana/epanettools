@@ -1085,6 +1085,10 @@ def ENsetqualtype(arg1, arg2, arg3, arg4):
     return _pdd.ENsetqualtype(arg1, arg2, arg3, arg4)
 ENsetqualtype = _pdd.ENsetqualtype
 
+def without_link(li, fact):
+    return _pdd.without_link(li, fact)
+without_link = _pdd.without_link
+
 def ENsetpatterndim(index, dim):
     return _pdd.ENsetpatterndim(index, dim)
 ENsetpatterndim = _pdd.ENsetpatterndim
