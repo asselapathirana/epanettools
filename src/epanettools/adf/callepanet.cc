@@ -383,8 +383,6 @@ arguments:
 			cerr << "Error in epanet..\n" <<ret<<" returned.\n";
 			cerr << "Error : " << enerr << endl;
 			epanet_error=true;
-			if (ret==204){
-				0./0.;}
 		}
 		if(ret==1 || ret==2){ // these are problems that prevent us from getting reliable answers. 
 			cerr << "Warning from epanet..\n" <<ret<<" returned.\n";
