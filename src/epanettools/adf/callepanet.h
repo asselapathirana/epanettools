@@ -2,7 +2,6 @@
 #define CALLADF_H
 
 
-
 #define _CRT_SECURE_NO_DEPRECATE // to avoid visual studio screaming 'bloody murder'. 
 #include <stdio.h>
 #include <epanet2.h>
@@ -16,6 +15,29 @@
 #include <cstring>
 using namespace std;
 
+/* macros and variables  used by ReDirectStdout function */
+//  
+#ifdef _WIN32  
+#define _CRT_SECURE_NO_WARNINGS 1
+#include <io.h>
+#define _DUP_ _dup  
+#define _DUP2_ _dup2  
+#define _CLOSE_ _close 
+#define _FILENO_ _fileno
+#else
+#include <unistd.h>
+#define _DUP_ dup  
+#define _DUP2_ dup2  
+#define fopen_s fopen 
+#define _CLOSE_ close 
+#define _FILENO_ fileno
+#endif
+#include <stdlib.h>  
+#include <stdio.h>  
+#include <iostream>  
+int stdout_dupfd;
+FILE *temp_out;
+/* end macros and variables  used by ReDirectStdout function */
 
 
 /* Structures */

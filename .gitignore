@@ -87,3 +87,5 @@ docs/_build
 .bootstrap
 .appveyor.token
 *.bak
+tests/log.txt
+log.txt

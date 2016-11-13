@@ -75,16 +75,16 @@ arguments:
 	r	:	struct res containing the results
 */
 {
-	cout.precision(3);
+	/* cout.precision(3);
 	cout << setw(3) << ii<<
 		'\t'<<linkid(ii).c_str()<<
 		fixed <<
 		'\t'<<r.adf1<<
-		/*'\t'<<r.adf2<<
+		'\t'<<r.adf2<<
 		scientific <<
 		'\t'<<r.energy_in<<
-		'\t'<<r.energy_out<< */
-		'\n';
+		'\t'<<r.energy_out<< 
+		'\n'; */
 	if(ResultsFile.is_open()){
 		ResultsFile << setw(3)<< ii<<
 			fixed << 
@@ -107,7 +107,7 @@ arguments:
 	none
 **/
 {
-	cout << "LINK#\tLNKID\tSIGNF\n";
+	//cout << "LINK#\tLNKID\tSIGNF\n";
 	for (unsigned int ii=1;ii<linksOfNetwork.size();ii++){
 		res r=without_link(ii);
 		writeoutputforpipe(ii, r);
@@ -398,13 +398,30 @@ void ReDirectStdout(bool d)
 	d	:	if true/false redirection is done/undone. 
 **/
 {
+	
+
 	if(d){
-		freopen(LOGFILENAME, "w", stdout );
+		/* duplicate stdout */
+		stdout_dupfd = _DUP_(1);
+	    
+		temp_out = fopen(LOGFILENAME, "w");
+		fflush(stdout);
+		/* replace stdout with our output fd */
+		_DUP2_(_FILENO_(temp_out), 1);
 	}else{
-		fclose(stdout);
-		freopen( "CON", "w", stdout );
-	}
+
+		/* flush output so it goes to our file */
+		fflush(stdout);
+		fclose(temp_out);
+		/* Now restore stdout */
+		_DUP2_(stdout_dupfd, 1);
+		_CLOSE_(stdout_dupfd);
+
+			    
+		    }
 	
 }
+ 
+
 
 /********************************************************************************/

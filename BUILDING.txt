@@ -45,3 +45,9 @@ Working with wingide
 (when c parts are changed)
 run python3 setup.py test first
 then test with wingide (with python3)
+
+#########################
+Run a single test on command prompt 
+env PYTHONPATH=src/ python3 -m unittest -q tests.test_ADF
+
+

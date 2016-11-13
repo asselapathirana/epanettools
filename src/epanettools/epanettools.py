@@ -6,6 +6,7 @@ import sys
 import tempfile
 
 from . import tools
+from . import adf
 from .pdd_class_wrapper import pdd_wrapper_class
 
 """" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
@@ -502,6 +503,32 @@ class EPANetSimulation(object):
     def _reset(self):
         self._close()
         self._open()
+        
+    def adfcalc(self, diafact=10.0):
+        """ Calculates available demand fraction of the network when each links capacity is restricted to 
+        original_diameter/diafact """
+        inpfile=self.create_temporary_copy(self.OriginalInputFileName)
+        resultfile=inpfile[:-3]+"results"
+        adf.ADF_calculation(inpfile, resultfile, diafact)
+        d={}
+        warning={}
+        with open(resultfile,"r") as f:
+            for line in f:
+                (i,id,adfv)= line.split()
+                d[id] = float(adfv)
+        for i,link in self.network.links.items():
+            v=d[link.id]
+            if(v>1.0):
+                if(v>1.1):
+                    # now this is a bit too much. So, add a warning
+                    warning[link.id]=v
+                #anyways set the value to 1.0 if > 1.0
+                v = 1.0
+            link.ADF=v    
+        return warning
+            
+    
+        
 
     def _getInputData(self):
         for i, node in self.network.nodes.items():

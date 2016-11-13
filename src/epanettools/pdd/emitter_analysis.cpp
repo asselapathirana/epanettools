@@ -61,10 +61,10 @@ float eexp, // emitter exponent,
 int NITER;
 
 bool comp(float v1, float v2){
-	 if(min(abs(v1),abs(v2))<TOLERANCE){	//June-2010
+	 if(min(fabs(v1),fabs(v2))<TOLERANCE){	//June-2010
 		return false;						//June-2010
 	}										//June-2010
-	return 2*abs(v1-v2)/abs(v1+v2)>TOLERANCE;
+	return 2*fabs(v1-v2)/fabs(v1+v2)>TOLERANCE;
 }
 
 bool error(int i,int value)
@@ -128,7 +128,7 @@ bool large_pressures(){
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_PRESSURE , &pres));
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_EMITTER, &ec));
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_DEMAND, &dem));
-		if(pres>ecup &&  abs(nodes.at(i).orig_demand) > abs(TOLERANCE) && comp(dem,nodes.at(i).orig_demand)){
+		if(pres>ecup &&  fabs(nodes.at(i).orig_demand) > fabs(TOLERANCE) && comp(dem,nodes.at(i).orig_demand)){
 			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_BASEDEMAND, nodes.at(i).orig_basedemand));
 			error(nodes.at(i).index,ENsetnodevalue(nodes.at(i).index, EN_EMITTER, (float)ZEROEMIT));
 			sign=true;
@@ -357,8 +357,8 @@ bool still_evolving(){
 		float pres,dem;
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_PRESSURE, &pres));
 		error(nodes.at(i).index,ENgetnodevalue(nodes.at(i).index, EN_PRESSURE, &dem));
-		if(!(abs(nodes.at(i).saved_pressure-pres)<ACCURACY)
-			||!(abs(nodes.at(i).saved_demand-dem)<ACCURACY)
+		if(!(fabs(nodes.at(i).saved_pressure-pres)<ACCURACY)
+			||!(fabs(nodes.at(i).saved_demand-dem)<ACCURACY)
 			){
 			notyet=true;
 			if(NITER > MAXTRIALS)nodes.at(i).offender=true;
