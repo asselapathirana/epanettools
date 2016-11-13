@@ -23,10 +23,11 @@ Bug in epanet (perhaps new versions have it fixed)
 
 ##########################
 C/C++ part
-edit epanet2.i and pdd.i
+edit epanet2.i and pdd.i adf.i
 then run 
 swig -python epanet2.i
 swig -c++ -python pdd.i
+swig -c++ -python adf.i
 
 then run 
 tox # this will do all the testing and doctest. 
@@ -38,4 +39,15 @@ To run only doctest (scenario: editing README.rst)
 flake8 failures:
 try 
 autopep8 --in-place --recursive    --verbose --pep8-passes 5000 <filename>
+
+###########################
+Working with wingide
+(when c parts are changed)
+run python3 setup.py test first
+then test with wingide (with python3)
+
+#########################
+Run a single test on command prompt 
+env PYTHONPATH=src/ python3 -m unittest -q tests.test_ADF
+
 

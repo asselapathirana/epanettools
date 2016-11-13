@@ -77,11 +77,20 @@ sources.append("src" + os.sep + "epanettools" + os.sep + "epanet2_wrap.c")
 
 # 25-Aug-2016 - append emitter modification files
 sources = sources + list(
-    "src" + os.sep + "epanettools" + os.sep + "pdd" + os.sep + x for x in ["emitter_analysis.cpp",
-                                                                           "mods.cpp", "wrap.cpp",
-                                                                           ])
-sources.append("src" + os.sep + "epanettools" + os.sep + "pdd_wrap.cxx")
+    "src" + os.sep + "epanettools" + os.sep +
+    "pdd" + os.sep + x for x in ["emitter_analysis.cpp",
+                                 "mods.cpp", "wrap.cpp", ])
 sources.append("src" + os.sep + "epanettools" + os.sep + "patch.c")
+sources.append("src" + os.sep + "epanettools" + os.sep + "pdd_wrap.cxx")
+# ^^^^^ NOTE: keep pdd_wrap.cxx as last element in sources
+# - we remove that below using the fact that it is the last element
+#  12-Nov-2016 - append adf calculation files
+
+sources2 = sources[:-1] + list(
+    "src" + os.sep + "epanettools" + os.sep + "adf" + os.sep + x for x in ["callepanet.cc",
+                                                                           ])
+
+sources2.append("src" + os.sep + "epanettools" + os.sep + "adf_wrap.cxx")
 
 cargs = ['-Wno-format']
 
@@ -150,15 +159,23 @@ setup(
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
                   include_dirs=[
-                      "src/epanettools/pdd", "src/epanettools/epanet"],
+                      "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
                   ),
         Extension('_pdd',
                   sources=sources,
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
                   include_dirs=[
-                      "src/epanettools/pdd", "src/epanettools/epanet"]
+                      "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
+                  ),
+        Extension('_adf',
+                  sources=sources2,
+                  extra_compile_args=cargs,
+                  # extra_link_args=cargs,
+                  include_dirs=[
+                      "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
                   )
+
     ],
     tests_require=['tox'],
 )

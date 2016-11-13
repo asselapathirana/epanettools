@@ -21,6 +21,7 @@ from epanettools.epanettools import Pattern
 from epanettools.epanettools import Patterns
 from epanettools.examples import simple
 
+patId = "NewPattern";
 
 class Test1(unittest.TestCase):
 
@@ -73,7 +74,6 @@ class Test1(unittest.TestCase):
                 self.assertEqual(p[0],251)                
 
     def create_pattern(self):
-        patId = "NewPattern";
         self.assertEqual(self.es.ENaddpattern(patId),0)
         ret,index=self.es.ENgetpatternindex(patId)
         return index
@@ -90,6 +90,21 @@ class Test1(unittest.TestCase):
             self.assertEqual(p[0],0)
             self.assertAlmostEqual(p[1],pat[i],delta=0.001)   
         
+    def test_ENsetpattern_with_pat_id_not_index_will_successfully_allocate_and_fill_an_exiting_pattern(self):
+        index=self.create_pattern()
+        pat=[1.0,2.0,3.0,4.0,8.0,9.0,10.0,11.0,
+             1.5,2.5,3.5,4.5,8.5,9.5,10.5,11.5,
+             1.6,2.6,3.6,4.6,8.6,9.6,10.6,11.6,]
+        with self.assertRaises(Exception):
+            self.es.ENsetpattern("boo",pat)
+        self.assertEqual(self.es.ENsetpattern(patId,pat),0)
+        self.assertEqual(self.es.ENgetpatternlen(index),[0,24])
+        for i in range(len(pat)):
+            p=self.es.ENgetpatternvalue(index,i+1)
+            self.assertEqual(p[0],0)
+            self.assertAlmostEqual(p[1],pat[i],delta=0.001) 
+            
+
         
 
 tc = None
