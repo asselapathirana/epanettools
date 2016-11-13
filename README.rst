@@ -340,8 +340,9 @@ Look at http://assela.pathirana.net/EPANET-Emitter  for details and desktop (win
     >>> e3=EPANetSimulation(f,pdd=True) # now we enable pdd
     >>> e3.run()
     >>> p225=e3.network.nodes['225'].results[p][10] # pressure should not be a rediculous value
-    >>> (p225 > -10 and p225 < 10)
+    >>> (p225 > -3 and p225 < 500)
     True
+    >>> p225
     >>> d=Node.value_type['EN_DEMAND']
     >>> d225=e3.network.nodes['225'].results[d][10]  # the demand should be nearly zero
     >>> (d225 > -.1 and d225 < .1)
