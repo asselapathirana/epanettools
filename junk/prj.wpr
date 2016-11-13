@@ -26,6 +26,6 @@ proj.file-type = 'shared'
 proj.launch-config = {loc('../setup.py'): ('project',
         (u'test ',
          ''))}
-proj.main-file = loc('../tests/test_ADF.py')
+proj.main-file = loc('../tests/test_EPANetPDD.py')
 testing.auto-test-file-specs = (('glob',
                                  'tests/test*.py'),)

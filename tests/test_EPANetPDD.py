@@ -43,7 +43,8 @@ class Test1(unittest.TestCase):
         # use old interface to set diameter to zero
         self.Error(self.es.ENsetlinkvalue(ind, dia, 0.1))  # now link diameter is small
         file = "1.inp"
-        self.es.ENsaveinpfile(file)
+        ret=self.es.ENsaveinpfile(file)
+        self.assertEqual(ret,0)
         # now create a new object with the new file.
         es = EPANetSimulation(file, pdd=True)
         es.run()
@@ -52,7 +53,7 @@ class Test1(unittest.TestCase):
         self.assertAlmostEquals(es.network.nodes['215'].results[p][5], -1.3, places=1)
         self.assertAlmostEqual(es.network.nodes['215'].results[d][5], 0.0, places=1)
 
-    @skip    
+     
     def test_runs_a_normal_pressure_simulation_and_get_results_pdd_does_not_change_results(self):
         # self.fail("Not yet calling epanet emitter properly")
         def mod1():
