@@ -1,7 +1,13 @@
 1. Update git hub
 2. change version :  bumpversion
+bumpversion --current-version x.y.z minor
+(where x.y.z is the current version. minor/major/patch)
 3. Github release (web interface)
 4. Upload new release to pypi using twine
+> python setup.py check 
+(If there are warnings, check README.rst, CHANGELOG.rst etc - which will be used in long_description on setup.py)
 > python setup.py register
-> python setup.py sdist
-twine upload dist/<name> 
+(Once appveyor is finished testing open each test in a seperate tab on the browser. 
+then download the artifacts (wheels) and move them to ./dist directory)
+twine upload dist/<whildcard>
+Note: linux wheels and sdist are uploaded by travis automatically (for each release version)
