@@ -26,7 +26,7 @@ project = 'epanettools'
 year = '2016'
 author = 'Assela Pathirana'
 copyright = '{0}, {1}'.format(year, author)
-version = release = '0.8.0'
+version = release = '0.9.0'
 
 pygments_style = 'trac'
 templates_path = ['.']

@@ -1,6 +1,12 @@
 
 Changelog
 =========
+0.9.0 (2016-11-13)
+-----------------------------------------
+* Available demand fraction with pipes closed added
+ - this was done with c library for efficiency.
+
+
 0.8.0 (2016-10-06)
 -----------------------------------------
 * completely removed dependency on numpy.  
