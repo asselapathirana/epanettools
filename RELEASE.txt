@@ -7,7 +7,7 @@ bumpversion --current-version x.y.z minor
 > python setup.py check 
 (If there are warnings, check README.rst, CHANGELOG.rst etc - which will be used in long_description on setup.py)
 > python setup.py register
-(Once appveyor is finished testing open each test in a seperate tab on the browser. 
-then download the artifacts (wheels) and move them to ./dist directory)
+then download the artifacts (wheels) using the python script:
+python appveyor_download.py master
 twine upload dist/<whildcard>
 Note: linux wheels and sdist are uploaded by travis automatically (for each release version)
