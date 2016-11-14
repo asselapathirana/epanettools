@@ -92,7 +92,7 @@ sources2 = sources[:-1] + list(
 
 sources2.append("src" + os.sep + "epanettools" + os.sep + "adf_wrap.cxx")
 
-cargs = ['-Wno-format']
+cargs = ['-Wno-format','-O0']
 
 
 setup(
