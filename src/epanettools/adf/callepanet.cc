@@ -357,7 +357,7 @@ arguments:
 		eoutcheck(emitter?ENnextH_wrap(&tt):ENnextH(&tt));
 	}while (tt > 0);  	
 	if(epanet_error){
-		setNaN(results);
+		//setNaN(results);
 
 	}
 	ReDirectStdout(false);

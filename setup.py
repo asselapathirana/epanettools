@@ -82,14 +82,14 @@ sources2 = sources[:-1] + list("src" + os.sep + "epanettools" + os.sep +
 
 sources2.append("src" + os.sep + "epanettools" + os.sep + "adf_wrap.cxx")
 
-cargs = ['-Wno-format',
+cargs = ['-Wno-format', '-O0',
          # Let the linker for remove duplicate symbols (required in OSX).
          '-fcommon']
 
 
 setup(
     name='EPANETTOOLS',
-    version='0.9.1',
+    version='0.9.2',
     license='GPLv3+',
     description='Epanet 2.0 Python calling interface',
     long_description='%s\n%s' % (
