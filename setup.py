@@ -97,7 +97,7 @@ cargs = ['-Wno-format','-O0']
 
 setup(
     name='EPANETTOOLS',
-    version='0.9.1',
+    version='0.9.2',
     license='GPLv3+',
     description='Epanet 2.0 Python calling interface',
     long_description='%s\n%s' % (
