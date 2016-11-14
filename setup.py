@@ -52,27 +52,18 @@ def read(*names, **kwargs):
     ).read()
 
 
-# Enable code coverage for C code: we can't use CFLAGS=-coverage in tox.ini, since that may mess with compiling
-# dependencies (e.g. numpy). Therefore we set SETUPPY_CFLAGS=-coverage in tox.ini and copy it to CFLAGS here (after
-# deps have been safely installed).
+# Enable code coverage for C code: we can't use CFLAGS=-coverage in tox.ini,
+# since that may mess with compiling
+# dependencies (e.g. numpy). Therefore we set SETUPPY_CFLAGS=-coverage in
+# tox.ini and copy it to CFLAGS here (after deps have been safely installed).
 if 'TOXENV' in os.environ and 'SETUPPY_CFLAGS' in os.environ:
     os.environ['CFLAGS'] = os.environ['SETUPPY_CFLAGS']
 
-sources = [
-    "src" + os.sep + "epanettools" + os.sep + "epanet" + os.sep + x for x in ["epanet.c",
-                                                                              "hash.c",
-                                                                              "hydraul.c",
-                                                                              "inpfile.c",
-                                                                              "input1.c",
-                                                                              "input2.c",
-                                                                              "input3.c",
-                                                                              "mempool.c",
-                                                                              "output.c",
-                                                                              "quality.c",
-                                                                              "report.c",
-                                                                              "rules.c",
-                                                                              "smatrix.c"
-                                                                              ]]
+sources = ["src" + os.sep + "epanettools" + os.sep + "epanet" + os.sep +
+           x for x in ["epanet.c", "hash.c", "hydraul.c", "inpfile.c",
+                       "input1.c", "input2.c", "input3.c", "mempool.c",
+                       "output.c", "quality.c", "report.c", "rules.c",
+                       "smatrix.c"]]
 sources.append("src" + os.sep + "epanettools" + os.sep + "epanet2_wrap.c")
 
 # 25-Aug-2016 - append emitter modification files
@@ -86,13 +77,14 @@ sources.append("src" + os.sep + "epanettools" + os.sep + "pdd_wrap.cxx")
 # - we remove that below using the fact that it is the last element
 #  12-Nov-2016 - append adf calculation files
 
-sources2 = sources[:-1] + list(
-    "src" + os.sep + "epanettools" + os.sep + "adf" + os.sep + x for x in ["callepanet.cc",
-                                                                           ])
+sources2 = sources[:-1] + list("src" + os.sep + "epanettools" + os.sep +
+                               "adf" + os.sep + x for x in ["callepanet.cc"])
 
 sources2.append("src" + os.sep + "epanettools" + os.sep + "adf_wrap.cxx")
 
-cargs = ['-Wno-format']
+cargs = ['-Wno-format',
+         # Let the linker strip duplicated symbols (required in OSX).
+         '-fcommon']
 
 
 setup(
@@ -119,7 +111,8 @@ setup(
         # http://pypi.python.org/pypi?%3Aaction=list_classifiers
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+) ',
+        'License :: OSI Approved :: '
+        'GNU General Public License v3 or later (GPLv3+)',
         'Operating System :: Unix',
         'Operating System :: POSIX',
         'Operating System :: Microsoft :: Windows',
@@ -158,22 +151,25 @@ setup(
                   sources=sources,
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
-                  include_dirs=[
-                      "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
+                  include_dirs=["src/epanettools/adf",
+                                "src/epanettools/epanet",
+                                "src/epanettools/pdd"]
                   ),
         Extension('_pdd',
                   sources=sources,
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
-                  include_dirs=[
-                      "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
+                  include_dirs=["src/epanettools/adf",
+                                "src/epanettools/epanet",
+                                "src/epanettools/pdd"]
                   ),
         Extension('_adf',
                   sources=sources2,
                   extra_compile_args=cargs,
                   # extra_link_args=cargs,
-                  include_dirs=[
-                      "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
+                  include_dirs=["src/epanettools/adf",
+                                "src/epanettools/epanet",
+                                "src/epanettools/pdd"]
                   )
 
     ],
