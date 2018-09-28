@@ -2914,7 +2914,7 @@ char* getTmpName(char* fname)
       */
       // --- now add the prefix to the file name
       strcat(fname, name);
-      printf("Writing temp file %s %s %s \n", TmpDir, fname, name);
+      //printf("Writing temp file %s %s %s \n", TmpDir, fname, name);
       //exit(1);
 
     // --- for non-Windows systems:
