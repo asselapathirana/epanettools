@@ -29,7 +29,7 @@ install:
   - python.exe setup.py build 
   - python.exe setup.py install
 
-build_script: off
+build: off
 
 test_script:
   - nosetests
