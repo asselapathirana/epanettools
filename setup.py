@@ -19,6 +19,19 @@ from setuptools import Extension
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
 
+# in windows use microsoft compilers
+if os.name == 'nt':
+ 
+    compilerargs = ['/W1', '/DDLL#1', ]
+    linkerargs   = []
+else:
+    compilerargs = [['-Wno-format','-O0'] ]
+    linkerargs   = []
+
+
+
+
+
 
 # from setuptools.command.build_ext import build_ext
 # from collections import defaultdict
@@ -92,7 +105,8 @@ sources2 = sources[:-1] + list(
 
 sources2.append("src" + os.sep + "epanettools" + os.sep + "adf_wrap.cxx")
 
-cargs = ['-Wno-format','-O0']
+
+
 
 
 setup(
@@ -156,22 +170,22 @@ setup(
     ext_modules=[
         Extension('_epanet2',
                   sources=sources,
-                  extra_compile_args=cargs,
-                  # extra_link_args=cargs,
+                  extra_compile_args=compilerargs,
+                  extra_link_args=linkerargs,
                   include_dirs=[
                       "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
                   ),
         Extension('_pdd',
                   sources=sources,
-                  extra_compile_args=cargs,
-                  # extra_link_args=cargs,
+                  extra_compile_args=compilerargs,
+                  extra_link_args=linkerargs,
                   include_dirs=[
                       "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
                   ),
         Extension('_adf',
                   sources=sources2,
-                  extra_compile_args=cargs,
-                  # extra_link_args=cargs,
+                  extra_compile_args=compilerargs,
+                  extra_link_args=linkerargs,
                   include_dirs=[
                       "src/epanettools/adf", "src/epanettools/epanet", "src/epanettools/pdd"]
                   )
