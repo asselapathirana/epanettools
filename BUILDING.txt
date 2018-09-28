@@ -32,7 +32,10 @@ swig -c++ -python adf.i
 then run 
 tox # this will do all the testing and doctest. 
 To run only doctest (scenario: editing README.rst)
+- Windows
 .\.tox\py34\Scripts\python.exe -m doctest -v README.rst
+- POSIX
+./.tox/py27/bin/python -m doctest -v README.rst
 (Works only after running tox successfully)
 
 ##########################

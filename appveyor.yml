@@ -25,9 +25,9 @@ install:
   - conda install -q --name python%PYTHON_VERSION% setuptools  wheel  nose
   #- pip install -q mando tstoolbox baker
   #- python.exe setup.py config_fc
-  - python.exe setup.py config --compiler=mingw32 
+  - python.exe setup.py config  
   #--fcompiler=gfortran
-  - python.exe setup.py build --compiler=mingw32
+  - python.exe setup.py build 
   - python.exe setup.py install
 
 build: off
