@@ -111,7 +111,7 @@ sources2.append("src" + os.sep + "epanettools" + os.sep + "adf_wrap.cxx")
 
 setup(
     name='EPANETTOOLS',
-    version='0.9.2',
+    version='1.0.0',
     license='GPLv3+',
     description='Epanet 2.0 Python calling interface',
     long_description='%s\n%s' % (
