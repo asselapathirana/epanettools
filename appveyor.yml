@@ -3,13 +3,15 @@ environment:
     secure: FTXC0Lbagq+isgXzs7VsYFIBJ1axTt2wgwCiwfhouSU=
   matrix:
     - PYTHON_VERSION: "2.7"
-      #    - PYTHON_VERSION: "3.3"
+    - PYTHON_VERSION: "3.3"
     - PYTHON_VERSION: "3.4"
+    - PYTHON_VERSION: "3.5"
+    - PYTHON_VERSION: "3.6"
     - PYTHON_VERSION: "3.7"
 
 platform:
   - x86
-    # - x64
+  - x64
 
 matrix:
   fast_finish: false
