@@ -25,7 +25,7 @@ if os.name == 'nt':
     compilerargs = ['/W1', '/DDLL#1', ]
     linkerargs   = []
 else:
-    compilerargs = [['-Wno-format','-O0'] ]
+    compilerargs = ['-Wno-format','-O0'] 
     linkerargs   = []
 
 
