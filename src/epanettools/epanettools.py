@@ -18,8 +18,11 @@ RIDICULOUS_VALUE = -999999999
 
 def Error(e):
     if(e):
-        s = "Epanet Error: %d : %s" % (
-            e, pdd_wrapper_class.ENgeterror(e, 500)[1])
+        try:
+            s = "Epanet Error: %d : %s" % (
+                e, pdd_wrapper_class.ENgeterror(e, 500)[1])
+        except:
+            s= "Epanet Error: %d " % (e)
         raise Exception(s)
 
 
@@ -409,7 +412,7 @@ class EPANetSimulation(object):
             init = 1
         else:
             init = 0
-        self.pd.ENinitH(init)
+        Error(self.pd.ENinitH(init))
         while True:
             ret, t = self.pd.ENrunH()
             self.network.time.append(t)
