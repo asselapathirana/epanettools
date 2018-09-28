@@ -38,6 +38,7 @@ Call read_newvalues() only after all checks, just before resuming the next loop 
 #include <float.h>
 #include <cstring>
 #include <stdlib.h>
+#include <algorithm>
 
 using namespace std;
 long time_;
