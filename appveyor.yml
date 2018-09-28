@@ -4,8 +4,10 @@ environment:
   matrix:
     - PYTHON_VERSION: "2.7"
       #    - PYTHON_VERSION: "3.3"
-    - PYTHON_VERSION: "3.6"
-    - PYTHON_VERSION: "3.7"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON_VERSION: "3.6"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      PYTHON_VERSION: "3.7"
 
 platform:
   - x86
