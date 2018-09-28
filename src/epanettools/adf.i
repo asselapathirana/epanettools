@@ -2,7 +2,7 @@
  #define SWIG_FILE_WITH_INIT
  /* Includes the header in the wrapper code */
  #include "./adf/adfandenergycalc.h"
- extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
+ extern "C" char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
  %}
 
 

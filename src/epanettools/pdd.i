@@ -4,7 +4,7 @@
  #include "./pdd/wrapper.h"
  #include "./epanet/epanet2.h"
  #include "./patch.h"
- extern char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
+ extern "C" char TmpDir[200]; /* this makes it possible to overrride the TmpDir */ 
  %}
 
 
