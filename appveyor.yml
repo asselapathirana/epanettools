@@ -15,7 +15,7 @@ matrix:
   fast_finish: false
 
 install:
-  - set PATH=C:\Miniconda\Scripts
+  - set PATH=C:\Miniconda\Scripts;%SystemRoot%\system32;%SystemRoot%;%SystemRoot%\System32\Wbem;
   - ps: If ($env:Platform -Match "x64") {$env:PATH="C:\Miniconda-x64\Scripts"}
   - conda config --set always_yes yes --set changeps1 no
   - conda update -q conda
