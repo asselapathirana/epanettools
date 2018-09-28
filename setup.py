@@ -22,7 +22,7 @@ from setuptools.command.test import test as TestCommand
 # in windows use microsoft compilers
 if os.name == 'nt':
  
-    compilerargs = ['/W1', '/DDLL#1', ]
+    compilerargs = ['/DDLL#1', ]
     linkerargs   = []
 else:
     compilerargs = ['-Wno-format','-O0'] 
