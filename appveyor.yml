@@ -3,9 +3,9 @@ environment:
     secure: FTXC0Lbagq+isgXzs7VsYFIBJ1axTt2wgwCiwfhouSU=
   matrix:
     - PYTHON_VERSION: "2.7"
-    - PYTHON_VERSION: "3.3"
-    - PYTHON_VERSION: "3.4"
-#    - PYTHON_VERSION: "3.5" no mingwpy for python 3.5
+      #    - PYTHON_VERSION: "3.3"
+      #    - PYTHON_VERSION: "3.4"
+    - PYTHON_VERSION: "3.7"
 
 platform:
   - x86
@@ -26,11 +26,10 @@ install:
   #- pip install -q mando tstoolbox baker
   #- python.exe setup.py config_fc
   - python.exe setup.py config  
-  #--fcompiler=gfortran
   - python.exe setup.py build 
   - python.exe setup.py install
 
-build: off
+build_script: off
 
 test_script:
   - nosetests

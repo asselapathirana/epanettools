@@ -1,7 +1,12 @@
 
 Changelog
 =========
-0.9.0 (2016-11-13)
+1.0.0 (2018-09-28)
+-----------------------------------------
+* Now works with python > 3.4. 
+* Uses visual c/c++ compilers for windows
+
+.9.0 (2016-11-13)
 -----------------------------------------
 * Available demand fraction with pipes closed added. This was done with c library for efficiency.
 
