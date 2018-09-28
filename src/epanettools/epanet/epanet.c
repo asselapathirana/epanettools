@@ -2895,7 +2895,7 @@ char* getTmpName(char* fname)
     #ifdef WINDOWS
       // --- use system function tmpnam() to create a temporary file name
       tmpnam(name);
-
+/*
       // --- if user supplied the name of a temporary directory,
       //     then make it be the prefix of the full file name
       n = strlen(TmpDir);
@@ -2911,9 +2911,11 @@ char* getTmpName(char* fname)
       {
           strcpy(fname, ".\\");
       }
-
+      */
       // --- now add the prefix to the file name
       strcat(fname, name);
+      printf("Writing temp file %s %s %s \n", TmpDir, fname, name);
+      //exit(1);
 
     // --- for non-Windows systems:
     #else

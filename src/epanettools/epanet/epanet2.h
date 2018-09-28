@@ -142,16 +142,18 @@
   #define WINDOWS
 #endif
 
-#undef WINDOWS
-#undef __WIN32__
+//#undef WINDOWS
+//#undef __WIN32__
 
 // --- define DLLEXPORT
 
 #ifdef WINDOWS
   #ifdef __cplusplus
-  #define DLLEXPORT extern "C" __declspec(dllexport) __stdcall
+#define DLLEXPORT extern "C" int __declspec(dllexport)
+//__stdcall
   #else
-  #define DLLEXPORT __declspec(dllexport) __stdcall
+  #define DLLEXPORT int __declspec(dllexport)
+//__stdcall
   #endif
 #else
   #ifdef __cplusplus
