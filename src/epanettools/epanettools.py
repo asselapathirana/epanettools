@@ -7,6 +7,7 @@ import tempfile
 
 from . import adf
 from . import tools
+from .epanet2 import ENgeterror
 from .pdd_class_wrapper import pdd_wrapper_class
 
 """" Never use ENOpen ENclose without keeping tab. -- always use _close and _open methods instead.
@@ -20,7 +21,7 @@ def Error(e):
     if(e):
         try:
             s = "Epanet Error: %d : %s" % (
-                e, pdd_wrapper_class.ENgeterror(e, 500)[1])
+                e, ENgeterror(e, 500)[1])
         except:
             s= "Epanet Error: %d " % (e)
         raise Exception(s)
