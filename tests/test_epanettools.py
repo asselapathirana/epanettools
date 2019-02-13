@@ -16,6 +16,12 @@ class Test1(unittest.TestCase):
             print((e, et.ENgeterror(e, 25)))
             exit(5)
 
+    def test_error_func(self):
+        from epanettools.epanettools import Error
+        with self.assertRaises(Exception) as e:
+            Error(202)
+        self.assertEqual(e.exception.args[0], "Epanet Error: 202 : Input Error 202: function call  contains illegal numeric value.")
+    
     def test_basic(self):
         import os
         from epanettools import epanet2 as et
