@@ -121,6 +121,13 @@ class Test1(unittest.TestCase):
         mod2()
         mod3()
 
+    def test_ppd_wrapper_error_func(self):
+        from epanettools.pdd_class_wrapper import Error
+        with self.assertRaises(Exception) as e:
+            Error(202)
+        self.assertEqual(e.exception.args[0],
+                         'Epanet Error: 202 : Input Error 202: function call  contains illegal numeric value.')
+
 
 def clt(fn, tc):
     tc.setUp()

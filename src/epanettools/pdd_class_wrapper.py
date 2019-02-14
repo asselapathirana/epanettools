@@ -4,7 +4,7 @@ from . import pdd as pd
 def Error(e):
     if(e):
         s = "Epanet Error: %d : %s" % (
-            e, pdd_wrapper_class.ENgeterror(e, 500)[1])
+            e, pd.ENgeterror(e, 500)[1])
         raise Exception(s)
 
 
