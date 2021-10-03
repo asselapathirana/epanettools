@@ -2,6 +2,9 @@
 Overview
 ========
 
+This repo is no longer actively maintained. The reason is the newer and actively maintained [WNTR package](https://github.com/USEPA/WNTR) implements all of the functionalities of this package. 
+
+
 .. start-badges
 
 .. list-table::
